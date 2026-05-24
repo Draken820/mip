@@ -15,8 +15,14 @@ public class home extends javax.swing.JFrame {
     /**
      * Creates new form home
      */
-    public home() {
+    private int idUsuarioActivo; 
+
+ 
+    public home(int id) {
         initComponents();
+        this.idUsuarioActivo = id; 
+        
+      
     }
 
     /**
@@ -66,7 +72,7 @@ public class home extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new home().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new home(0).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

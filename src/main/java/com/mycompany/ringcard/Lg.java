@@ -80,12 +80,27 @@ public class Lg extends javax.swing.JPanel {
         usuarios o=new usuarios();
         try{
             o.setEmail(txt1.getText());
-            o.setNombre(txt2.getText());
-            if(o.autenticarUsuario()){
-                JOptionPane.showMessageDialog(null, "Inicio correcto");
-            }else{
-                JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
-            }
+            o.setPass(txt2.getText());
+            if (o.autenticarUsuario()) {
+    JOptionPane.showMessageDialog(null, "Inicio correcto");
+    
+    
+    int id = o.getId_usuario(); 
+
+
+    home ventanaHome = new home(id);
+    
+    
+    ventanaHome.setVisible(true);
+  
+    java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
+    if (ventanaPadre != null) {
+        ventanaPadre.dispose();
+    }
+    
+} else {
+    JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
+}
             
         }catch(Exception e){
             e.printStackTrace();

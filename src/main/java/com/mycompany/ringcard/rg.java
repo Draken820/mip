@@ -4,6 +4,9 @@
  */
 package com.mycompany.ringcard;
 
+import com.mycompany.ringcard.clases.usuarios;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author DELL
@@ -28,19 +31,128 @@ public class rg extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        txtn = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        txtap = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        txtam = new javax.swing.JTextField();
+        txtem = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txtpas = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        txttel = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setMaximumSize(new java.awt.Dimension(168, 255));
+        jPanel1.setMinimumSize(new java.awt.Dimension(168, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jLabel1.setText("jLabel1");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 40, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, -1, -1));
+
+        txtn.setText("jTextField1");
+        jPanel1.add(txtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+
+        jLabel2.setText("jLabel1");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
+
+        txtap.setText("jTextField1");
+        jPanel1.add(txtap, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+
+        jLabel3.setText("jLabel1");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, -1, -1));
+
+        txtam.setText("jTextField1");
+        jPanel1.add(txtam, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
+
+        txtem.setText("jTextField1");
+        jPanel1.add(txtem, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
+
+        jLabel4.setText("jLabel1");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+
+        jLabel5.setText("jLabel1");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
+
+        txtpas.setText("jTextField1");
+        jPanel1.add(txtpas, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+
+        jLabel6.setText("jLabel1");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, -1, -1));
+
+        txttel.setText("jTextField1");
+        jPanel1.add(txttel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, -1, -1));
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, -1, -1));
+
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 160, 290));
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        usuarios o = new usuarios();
+        try{
+            o.setNombre(txtn.getText());
+            o.setAp(txtap.getText());
+            o.setAm(txtam.getText());
+            o.setEmail(txtem.getText());
+            o.setPass(txtpas.getText());
+            o.setTelefono(Integer.parseInt(txttel.getText()));
+            
+            if(o.insertarUsuario()){
+                JOptionPane.showMessageDialog(null, "Registrado correctamente");
+                
+      
+                
+                
+                java.awt.Container contenedorPadre = this.getParent();
+                
+                if (contenedorPadre != null) {
+                    
+                    contenedorPadre.removeAll();
+                    
+                   
+                    Lg panelLogin = new Lg();
+                    panelLogin.setSize(contenedorPadre.getSize());
+                    panelLogin.setLocation(0, 0);
+                    
+                    contenedorPadre.add(panelLogin);
+                    
+                    contenedorPadre.revalidate();
+                    contenedorPadre.repaint();
+                }
+                // ---------------------------------------------
+                // ---------------------------------------------
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "Datos invalidos");
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace(); // Es buena práctica imprimir el error en consola si algo falla
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JTextField txtam;
+    private javax.swing.JTextField txtap;
+    private javax.swing.JTextField txtem;
+    private javax.swing.JTextField txtn;
+    private javax.swing.JTextField txtpas;
+    private javax.swing.JTextField txttel;
     // End of variables declaration//GEN-END:variables
 }

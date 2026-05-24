@@ -16,28 +16,37 @@ import java.sql.SQLException;
  * @author DELL
  */
 public class dataUsuarios {
-Connection cx;
-	String url="jdbc://mysql/localhost:5432/proyecto";
-	String pass="volvo";
-	String user="postgres";
-public Connection conectar() {
-	try {
-	cx=DriverManager.getConnection(url,user,pass);
-	System.out.println("conexion exitosa");
-	}catch (SQLException e2) {
-	e2.printStackTrace();
-		// TODO: handle exception
-	System.out.println("conexion fallida");
-	}
-	return cx;
-}
+    Connection cx;
+
+    String url = "jdbc:postgresql://localhost:5432/proyecto";
+    String pass = "volvo";
+    String user = "postgres";
+
+    public Connection conectar() {
+        try {
+            cx = DriverManager.getConnection(url, user, pass);
+            System.out.println("conexion exitosa");
+        } catch (SQLException e2) {
+            e2.printStackTrace();
+            System.out.println("conexion fallida");
+        }
+        return cx;
+    }
+
 public boolean autenticarUsuario(usuarios o){
+    this.cx = conectar(); 
+    
+   
+    if (this.cx == null) {
+        System.out.println("No se pudo establecer la conexión. No se puede autenticar.");
+        return false; 
+    }
     try{
-    PreparedStatement ps=cx.prepareStatement("SELECT id FROM usuarios WHERE username = ? AND password = ?");
-    ps.setString(1, o.email);
-    ps.setString(2, o.pass);
+    PreparedStatement ps=cx.prepareStatement("SELECT id_usuario FROM usuarios WHERE email = ? AND pass = ?");
+    ps.setString(1, o.getEmail());
+    ps.setString(2, o.getPass());
     try (ResultSet rs = ps.executeQuery()) {
-                // Si rs.next() es true, significa que encontró un registro coincidente
+              
                 return rs.next();
             }
     }catch(Exception e){
@@ -47,21 +56,34 @@ public boolean autenticarUsuario(usuarios o){
     
 }
 public boolean insertarUsuario(usuarios o) {
-	try {
-	PreparedStatement ps=cx.prepareStatement("INSERT INTO usuario VALUES ?,?,?,?,?");
-	ps.setInt(1, o.id_usuario);
-	ps.setString(2, o.nombre);
-        ps.setString(3, o.ap);
-        ps.setString(4, o.am);
-        ps.setString(5, o.pass);
-        ps.setString(6, o.email);
-        ps.setInt(6, o.telefono);
-	ps.executeUpdate();
-	return true;
-	}catch (Exception e) {
-		// TODO: handle exception
-	}
-	return false;
+  
+    this.cx = conectar(); 
+    
+    if (this.cx == null) {
+        return false;
+    }
+
+    try {
+       
+        PreparedStatement ps = cx.prepareStatement("INSERT INTO usuarios (nombre, ap, am, pass, email, telefono) VALUES (?, ?, ?, ?, ?, ?)");
+        
+ 
+        ps.setString(1, o.getNombre());
+        ps.setString(2, o.getAp());
+        ps.setString(3, o.getAm());
+        ps.setString(4, o.getPass());
+        ps.setString(5, o.getEmail());
+        ps.setInt(6, o.getTelefono());
+        
+        ps.executeUpdate();
+        return true;
+        
+    } catch (Exception e) {
+       
+        e.printStackTrace(); 
+    }
+    
+    return false;
 }
 
 public boolean consultarUsuario(usuarios o) {

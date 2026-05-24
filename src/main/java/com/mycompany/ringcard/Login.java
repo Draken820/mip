@@ -20,8 +20,8 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
          initComponents();
-     // Dale un tamaño explícito
-this.setLocationRelativeTo(null); // Céntrala en la pantalla
+     
+this.setLocationRelativeTo(null);
 this.setVisible(true);
 
 java.net.URL imgUrl = getClass().getResource("/1163434.jpg");

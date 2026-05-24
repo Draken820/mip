@@ -20,9 +20,8 @@ public class usuarios {
     public int telefono;
     dataUsuarios x=new dataUsuarios();
 
-    public usuarios() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
+    
     public boolean insertarUsuario() {
 	if(x.insertarUsuario(this)) {
 		return true;
@@ -31,7 +30,7 @@ public class usuarios {
 	}
 }
      public boolean autenticarUsuario() {
-	if(x.insertarUsuario(this)) {
+	if(x.autenticarUsuario(this)) {
 		return true;
 	}else {
 		return false;
@@ -44,6 +43,10 @@ public boolean consultarUsuario() {
 		return false;
 	}
 }
+
+    public usuarios() {
+
+    }
 
     public usuarios(int id_usuario, String nombre, String ap, String am, String pass, String email, int telefono) {
         this.id_usuario = id_usuario;
