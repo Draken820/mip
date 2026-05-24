@@ -3,10 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.mycompany.ringcard;
+import com.mycompany.ringcard.clases.usuarios;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import java.awt.BorderLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,87 +36,69 @@ public class Lg extends javax.swing.JPanel {
 
         lg1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txt2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txt1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lg1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Correo");
-        lg1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, 70, -1));
+        lg1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 70, -1));
 
-        jTextField1.setText("jTextField1");
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
-        lg1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
+        txt2.setText("jTextField1");
+        txt2.addActionListener(this::txt2ActionPerformed);
+        lg1.add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
 
         jLabel2.setText("Password");
-        lg1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 50, 70, -1));
+        lg1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 70, -1));
 
-        jTextField2.setText("jTextField1");
-        jTextField2.addActionListener(this::jTextField2ActionPerformed);
-        lg1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 70, -1, -1));
+        txt1.setText("jTextField1");
+        txt1.addActionListener(this::txt1ActionPerformed);
+        lg1.add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, -1, -1));
 
         jButton1.setText("jButton1");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
         lg1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 200, -1, -1));
-
-        jLabel3.setText("Registrar");
-        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel3MouseClicked(evt);
-            }
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                jLabel3MousePressed(evt);
-            }
-        });
-        lg1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, 60, 30));
 
         add(lg1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 220, 320));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txt2ActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void txt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt1ActionPerformed
         // TODO add your handling code here:
         
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txt1ActionPerformed
 
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        rg rg=new rg();
-        
-        rg.setSize(222,318);
-        rg.setLocation(0,0);
-        lg1.removeAll();
-        lg1.add(lg1, BorderLayout.CENTER);
-        lg1.revalidate();
-lg1.repaint();
-    }//GEN-LAST:event_jLabel3MouseClicked
-
-    private void jLabel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MousePressed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        rg rg=new rg();
-        
-        rg.setSize(222,318);
-        rg.setLocation(0,0);
-        lg1.removeAll();
-        lg1.add(lg1, BorderLayout.CENTER);
-        lg1.revalidate();
-lg1.repaint();
-    }//GEN-LAST:event_jLabel3MousePressed
+        usuarios o=new usuarios();
+        try{
+            o.setEmail(txt1.getText());
+            o.setNombre(txt2.getText());
+            if(o.autenticarUsuario()){
+                JOptionPane.showMessageDialog(null, "Inicio correcto");
+            }else{
+                JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
+            }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    public javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     private javax.swing.JPanel lg1;
+    private javax.swing.JTextField txt1;
+    private javax.swing.JTextField txt2;
     // End of variables declaration//GEN-END:variables
 }
