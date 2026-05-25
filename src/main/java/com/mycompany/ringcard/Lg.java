@@ -6,7 +6,6 @@ package com.mycompany.ringcard;
 import com.mycompany.ringcard.clases.usuarios;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-
 import java.awt.BorderLayout;
 import javax.swing.JOptionPane;
 
@@ -39,31 +38,38 @@ public class Lg extends javax.swing.JPanel {
         txt2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txt1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        BtnIngresar = new javax.swing.JButton();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        lg1.setBackground(new java.awt.Color(255, 255, 255));
         lg1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setText("Correo");
-        lg1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 50, 70, -1));
+        lg1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 70, -1));
 
-        txt2.setText("jTextField1");
+        txt2.setForeground(new java.awt.Color(153, 153, 153));
+        txt2.setText("********");
         txt2.addActionListener(this::txt2ActionPerformed);
-        lg1.add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 120, -1, -1));
+        lg1.add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 230, -1));
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Password");
-        lg1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 110, 70, -1));
+        lg1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 100, -1));
 
-        txt1.setText("jTextField1");
+        txt1.setForeground(new java.awt.Color(153, 153, 153));
+        txt1.setText("Ingresa el correo");
         txt1.addActionListener(this::txt1ActionPerformed);
-        lg1.add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 70, -1, -1));
+        lg1.add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 230, -1));
 
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
-        lg1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 200, -1, -1));
+        BtnIngresar.setText("Ingresar");
+        BtnIngresar.addActionListener(this::BtnIngresarActionPerformed);
+        lg1.add(BtnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 100, 40));
 
-        add(lg1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 220, 320));
+        add(lg1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 480));
     }// </editor-fold>//GEN-END:initComponents
 
     private void txt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt2ActionPerformed
@@ -75,7 +81,7 @@ public class Lg extends javax.swing.JPanel {
         
     }//GEN-LAST:event_txt1ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void BtnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIngresarActionPerformed
         // TODO add your handling code here:
         usuarios o=new usuarios();
         try{
@@ -105,11 +111,11 @@ public class Lg extends javax.swing.JPanel {
         }catch(Exception e){
             e.printStackTrace();
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_BtnIngresarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton BtnIngresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel lg1;

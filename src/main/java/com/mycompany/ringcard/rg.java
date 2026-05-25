@@ -46,51 +46,72 @@ public class rg extends javax.swing.JPanel {
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setMaximumSize(new java.awt.Dimension(168, 255));
         jPanel1.setMinimumSize(new java.awt.Dimension(168, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("jLabel1");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 0, -1, -1));
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setText("Nombre:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, -1, -1));
 
-        txtn.setText("jTextField1");
-        jPanel1.add(txtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, -1, -1));
+        txtn.setText("ingresa el nombre");
+        txtn.addActionListener(this::txtnActionPerformed);
+        jPanel1.add(txtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 260, -1));
 
-        jLabel2.setText("jLabel1");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
+        jLabel2.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Apellido Paterno:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, -1, -1));
 
-        txtap.setText("jTextField1");
-        jPanel1.add(txtap, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+        txtap.setText("Ingresa Apelledo");
+        jPanel1.add(txtap, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 260, -1));
 
-        jLabel3.setText("jLabel1");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, -1, -1));
+        jLabel3.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Apellido Materno:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, -1, -1));
 
-        txtam.setText("jTextField1");
-        jPanel1.add(txtam, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 120, -1, -1));
+        txtam.setText("Ingresa Apellido");
+        jPanel1.add(txtam, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 260, -1));
 
-        txtem.setText("jTextField1");
-        jPanel1.add(txtem, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
+        txtem.setText("Ingresa tu Gmail");
+        jPanel1.add(txtem, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 260, -1));
 
-        jLabel4.setText("jLabel1");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+        jLabel4.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Gmail:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
 
-        jLabel5.setText("jLabel1");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 190, -1, -1));
+        jLabel5.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setText("Contraseña:");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, -1, -1));
 
-        txtpas.setText("jTextField1");
-        jPanel1.add(txtpas, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, -1, -1));
+        txtpas.setText("********");
+        jPanel1.add(txtpas, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 260, -1));
 
-        jLabel6.setText("jLabel1");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 230, -1, -1));
+        jLabel6.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setText("Confirmar Contraseña:");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, -1, -1));
 
-        txttel.setText("jTextField1");
-        jPanel1.add(txttel, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 250, -1, -1));
+        txttel.setText("********");
+        jPanel1.add(txttel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 260, -1));
 
-        jButton1.setText("jButton1");
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("Registrar");
         jButton1.addActionListener(this::jButton1ActionPerformed);
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 90, 40));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 160, 290));
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 474));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -137,6 +158,10 @@ public class rg extends javax.swing.JPanel {
             e.printStackTrace(); // Es buena práctica imprimir el error en consola si algo falla
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtnActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
