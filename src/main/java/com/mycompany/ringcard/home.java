@@ -49,7 +49,6 @@ public class home extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
 
@@ -152,11 +151,8 @@ public class home extends javax.swing.JFrame {
 
         jMenu1.setText("Opciones");
 
-        jMenu3.setText("Targetas");
+        jMenu3.setText("Movimientos");
         jMenu1.add(jMenu3);
-
-        jMenu4.setText("Modificaciones");
-        jMenu1.add(jMenu4);
 
         jMenu5.setText("Reportes Generales");
         jMenu1.add(jMenu5);
@@ -204,7 +200,6 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;

@@ -58,6 +58,11 @@ public class rg extends javax.swing.JPanel {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, -1, -1));
 
         txtn.setText("ingresa el nombre");
+        txtn.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtnFocusGained(evt);
+            }
+        });
         txtn.addActionListener(this::txtnActionPerformed);
         jPanel1.add(txtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 260, -1));
 
@@ -67,7 +72,7 @@ public class rg extends javax.swing.JPanel {
         jLabel2.setText("Apellido Paterno:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, -1, -1));
 
-        txtap.setText("Ingresa Apelledo");
+        txtap.setText("Ingresa Apellido");
         jPanel1.add(txtap, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 260, -1));
 
         jLabel3.setBackground(new java.awt.Color(0, 0, 0));
@@ -80,6 +85,7 @@ public class rg extends javax.swing.JPanel {
         jPanel1.add(txtam, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 260, -1));
 
         txtem.setText("Ingresa tu Gmail");
+        txtem.addActionListener(this::txtemActionPerformed);
         jPanel1.add(txtem, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 260, -1));
 
         jLabel4.setBackground(new java.awt.Color(0, 0, 0));
@@ -104,6 +110,11 @@ public class rg extends javax.swing.JPanel {
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, -1, -1));
 
         txttel.setText("********");
+        txttel.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txttelKeyTyped(evt);
+            }
+        });
         jPanel1.add(txttel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 260, -1));
 
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
@@ -162,6 +173,25 @@ public class rg extends javax.swing.JPanel {
     private void txtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtnActionPerformed
+
+    private void txttelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttelKeyTyped
+        // TODO add your handling code here:
+        if(txttel.getText().length()>=10){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txttelKeyTyped
+
+    private void txtemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtemActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtemActionPerformed
+
+    private void txtnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtnFocusGained
+        // TODO add your handling code here:
+        if(txtn.getText().equals("ingresa el nombre")){
+            txtn.setText("");
+            txtn.setForeground(java.awt.Color.BLACK);
+        }
+    }//GEN-LAST:event_txtnFocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -39,6 +39,7 @@ public class Lg extends javax.swing.JPanel {
         jLabel2 = new javax.swing.JLabel();
         txt1 = new javax.swing.JTextField();
         BtnIngresar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -68,6 +69,12 @@ public class Lg extends javax.swing.JPanel {
         BtnIngresar.setText("Ingresar");
         BtnIngresar.addActionListener(this::BtnIngresarActionPerformed);
         lg1.add(BtnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 100, 40));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI Emoji", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Iniciar Seción");
+        lg1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 420, 60));
 
         add(lg1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 480));
     }// </editor-fold>//GEN-END:initComponents
@@ -118,6 +125,7 @@ public class Lg extends javax.swing.JPanel {
     private javax.swing.JButton BtnIngresar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel lg1;
     private javax.swing.JTextField txt1;
     private javax.swing.JTextField txt2;
