@@ -86,30 +86,31 @@ public class rg extends javax.swing.JPanel {
 
         txtem.setText("Ingresa tu Gmail");
         txtem.addActionListener(this::txtemActionPerformed);
-        jPanel1.add(txtem, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 260, -1));
+        jPanel1.add(txtem, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 260, -1));
 
         jLabel4.setBackground(new java.awt.Color(0, 0, 0));
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Gmail:");
+        jLabel4.setText("Contraseña:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
 
         jLabel5.setBackground(new java.awt.Color(0, 0, 0));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel5.setText("Contraseña:");
+        jLabel5.setText("Email:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, -1, -1));
 
         txtpas.setText("********");
-        jPanel1.add(txtpas, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 260, -1));
+        jPanel1.add(txtpas, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 260, -1));
 
         jLabel6.setBackground(new java.awt.Color(0, 0, 0));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel6.setText("Confirmar Contraseña:");
+        jLabel6.setText("Telefono:");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, -1, -1));
 
-        txttel.setText("********");
+        txttel.setText("55-5555-5555");
+        txttel.addActionListener(this::txttelActionPerformed);
         txttel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txttelKeyTyped(evt);
@@ -120,7 +121,7 @@ public class rg extends javax.swing.JPanel {
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Registrar");
         jButton1.addActionListener(this::jButton1ActionPerformed);
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 90, 40));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 370, 90, 40));
 
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 474));
     }// </editor-fold>//GEN-END:initComponents
@@ -192,6 +193,10 @@ public class rg extends javax.swing.JPanel {
             txtn.setForeground(java.awt.Color.BLACK);
         }
     }//GEN-LAST:event_txtnFocusGained
+
+    private void txttelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txttelActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txttelActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

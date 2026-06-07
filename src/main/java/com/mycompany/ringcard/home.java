@@ -5,11 +5,13 @@
 package com.mycompany.ringcard;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import java.awt.BorderLayout;
 
 /**
  *
  * @author DELL
  */
+
 public class home extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(home.class.getName());
@@ -37,7 +39,7 @@ public class home extends javax.swing.JFrame {
     private void initComponents() {
 
         ContentPrincipal = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
+        panprincipal = new javax.swing.JPanel();
         CBMostrar = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -56,7 +58,7 @@ public class home extends javax.swing.JFrame {
 
         ContentPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(200, 200, 200));
+        panprincipal.setBackground(new java.awt.Color(200, 200, 200));
 
         CBMostrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CBMostrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar Todo", "Ingresos", "Egresos", "Solo Credito", "Solo debito" }));
@@ -76,20 +78,20 @@ public class home extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout panprincipalLayout = new javax.swing.GroupLayout(panprincipal);
+        panprincipal.setLayout(panprincipalLayout);
+        panprincipalLayout.setHorizontalGroup(
+            panprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panprincipalLayout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(45, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        panprincipalLayout.setVerticalGroup(
+            panprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panprincipalLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -97,7 +99,7 @@ public class home extends javax.swing.JFrame {
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
-        ContentPrincipal.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 520));
+        ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 520));
 
         jPanel3.setBackground(new java.awt.Color(64, 64, 64));
 
@@ -150,8 +152,10 @@ public class home extends javax.swing.JFrame {
         ContentPrincipal.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 0, 220, 520));
 
         jMenu1.setText("Opciones");
+        jMenu1.addActionListener(this::jMenu1ActionPerformed);
 
         jMenu3.setText("Movimientos");
+        jMenu3.addActionListener(this::jMenu3ActionPerformed);
         jMenu1.add(jMenu3);
 
         jMenu5.setText("Reportes Generales");
@@ -182,6 +186,21 @@ public class home extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CBMostrarActionPerformed
 
+    private void jMenu3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu3ActionPerformed
+        // TODO add your handling code here:
+        PanleMovimientos xdd = new PanleMovimientos();
+        xdd.setSize(660,520);
+        
+        panprincipal.removeAll();
+        panprincipal.add(xdd, java.awt.BorderLayout.CENTER);
+        panprincipal.revalidate();
+        panprincipal.repaint();
+    }//GEN-LAST:event_jMenu3ActionPerformed
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -202,9 +221,9 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
+    private javax.swing.JPanel panprincipal;
     // End of variables declaration//GEN-END:variables
 }

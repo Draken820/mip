@@ -29,9 +29,14 @@ public class PanleMovimientos extends javax.swing.JPanel {
         ContCardsCredito = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        MovimientosCredito = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        ScrollContent = new javax.swing.JScrollPane();
+        ContSCP = new javax.swing.JPanel();
+        MovimientoC = new javax.swing.JPanel();
+        TipoIngresoEgresoC = new javax.swing.JLabel();
+        TipomovimientoC = new javax.swing.JLabel();
+        CantC1 = new javax.swing.JLabel();
         ControlMovimientos = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -49,18 +54,31 @@ public class PanleMovimientos extends javax.swing.JPanel {
         jLabel1.setText("Cards");
         jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
 
+        jButton4.setText(">");
+
+        jButton5.setText("<");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout ContCardsCreditoLayout = new javax.swing.GroupLayout(ContCardsCredito);
         ContCardsCredito.setLayout(ContCardsCreditoLayout);
         ContCardsCreditoLayout.setHorizontalGroup(
             ContCardsCreditoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContCardsCreditoLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jButton5)
+                .addGap(29, 29, 29)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(16, 16, 16))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContCardsCreditoLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(ContCardsCreditoLayout.createSequentialGroup()
-                .addGap(67, 67, 67)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
         );
         ContCardsCreditoLayout.setVerticalGroup(
             ContCardsCreditoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -68,42 +86,81 @@ public class PanleMovimientos extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(167, 167, 167)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(ContCardsCreditoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton4)
+                    .addComponent(jButton5))
                 .addContainerGap(235, Short.MAX_VALUE))
         );
 
         add(ContCardsCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 550));
 
-        MovimientosCredito.setBackground(new java.awt.Color(255, 255, 255));
+        ScrollContent.setBackground(new java.awt.Color(255, 255, 255));
 
-        jTable1.setBackground(new java.awt.Color(200, 200, 200));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ContSCP.setBackground(new java.awt.Color(102, 102, 102));
 
-        javax.swing.GroupLayout MovimientosCreditoLayout = new javax.swing.GroupLayout(MovimientosCredito);
-        MovimientosCredito.setLayout(MovimientosCreditoLayout);
-        MovimientosCreditoLayout.setHorizontalGroup(
-            MovimientosCreditoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
+        MovimientoC.setBackground(new java.awt.Color(255, 255, 255));
+        MovimientoC.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        TipoIngresoEgresoC.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        TipoIngresoEgresoC.setForeground(new java.awt.Color(0, 0, 0));
+        TipoIngresoEgresoC.setText("Cantidad");
+
+        TipomovimientoC.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        TipomovimientoC.setForeground(new java.awt.Color(0, 0, 0));
+        TipomovimientoC.setText("Ingreso");
+
+        CantC1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        CantC1.setForeground(new java.awt.Color(0, 0, 0));
+        CantC1.setText("Ingreso");
+
+        javax.swing.GroupLayout MovimientoCLayout = new javax.swing.GroupLayout(MovimientoC);
+        MovimientoC.setLayout(MovimientoCLayout);
+        MovimientoCLayout.setHorizontalGroup(
+            MovimientoCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MovimientoCLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(TipomovimientoC, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 269, Short.MAX_VALUE)
+                .addComponent(TipoIngresoEgresoC, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(120, 120, 120))
+            .addGroup(MovimientoCLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(CantC1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        MovimientosCreditoLayout.setVerticalGroup(
-            MovimientosCreditoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(MovimientosCreditoLayout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 454, Short.MAX_VALUE)
-                .addContainerGap())
+        MovimientoCLayout.setVerticalGroup(
+            MovimientoCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MovimientoCLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(CantC1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(MovimientoCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(MovimientoCLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(TipoIngresoEgresoC, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(MovimientoCLayout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(TipomovimientoC, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(12, Short.MAX_VALUE))))
         );
 
-        add(MovimientosCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, 610, 460));
+        javax.swing.GroupLayout ContSCPLayout = new javax.swing.GroupLayout(ContSCP);
+        ContSCP.setLayout(ContSCPLayout);
+        ContSCPLayout.setHorizontalGroup(
+            ContSCPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(MovimientoC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        ContSCPLayout.setVerticalGroup(
+            ContSCPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContSCPLayout.createSequentialGroup()
+                .addComponent(MovimientoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 358, Short.MAX_VALUE))
+        );
+
+        ScrollContent.setViewportView(ContSCP);
+
+        add(ScrollContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, 610, 460));
 
         ControlMovimientos.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -123,9 +180,9 @@ public class PanleMovimientos extends javax.swing.JPanel {
         ControlMovimientosLayout.setHorizontalGroup(
             ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ControlMovimientosLayout.createSequentialGroup()
-                .addGap(98, 98, 98)
+                .addGap(95, 95, 95)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
                 .addComponent(jButton2)
                 .addGap(91, 91, 91)
                 .addComponent(jButton3)
@@ -134,12 +191,12 @@ public class PanleMovimientos extends javax.swing.JPanel {
         ControlMovimientosLayout.setVerticalGroup(
             ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ControlMovimientosLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
+                .addGap(26, 26, 26)
                 .addGroup(ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         add(ControlMovimientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, 610, 90));
@@ -149,17 +206,26 @@ public class PanleMovimientos extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel CantC1;
     private javax.swing.JPanel ContCardsCredito;
+    private javax.swing.JPanel ContSCP;
     private javax.swing.JPanel ControlMovimientos;
-    private javax.swing.JPanel MovimientosCredito;
+    private javax.swing.JPanel MovimientoC;
+    private javax.swing.JScrollPane ScrollContent;
+    private javax.swing.JLabel TipoIngresoEgresoC;
+    private javax.swing.JLabel TipomovimientoC;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

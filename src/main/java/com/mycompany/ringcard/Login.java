@@ -168,7 +168,7 @@ lolillo.repaint();         // TODO add your handling code here:
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 Lg lg=new Lg();
-        lg.setSize(222,318);
+        lg.setSize(410,474);
         lg.setLocation(0,0);
         lolillo.removeAll();
         lolillo.add(lg, BorderLayout.CENTER);
