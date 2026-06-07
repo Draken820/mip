@@ -15,6 +15,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
      */
     public PanleMovimientos() {
         initComponents();
+              
     }
 
     /**
