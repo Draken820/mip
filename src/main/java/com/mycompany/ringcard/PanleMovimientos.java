@@ -4,6 +4,14 @@
  */
 package com.mycompany.ringcard;
 
+
+import com.mycompany.ringcard.clases.Movimiento;
+import com.mycompany.ringcard.clases.MovimientoDAO;
+import com.mycompany.ringcard.data.dataUsuarios;
+import java.sql.Connection;
+import java.util.ArrayList;
+import javax.swing.BoxLayout;
+
 /**
  *
  * @author Gael
@@ -15,9 +23,48 @@ public class PanleMovimientos extends javax.swing.JPanel {
      */
     public PanleMovimientos() {
         initComponents();
-              
-    }
+        ContSCP.setLayout(new BoxLayout(ContSCP,BoxLayout.Y_AXIS));
+        ContSCP.removeAll();
+        System.out.println("Panel movimientos cargado");
 
+    cargarMovimientos();
+
+        
+    }
+public void cargarMovimientos() {
+
+    ContSCP.removeAll();
+
+    try {
+
+        dataUsuarios db = new dataUsuarios();
+        Connection cx = db.conectar();
+
+        MovimientoDAO dao =
+                new MovimientoDAO(cx);
+
+        ArrayList<Movimiento> lista =
+                dao.listarMovimientosDebito(1);
+
+        System.out.println("Registros encontrados: "
+                + lista.size());
+
+        for (Movimiento mov : lista) {
+
+            registroMovimientos panel =
+                    new registroMovimientos(mov);
+
+            ContSCP.add(panel);
+        }
+
+        ContSCP.revalidate();
+        ContSCP.repaint();
+
+    } catch (Exception e) {
+
+        e.printStackTrace();
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -92,7 +139,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
         add(ContCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 550));
 
-        ScrollContent.setBackground(new java.awt.Color(255, 255, 255));
+        ScrollContent.setBackground(new java.awt.Color(60, 64, 64));
 
         ContSCP.setBackground(new java.awt.Color(102, 102, 102));
 

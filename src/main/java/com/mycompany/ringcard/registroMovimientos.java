@@ -4,6 +4,9 @@
  */
 package com.mycompany.ringcard;
 
+import com.mycompany.ringcard.clases.Movimiento;
+import java.awt.Color;
+
 /**
  *
  * @author Gael
@@ -13,8 +16,50 @@ public class registroMovimientos extends javax.swing.JPanel {
     /**
      * Creates new form registroMovimientos
      */
-    public registroMovimientos() {
+    
+    public registroMovimientos(Movimiento mov) { 
+        
         initComponents();
+         setPreferredSize(new java.awt.Dimension(580, 100));
+        LabTM.setText(
+            mov.getTipoMovimiento().toUpperCase()
+        );
+
+        LabCons.setText(
+            mov.getConcepto()
+        );
+
+        LabDate.setText(
+            mov.getFechaMovimiento().toString()
+        );
+
+        if(mov.getTipoMovimiento()
+                .equalsIgnoreCase("egreso")){
+
+            LabMonto.setText(
+                "-$" + mov.getMonto()
+            );
+
+            LabMonto.setForeground(Color.RED);
+
+        }else{
+
+            LabMonto.setText(
+                "+$" + mov.getMonto()
+            );
+
+            LabMonto.setForeground(
+                new Color(0,153,0)
+            );
+        }
+
+        setBorder(
+            javax.swing.BorderFactory
+                .createLineBorder(
+                    Color.LIGHT_GRAY
+                )
+        );
+        
     }
 
     /**
@@ -26,19 +71,37 @@ public class registroMovimientos extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        LabDate = new javax.swing.JLabel();
+        LabMonto = new javax.swing.JLabel();
+        LabCons = new javax.swing.JLabel();
+        LabTM = new javax.swing.JLabel();
+
+        setBackground(new java.awt.Color(250, 250, 250));
+        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        LabDate.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        LabDate.setForeground(new java.awt.Color(0, 0, 0));
+        add(LabDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 130, 30));
+
+        LabMonto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        LabMonto.setForeground(new java.awt.Color(0, 0, 0));
+        LabMonto.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
+        add(LabMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, 180, 30));
+
+        LabCons.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        LabCons.setForeground(new java.awt.Color(0, 0, 0));
+        add(LabCons, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 390, 30));
+
+        LabTM.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        LabTM.setForeground(new java.awt.Color(0, 0, 0));
+        add(LabTM, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 570, 30));
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel LabCons;
+    private javax.swing.JLabel LabDate;
+    private javax.swing.JLabel LabMonto;
+    private javax.swing.JLabel LabTM;
     // End of variables declaration//GEN-END:variables
 }

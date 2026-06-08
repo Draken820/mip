@@ -41,6 +41,7 @@ public class home extends javax.swing.JFrame {
 
         ContentPrincipal = new javax.swing.JPanel();
         panprincipal = new javax.swing.JPanel();
+        ContenedorGeneralCyD = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         CBMostrar = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -63,6 +64,8 @@ public class home extends javax.swing.JFrame {
 
         panprincipal.setBackground(new java.awt.Color(64, 60, 60));
         panprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        ContenedorGeneralCyD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(200, 200, 200));
 
@@ -91,24 +94,24 @@ public class home extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(37, 37, 37)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(44, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
                 .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
-        panprincipal.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, -1));
+        ContenedorGeneralCyD.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, -1));
 
         jPanel3.setBackground(new java.awt.Color(64, 64, 64));
 
@@ -158,7 +161,9 @@ public class home extends javax.swing.JFrame {
                 .addContainerGap(65, Short.MAX_VALUE))
         );
 
-        panprincipal.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 0, -1, 530));
+        ContenedorGeneralCyD.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 0, -1, 530));
+
+        panprincipal.add(ContenedorGeneralCyD, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 530));
 
         ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 530));
 
@@ -235,6 +240,7 @@ public class home extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CBMostrar;
+    private javax.swing.JPanel ContenedorGeneralCyD;
     private javax.swing.JPanel ContentPrincipal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
