@@ -21,11 +21,11 @@ public class Login extends javax.swing.JFrame {
      * Creates new form Login
      */
     public Login() {
-         initComponents();/*
+         initComponents();
      
 this.setLocationRelativeTo(null);
 this.setVisible(true);
-
+/*
 java.net.URL imgUrl = getClass().getResource("/com/mycompany/ringcard/resources/images/logo_login.png");
     
     if (imgUrl != null) {

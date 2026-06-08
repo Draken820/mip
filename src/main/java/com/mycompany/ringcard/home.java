@@ -5,6 +5,7 @@
 package com.mycompany.ringcard;
 
 import com.formdev.flatlaf.FlatDarkLaf;
+import java.awt.BorderLayout;
 
 /**
  *
@@ -51,6 +52,9 @@ public class home extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        jMenu6 = new javax.swing.JMenu();
+        jMenu7 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -159,7 +163,18 @@ public class home extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Tarjeta");
+
+        jMenu4.setText("Tarjeta");
+        jMenu2.add(jMenu4);
+
+        jMenu6.setText("Tarjeta");
+
+        jMenu7.setText("Tarjeta");
+        jMenu6.add(jMenu7);
+
+        jMenu2.add(jMenu6);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -200,7 +215,10 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
