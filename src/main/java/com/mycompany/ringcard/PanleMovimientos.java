@@ -27,17 +27,13 @@ public class PanleMovimientos extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        ContCardsCredito = new javax.swing.JPanel();
+        ContCards = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         ScrollContent = new javax.swing.JScrollPane();
         ContSCP = new javax.swing.JPanel();
-        MovimientoC = new javax.swing.JPanel();
-        TipoIngresoEgresoC = new javax.swing.JLabel();
-        TipomovimientoC = new javax.swing.JLabel();
-        CantC1 = new javax.swing.JLabel();
         ControlMovimientos = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -46,8 +42,8 @@ public class PanleMovimientos extends javax.swing.JPanel {
         setBackground(new java.awt.Color(200, 200, 200));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ContCardsCredito.setBackground(new java.awt.Color(64, 64, 64));
-        ContCardsCredito.setPreferredSize(new java.awt.Dimension(475, 475));
+        ContCards.setBackground(new java.awt.Color(64, 64, 64));
+        ContCards.setPreferredSize(new java.awt.Dimension(475, 475));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar todo", "Por Mes", "Por Semana" }));
 
@@ -64,11 +60,11 @@ public class PanleMovimientos extends javax.swing.JPanel {
             }
         });
 
-        javax.swing.GroupLayout ContCardsCreditoLayout = new javax.swing.GroupLayout(ContCardsCredito);
-        ContCardsCredito.setLayout(ContCardsCreditoLayout);
-        ContCardsCreditoLayout.setHorizontalGroup(
-            ContCardsCreditoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ContCardsCreditoLayout.createSequentialGroup()
+        javax.swing.GroupLayout ContCardsLayout = new javax.swing.GroupLayout(ContCards);
+        ContCards.setLayout(ContCardsLayout);
+        ContCardsLayout.setHorizontalGroup(
+            ContCardsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContCardsLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addComponent(jButton5)
                 .addGap(29, 29, 29)
@@ -76,87 +72,39 @@ public class PanleMovimientos extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addGap(16, 16, 16))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContCardsCreditoLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ContCardsLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        ContCardsCreditoLayout.setVerticalGroup(
-            ContCardsCreditoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ContCardsCreditoLayout.createSequentialGroup()
+        ContCardsLayout.setVerticalGroup(
+            ContCardsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContCardsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(167, 167, 167)
-                .addGroup(ContCardsCreditoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(ContCardsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4)
                     .addComponent(jButton5))
                 .addContainerGap(235, Short.MAX_VALUE))
         );
 
-        add(ContCardsCredito, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 550));
+        add(ContCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 550));
 
         ScrollContent.setBackground(new java.awt.Color(255, 255, 255));
 
         ContSCP.setBackground(new java.awt.Color(102, 102, 102));
 
-        MovimientoC.setBackground(new java.awt.Color(255, 255, 255));
-        MovimientoC.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        TipoIngresoEgresoC.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        TipoIngresoEgresoC.setForeground(new java.awt.Color(0, 0, 0));
-        TipoIngresoEgresoC.setText("Cantidad");
-
-        TipomovimientoC.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        TipomovimientoC.setForeground(new java.awt.Color(0, 0, 0));
-        TipomovimientoC.setText("Ingreso");
-
-        CantC1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        CantC1.setForeground(new java.awt.Color(0, 0, 0));
-        CantC1.setText("Ingreso");
-
-        javax.swing.GroupLayout MovimientoCLayout = new javax.swing.GroupLayout(MovimientoC);
-        MovimientoC.setLayout(MovimientoCLayout);
-        MovimientoCLayout.setHorizontalGroup(
-            MovimientoCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MovimientoCLayout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(TipomovimientoC, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 269, Short.MAX_VALUE)
-                .addComponent(TipoIngresoEgresoC, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(120, 120, 120))
-            .addGroup(MovimientoCLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(CantC1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        MovimientoCLayout.setVerticalGroup(
-            MovimientoCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, MovimientoCLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(CantC1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(MovimientoCLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(MovimientoCLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(TipoIngresoEgresoC, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(MovimientoCLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(TipomovimientoC, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(12, Short.MAX_VALUE))))
-        );
-
         javax.swing.GroupLayout ContSCPLayout = new javax.swing.GroupLayout(ContSCP);
         ContSCP.setLayout(ContSCPLayout);
         ContSCPLayout.setHorizontalGroup(
             ContSCPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(MovimientoC, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 611, Short.MAX_VALUE)
         );
         ContSCPLayout.setVerticalGroup(
             ContSCPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ContSCPLayout.createSequentialGroup()
-                .addComponent(MovimientoC, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 358, Short.MAX_VALUE))
+            .addGap(0, 462, Short.MAX_VALUE)
         );
 
         ScrollContent.setViewportView(ContSCP);
@@ -213,14 +161,10 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel CantC1;
-    private javax.swing.JPanel ContCardsCredito;
+    private javax.swing.JPanel ContCards;
     private javax.swing.JPanel ContSCP;
     private javax.swing.JPanel ControlMovimientos;
-    private javax.swing.JPanel MovimientoC;
     private javax.swing.JScrollPane ScrollContent;
-    private javax.swing.JLabel TipoIngresoEgresoC;
-    private javax.swing.JLabel TipomovimientoC;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;

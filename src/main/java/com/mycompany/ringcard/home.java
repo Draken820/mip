@@ -6,6 +6,7 @@ package com.mycompany.ringcard;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import java.awt.BorderLayout;
+import javax.swing.text.AbstractDocument;
 
 /**
  *
@@ -40,6 +41,7 @@ public class home extends javax.swing.JFrame {
 
         ContentPrincipal = new javax.swing.JPanel();
         panprincipal = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         CBMostrar = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -59,7 +61,10 @@ public class home extends javax.swing.JFrame {
 
         ContentPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        panprincipal.setBackground(new java.awt.Color(200, 200, 200));
+        panprincipal.setBackground(new java.awt.Color(64, 60, 60));
+        panprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel1.setBackground(new java.awt.Color(200, 200, 200));
 
         CBMostrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         CBMostrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar Todo", "Ingresos", "Egresos", "Solo Credito", "Solo debito" }));
@@ -79,28 +84,31 @@ public class home extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        javax.swing.GroupLayout panprincipalLayout = new javax.swing.GroupLayout(panprincipal);
-        panprincipal.setLayout(panprincipalLayout);
-        panprincipalLayout.setHorizontalGroup(
-            panprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panprincipalLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addGroup(panprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(45, Short.MAX_VALUE))
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(44, Short.MAX_VALUE))
         );
-        panprincipalLayout.setVerticalGroup(
-            panprincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panprincipalLayout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
-        ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, 530));
+        panprincipal.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, -1));
 
         jPanel3.setBackground(new java.awt.Color(64, 64, 64));
 
@@ -150,7 +158,9 @@ public class home extends javax.swing.JFrame {
                 .addContainerGap(65, Short.MAX_VALUE))
         );
 
-        ContentPrincipal.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 0, 290, 530));
+        panprincipal.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 0, -1, 530));
+
+        ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 530));
 
         jMenu1.setText("Opciones");
         jMenu1.addActionListener(this::jMenu1ActionPerformed);
@@ -178,7 +188,7 @@ public class home extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(ContentPrincipal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(ContentPrincipal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
@@ -205,8 +215,14 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // No te lleva a nada por que te lleva al mismo panel
-
+        // Te lleva a el panel de home donde vez todas las estadisticas de todas las cards
+        panprincipal.setSize(ContentPrincipal.getSize());
+        panprincipal.setLocation(0,0);
+        ContentPrincipal.removeAll();
+        ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0,0,950,550));
+        ContentPrincipal.revalidate();
+        ContentPrincipal.repaint();
+        
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
@@ -229,6 +245,7 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
