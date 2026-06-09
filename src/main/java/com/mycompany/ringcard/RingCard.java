@@ -16,14 +16,14 @@ import javax.swing.JLabel;
  *
  * @author DELL
  */
-public class Login extends javax.swing.JFrame {
+public class RingCard extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RingCard.class.getName());
 
     /**
      * Creates new form Login
      */
-    public Login() {
+    public RingCard() {
          initComponents();
          setImagenLabel(jLabel3, "/com/mycompany/ringcard/images/icon.png");
          /*
@@ -192,7 +192,7 @@ lolillo.repaint();         // TODO add your handling code here:
         FlatDarkLaf.setup();
 
         
-        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new RingCard().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

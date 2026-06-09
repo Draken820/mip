@@ -26,7 +26,7 @@ public class home extends javax.swing.JFrame {
     public home(int id) {
         initComponents();
         this.idUsuarioActivo = id; 
-        
+        this.setLocationRelativeTo(null);
       
     }
 
@@ -212,6 +212,7 @@ public class home extends javax.swing.JFrame {
         PanleMovimientos panmov = new PanleMovimientos();
         panmov.setSize(ContentPrincipal.getSize());
         panmov.setLocation(0,0);
+        
 
         ContentPrincipal.removeAll();
         ContentPrincipal.add(panmov,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950,550));

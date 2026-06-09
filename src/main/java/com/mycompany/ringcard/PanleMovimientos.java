@@ -11,6 +11,7 @@ import com.mycompany.ringcard.data.dataUsuarios;
 import java.sql.Connection;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 
 /**
  *
@@ -23,6 +24,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
      */
     public PanleMovimientos() {
         initComponents();
+        
         ContSCP.setLayout(new BoxLayout(ContSCP,BoxLayout.Y_AXIS));
         ContSCP.removeAll();
         System.out.println("Panel movimientos cargado");
