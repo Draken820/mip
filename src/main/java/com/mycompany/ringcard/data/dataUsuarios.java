@@ -36,24 +36,30 @@ public class dataUsuarios {
     public boolean autenticarUsuario(usuarios o){
         this.cx = conectar(); 
 
-
         if (this.cx == null) {
             System.out.println("No se pudo establecer la conexión. No se puede autenticar.");
             return false; 
         }
         try{
-        PreparedStatement ps=cx.prepareStatement("SELECT id_usuario FROM usuarios WHERE email = ? AND pass = ?");
-        ps.setString(1, o.getEmail());
-        ps.setString(2, o.getPass());
-        try (ResultSet rs = ps.executeQuery()) {
-
-                    return rs.next();
+            PreparedStatement ps=cx.prepareStatement("SELECT id_usuario FROM usuarios WHERE email = ? AND pass = ?");
+            ps.setString(1, o.getEmail());
+            ps.setString(2, o.getPass());
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                // MODIFICACIÓN AQUÍ:
+                if (rs.next()) {
+                    // Extraemos el ID de la BD y lo guardamos en el objeto 'o'
+                    o.setId_usuario(rs.getInt("id_usuario")); 
+                    return true; // Inicio de sesión exitoso
+                } else {
+                    return false; // No se encontró el usuario
                 }
+            }
+            
         }catch(Exception e){
             e.printStackTrace();
             return false;
         }
-
     }
     public boolean insertarUsuario(usuarios o) {
 

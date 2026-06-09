@@ -19,8 +19,10 @@ public class TarjetasAddC extends javax.swing.JPanel {
     /**
      * Creates new form TarjetasAdd
      */
-    public TarjetasAddC() {
+    public int idUser;
+    public TarjetasAddC(int id) {
         initComponents();
+        this.idUser=id;
         try {
   
     MaskFormatter mascaraFecha = new MaskFormatter("##/##/####");
@@ -52,26 +54,42 @@ public class TarjetasAddC extends javax.swing.JPanel {
         jTextField6 = new javax.swing.JTextField();
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField1.setText("jTextField1");
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(96, 25, -1, -1));
+        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
 
         jTextField3.setText("jTextField3");
-        add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, -1, -1));
+        jTextField3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField3ActionPerformed(evt);
+            }
+        });
+        add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
 
         jTextField4.setText("jTextField4");
-        add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, -1, -1));
+        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField4ActionPerformed(evt);
+            }
+        });
+        add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, -1, -1));
 
         jTextField5.setText("jTextField5");
-        add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 180, -1, -1));
+        add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, -1, -1));
 
         jTextField6.setText("jTextField6");
-        add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, -1, -1));
+        add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
 
         jFormattedTextField1.setText("jFormattedTextField1");
-        add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, -1, -1));
+        add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));
 
         jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -79,37 +97,96 @@ public class TarjetasAddC extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 120, -1, -1));
+        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 310, 110, -1));
+
+        jLabel1.setText("FechaCorte");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, -1, -1));
+
+        jLabel2.setText("Banco");
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, -1, -1));
+
+        jLabel3.setText("FechaVencimiento");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
+
+        jLabel4.setText("Estado");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, -1, -1));
+
+        jLabel5.setText("SaldoActual");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 150, -1, -1));
+
+        jLabel6.setText("LimiteCredito");
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         try {
                 TarjetasCred tCred = new TarjetasCred();
-             // Asume un ID de usuario activo en tu sesión
-              
+
                 tCred.setBanco(jTextField1.getText());
-                tCred.setFecha_vencimiento(Date.valueOf(jFormattedTextField1.getText())); 
+                
+                // 1. Obtenemos el texto que escribió el usuario
+String textoFecha = jFormattedTextField1.getText();
+
+try {
+    // 2. Le decimos a Java que el usuario escribe en formato Día/Mes/Año
+    java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
+    
+    // 3. Convertimos el texto a una fecha normal de Java
+    java.util.Date fechaParseada = formatoEntrada.parse(textoFecha);
+    
+    // 4. Transformamos esa fecha al formato estricto que requiere SQL y la guardamos en tu objeto
+    tCred.setFecha_vencimiento(new java.sql.Date(fechaParseada.getTime()));
+    
+} catch (java.text.ParseException e) {
+    // Si el usuario escribe letras o algo que no es una fecha válida, mostramos error y detenemos el proceso
+    JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
+    return; // Este return evita que el código siga intentando guardar en la base de datos
+}
                 tCred.setEstado(jTextField3.getText());
                 tCred.setSaldo_actual(Integer.parseInt(jTextField4.getText()));
                 tCred.setLimite_credito(Integer.parseInt(jTextField5.getText()));
                 tCred.setFecha_corte(Integer.parseInt(jTextField6.getText()));
+tCred.setId_usuario(idUser);
 
-                dataTarjetascred dao = new dataTarjetascred();
-                if (dao.insertarTarjetac(tCred)) {
+                if (tCred.insertarTarjetac()) {
                     JOptionPane.showMessageDialog(this, "Tarjeta de crédito agregada con éxito.");
+                    home ventanaHome = new home(idUser);
+                    
+                    // 2. Hacemos visible el home
+                    ventanaHome.setVisible(true);
+                    
+                    // 3. Cerramos la ventana actual
+                    java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
+                    if (ventanaPadre != null) {
+                        ventanaPadre.dispose();
+                    } 
                 } else {
                     JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Revisa los datos ingresados. Fechas en formato YYYY-MM-DD y montos numéricos.", "Error de formato", JOptionPane.WARNING_MESSAGE);
+                ex.printStackTrace();
             }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField3ActionPerformed
+
+    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;

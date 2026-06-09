@@ -20,12 +20,15 @@ public class home extends javax.swing.JFrame {
     /**
      * Creates new form home
      */
-    private int idUsuarioActivo; 
+    public int idUsuarioLogueado;
 
  
     public home(int id) {
         initComponents();
-        this.idUsuarioActivo = id; 
+        this.idUsuarioLogueado = id;
+        
+        // (Opcional) Puedes imprimir un mensaje en consola para comprobar que llegó bien
+        System.out.println("Sesión iniciada. ID del usuario: " + this.idUsuarioLogueado);
         this.setLocationRelativeTo(null);
       
     }
@@ -56,6 +59,8 @@ public class home extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(950, 550));
@@ -180,7 +185,16 @@ public class home extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
+        jMenu2.setText("Tarjeta");
+
+        jMenuItem3.setText("TarjetasC");
+        jMenuItem3.addActionListener(this::jMenuItem3ActionPerformed);
+        jMenu2.add(jMenuItem3);
+
+        jMenuItem4.setText("TarjetasD");
+        jMenuItem4.addActionListener(this::jMenuItem4ActionPerformed);
+        jMenu2.add(jMenuItem4);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -231,6 +245,32 @@ public class home extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+         TarjetasAddC tac = new TarjetasAddC(idUsuarioLogueado);
+        tac.setSize(ContentPrincipal.getSize());
+        tac.setLocation(0,0);
+        
+
+        ContentPrincipal.removeAll();
+        ContentPrincipal.add(tac,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950,550));
+        ContentPrincipal.revalidate();
+        ContentPrincipal.repaint();
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+         TarjetasAddD tad = new TarjetasAddD(idUsuarioLogueado);
+        tad.setSize(ContentPrincipal.getSize());
+        tad.setLocation(0,0);
+        
+
+        ContentPrincipal.removeAll();
+        ContentPrincipal.add(tad,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950,550));
+        ContentPrincipal.revalidate();
+        ContentPrincipal.repaint();
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -252,6 +292,8 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;

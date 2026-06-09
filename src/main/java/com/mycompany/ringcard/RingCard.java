@@ -26,6 +26,8 @@ public class RingCard extends javax.swing.JFrame {
     public RingCard() {
          initComponents();
          setImagenLabel(jLabel3, "/com/mycompany/ringcard/images/icon.png");
+         this.setLocationRelativeTo(null);
+this.setVisible(true);
          /*
      
 this.setLocationRelativeTo(null);
