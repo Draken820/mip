@@ -48,10 +48,6 @@ public class TarjetasAddC extends javax.swing.JPanel {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -60,33 +56,15 @@ public class TarjetasAddC extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jSpinner2 = new javax.swing.JSpinner();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jSpinner3 = new javax.swing.JSpinner();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField1.setText("jTextField1");
         add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
-
-        jTextField3.setText("jTextField3");
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
-        add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
-
-        jTextField4.setText("jTextField4");
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
-        add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 170, -1, -1));
-
-        jTextField5.setText("jTextField5");
-        add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 220, -1, -1));
-
-        jTextField6.setText("jTextField6");
-        add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, -1, -1));
 
         jFormattedTextField1.setText("jFormattedTextField1");
         add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));
@@ -97,9 +75,9 @@ public class TarjetasAddC extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(155, 310, 110, -1));
+        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 110, -1));
 
-        jLabel1.setText("FechaCorte");
+        jLabel1.setText("Dia de Corte");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, -1, -1));
 
         jLabel2.setText("Banco");
@@ -116,6 +94,17 @@ public class TarjetasAddC extends javax.swing.JPanel {
 
         jLabel6.setText("LimiteCredito");
         add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, -1, -1));
+        add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, -1, -1));
+        add(jSpinner2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 170, -1, -1));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "pagado", "vencido", "espera" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+        add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
+        add(jSpinner3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -143,10 +132,10 @@ try {
     JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
     return; // Este return evita que el código siga intentando guardar en la base de datos
 }
-                tCred.setEstado(jTextField3.getText());
-                tCred.setSaldo_actual(Integer.parseInt(jTextField4.getText()));
-                tCred.setLimite_credito(Integer.parseInt(jTextField5.getText()));
-                tCred.setFecha_corte(Integer.parseInt(jTextField6.getText()));
+                tCred.setEstado(jComboBox1.getSelectedItem().toString());
+                tCred.setSaldo_actual((int) jSpinner1.getValue());
+                tCred.setLimite_credito((int)jSpinner2.getValue());
+                tCred.setFecha_corte((int)jSpinner3.getValue());
 tCred.setId_usuario(idUser);
 
                 if (tCred.insertarTarjetac()) {
@@ -169,17 +158,14 @@ tCred.setId_usuario(idUser);
             }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
-
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -187,10 +173,9 @@ tCred.setId_usuario(idUser);
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JSpinner jSpinner2;
+    private javax.swing.JSpinner jSpinner3;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }

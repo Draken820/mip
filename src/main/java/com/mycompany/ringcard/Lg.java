@@ -81,11 +81,12 @@ public class Lg extends javax.swing.JPanel {
 
     private void txt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt2ActionPerformed
         // TODO add your handling code here:
+        txt2.setText("");
     }//GEN-LAST:event_txt2ActionPerformed
 
     private void txt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt1ActionPerformed
         // TODO add your handling code here:
-        
+        txt1.setText("");
     }//GEN-LAST:event_txt1ActionPerformed
 
     private void BtnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIngresarActionPerformed

@@ -51,31 +51,28 @@ public class TarjetasAddD extends javax.swing.JPanel {
     private void initComponents() {
 
         jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
         jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jButton1 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField1.setText("jTextField1");
         add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
 
-        jTextField2.setText("jTextField2");
-        add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
-
         jFormattedTextField1.setText("jFormattedTextField1");
         add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 100, -1, -1));
 
-        jButton1.setText("jButton1");
+        jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, -1, -1));
+        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, -1, 40));
 
         jLabel1.setText("Bancp");
         add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 30, -1, -1));
@@ -85,6 +82,7 @@ public class TarjetasAddD extends javax.swing.JPanel {
 
         jLabel3.setText("Saldo");
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 130, -1, -1));
+        add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -111,7 +109,7 @@ try {
     JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
     return; // Este return evita que el código siga intentando guardar en la base de datos
 }
-                tCred.setSaldo_actual(Integer.parseInt(jTextField2.getText()));
+                tCred.setSaldo_actual((int) jSpinner1.getValue());
                 
 tCred.setId_usuario(iduser);
                 dataTarjetasdeb dao = new dataTarjetasdeb();
@@ -142,7 +140,7 @@ tCred.setId_usuario(iduser);
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }

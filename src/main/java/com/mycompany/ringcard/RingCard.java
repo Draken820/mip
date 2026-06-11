@@ -179,7 +179,13 @@ lolillo.repaint();         // TODO add your handling code here:
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        
+        Lg lg=new Lg();
+        lg.setSize(410,474);
+        lg.setLocation(0,0);
+        lolillo.removeAll();
+        lolillo.add(lg, BorderLayout.CENTER);
+        lolillo.revalidate();
+        lolillo.repaint();
     }//GEN-LAST:event_formWindowOpened
 
     /**
