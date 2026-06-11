@@ -10,8 +10,8 @@ import java.sql.SQLException;
 
 public class dataTarjetasdeb {
     Connection cx;
-    String url = "jdbc:postgresql://localhost:5432/RINGCARD";
-    String pass = "pokoyo5505";
+    String url = "jdbc:postgresql://localhost:5432/proyecto";
+    String pass = "volvo";
     String user = "postgres";
 
     public Connection conectar() {

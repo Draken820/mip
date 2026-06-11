@@ -41,8 +41,6 @@ public class Lg extends javax.swing.JPanel {
         BtnIngresar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
         lg1.setBackground(new java.awt.Color(255, 255, 255));
         lg1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -76,7 +74,20 @@ public class Lg extends javax.swing.JPanel {
         jLabel3.setText("Iniciar Seción");
         lg1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 420, 60));
 
-        add(lg1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 480));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void txt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt2ActionPerformed

@@ -223,7 +223,7 @@ public class home extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // Te lleva al panel de Movimientos
-        PanleMovimientos panmov = new PanleMovimientos();
+        PanleMovimientos panmov = new PanleMovimientos(idUsuarioLogueado);
         panmov.setSize(ContentPrincipal.getSize());
         panmov.setLocation(0,0);
         
