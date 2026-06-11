@@ -1,169 +1,67 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.ringcard.clases;
 
 import com.mycompany.ringcard.data.dataTarjetascred;
 import java.util.Date;
 
-/**
- *
- * @author drako
- */
 public class TarjetasCred {
-    dataTarjetascred x=new dataTarjetascred();
+    dataTarjetascred x = new dataTarjetascred();
+    
     public int id_cardcredito;
     public int id_usuario;
     public String banco;
+    public double cantidadab; // NUEVO CAMPO NUMERIC
+    public int pctinteres;    // NUEVO CAMPO INT4
     public Date fecha_vencimiento;
     public String estado;
-    public int saldo_actual;
-    public int limite_credito;
+    public double saldo_actual;   // CAMBIADO A DOUBLE (NUMERIC)
+    public double limite_credito; // CAMBIADO A DOUBLE (NUMERIC)
     public int fecha_corte;
 
-    /**
-     * @return the id_cardcredito
-     */
-    public int getId_cardcredito() {
-        return id_cardcredito;
+    public TarjetasCred() {
     }
 
-    /**
-     * @param id_cardcredito the id_cardcredito to set
-     */
-    public void setId_cardcredito(int id_cardcredito) {
-        this.id_cardcredito = id_cardcredito;
-    }
+    // GETTERS Y SETTERS
+    public int getId_cardcredito() { return id_cardcredito; }
+    public void setId_cardcredito(int id_cardcredito) { this.id_cardcredito = id_cardcredito; }
 
-    /**
-     * @return the id_usuario
-     */
-    public int getId_usuario() {
-        return id_usuario;
-    }
+    public int getId_usuario() { return id_usuario; }
+    public void setId_usuario(int id_usuario) { this.id_usuario = id_usuario; }
 
-    /**
-     * @param id_usuario the id_usuario to set
-     */
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
-    }
+    public String getBanco() { return banco; }
+    public void setBanco(String banco) { this.banco = banco; }
 
-    /**
-     * @return the banco
-     */
-    public String getBanco() {
-        return banco;
-    }
+    public double getCantidadab() { return cantidadab; }
+    public void setCantidadab(double cantidadab) { this.cantidadab = cantidadab; }
 
-    /**
-     * @param banco the banco to set
-     */
-    public void setBanco(String banco) {
-        this.banco = banco;
-    }
+    public int getPctinteres() { return pctinteres; }
+    public void setPctinteres(int pctinteres) { this.pctinteres = pctinteres; }
 
-    /**
-     * @return the fecha_vencimiento
-     */
-    public Date getFecha_vencimiento() {
-        return fecha_vencimiento;
-    }
+    public Date getFecha_vencimiento() { return fecha_vencimiento; }
+    public void setFecha_vencimiento(Date fecha_vencimiento) { this.fecha_vencimiento = fecha_vencimiento; }
 
-    /**
-     * @param fecha_vencimiento the fecha_vencimiento to set
-     */
-    public void setFecha_vencimiento(Date fecha_vencimiento) {
-        this.fecha_vencimiento = fecha_vencimiento;
-    }
+    public String getEstado() { return estado; }
+    public void setEstado(String estado) { this.estado = estado; }
 
-    /**
-     * @return the estado
-     */
-    public String getEstado() {
-        return estado;
-    }
+    public double getSaldo_actual() { return saldo_actual; }
+    public void setSaldo_actual(double saldo_actual) { this.saldo_actual = saldo_actual; }
 
-    /**
-     * @param estado the estado to set
-     */
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
+    public double getLimite_credito() { return limite_credito; }
+    public void setLimite_credito(double limite_credito) { this.limite_credito = limite_credito; }
 
-    /**
-     * @return the saldo_actual
-     */
-    public int getSaldo_actual() {
-        return saldo_actual;
-    }
+    public int getFecha_corte() { return fecha_corte; }
+    public void setFecha_corte(int fecha_corte) { this.fecha_corte = fecha_corte; }
 
-    /**
-     * @param saldo_actual the saldo_actual to set
-     */
-    public void setSaldo_actual(int saldo_actual) {
-        this.saldo_actual = saldo_actual;
-    }
-
-    /**
-     * @return the limite_credito
-     */
-    public int getLimite_credito() {
-        return limite_credito;
-    }
-
-    /**
-     * @param limite_credito the limite_credito to set
-     */
-    public void setLimite_credito(int limite_credito) {
-        this.limite_credito = limite_credito;
-    }
-
-    /**
-     * @return the fecha_corte
-     */
-    public int getFecha_corte() {
-        return fecha_corte;
-    }
-
-    /**
-     * @param fecha_corte the fecha_corte to set
-     */
-    public void setFecha_corte(int fecha_corte) {
-        this.fecha_corte = fecha_corte;
-    }
-    public TarjetasCred(){
-        
-    }
+    // MÉTODOS CRUD
     public boolean insertarTarjetac() {
-	if(x.insertarTarjetac(this)) {
-		return true;
-	}else {
-		return false;
-	}
-}
-     public boolean eliminarTarjetac() {
-	if(x.eliminarTarjetac(this)) {
-		return true;
-	}else {
-		return false;
-	}
-}
-public boolean consultarTarjetac() {
-	if(x.consultarTarjetac(this)) {
-		return true;
-	}else {
-		return false;
-	}
-}
-public boolean actualizarTarjetac() {
-	if(x.actualizarTarjetac(this)) {
-		return true;
-	}else {
-		return false;
-	}
-}
-            
-         
+        return x.insertarTarjetac(this);
+    }
+    public boolean eliminarTarjetac() {
+        return x.eliminarTarjetac(this);
+    }
+    public boolean consultarTarjetac() {
+        return x.consultarTarjetac(this);
+    }
+    public boolean actualizarTarjetac() {
+        return x.actualizarTarjetac(this);
+    }
 }

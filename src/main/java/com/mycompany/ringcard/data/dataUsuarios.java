@@ -18,7 +18,7 @@ import java.sql.SQLException;
 public class dataUsuarios {
     Connection cx;
 
-   String url = "jdbc:postgresql://localhost:5432/proyecto";
+   String url = "jdbc:postgresql://localhost:5432/proyecto1";
     String pass = "volvo";
     String user = "postgres";
 

@@ -19,11 +19,14 @@ import javax.swing.JPanel;
  * @author Gael
  */
 public class PanleMovimientos extends javax.swing.JPanel {
-private ArrayList<String> nombresTarjetas;
+
+    private ArrayList<String> nombresTarjetas;
+    private ArrayList<Integer> idsTarjetas;  // <-- NUEVO: Guarda los IDs reales
+    private ArrayList<String> tiposTarjetas; // <-- NUEVO: Guarda "debito" o "credito"
     private int indiceActual = 0;
-    
-    // Es vital recibir el ID del usuario para saber de quién son las tarjetas
     private int idUsuarioLogueado;
+    
+
     /**
      * Creates new form PanleMovimientos
      */
@@ -31,8 +34,8 @@ private ArrayList<String> nombresTarjetas;
         initComponents();
         this.idUsuarioLogueado = idUsuario;
         this.nombresTarjetas = new ArrayList<>();
-        ContCards.setComponentZOrder(btnBorrarCard, 0);
-        ContCards.setComponentZOrder(btnModificarCard, 1);
+        this.idsTarjetas = new ArrayList<>();   // <-- INICIALIZAR
+        this.tiposTarjetas = new ArrayList<>(); // <-- INICIALIZAR
         
         this.idUsuarioLogueado = idUsuario;
         this.nombresTarjetas = new ArrayList<>();
@@ -84,34 +87,81 @@ private ArrayList<String> nombresTarjetas;
         });
     } // <-- Cierre del constructor
     private void obtenerTarjetasDelUsuario() {
-        nombresTarjetas.clear();
-        try {
-            dataUsuarios db = new dataUsuarios();
-            Connection cx = db.conectar();
-            
-            // Consulta para obtener tarjetas de débito
-            String sqlDebito = "SELECT banco FROM cardsdebito WHERE id_usuario = ?";
-            java.sql.PreparedStatement psDeb = cx.prepareStatement(sqlDebito);
-            psDeb.setInt(1, this.idUsuarioLogueado);
-            java.sql.ResultSet rsDeb = psDeb.executeQuery();
-            while(rsDeb.next()) {
-                nombresTarjetas.add(rsDeb.getString("banco") + " (Débito)");
-            }
-            
-            // Consulta para obtener tarjetas de crédito
-            String sqlCredito = "SELECT banco FROM cardscredito WHERE id_usuario = ?";
-            java.sql.PreparedStatement psCred = cx.prepareStatement(sqlCredito);
-            psCred.setInt(1, this.idUsuarioLogueado);
-            java.sql.ResultSet rsCred = psCred.executeQuery();
-            while(rsCred.next()) {
-                nombresTarjetas.add(rsCred.getString("banco") + " (Crédito)");
-            }
-            
-            cx.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+    nombresTarjetas.clear();
+    idsTarjetas.clear();     // Limpiamos la lista
+    tiposTarjetas.clear();   // Limpiamos la lista
+    try {
+        dataUsuarios db = new dataUsuarios();
+        Connection cx = db.conectar();
+        
+        // Obtenemos ID y Banco de Débito
+        String sqlDebito = "SELECT id_carddebito, banco FROM cardsdebito WHERE id_usuario = ?";
+        java.sql.PreparedStatement psDeb = cx.prepareStatement(sqlDebito);
+        psDeb.setInt(1, this.idUsuarioLogueado);
+        java.sql.ResultSet rsDeb = psDeb.executeQuery();
+        while(rsDeb.next()) {
+            nombresTarjetas.add(rsDeb.getString("banco") + " (Débito)");
+            idsTarjetas.add(rsDeb.getInt("id_carddebito")); // Guardamos el ID real
+            tiposTarjetas.add("debito");
         }
+        
+        // Obtenemos ID y Banco de Crédito
+        String sqlCredito = "SELECT id_cardcredito, banco FROM cardscredito WHERE id_usuario = ?";
+        java.sql.PreparedStatement psCred = cx.prepareStatement(sqlCredito);
+        psCred.setInt(1, this.idUsuarioLogueado);
+        java.sql.ResultSet rsCred = psCred.executeQuery();
+        while(rsCred.next()) {
+            nombresTarjetas.add(rsCred.getString("banco") + " (Crédito)");
+            idsTarjetas.add(rsCred.getInt("id_cardcredito")); // Guardamos el ID real
+            tiposTarjetas.add("credito");
+        }
+        
+        cx.close();
+    } catch (Exception e) {
+        e.printStackTrace();
     }
+}
+
+public void cargarMovimientos() {
+    ContSCP.removeAll();
+
+    // Si no hay tarjetas, no hacemos nada
+    if (idsTarjetas == null || idsTarjetas.isEmpty()) {
+        ContSCP.revalidate();
+        ContSCP.repaint();
+        return;
+    }
+
+    try {
+        dataUsuarios db = new dataUsuarios();
+        Connection cx = db.conectar();
+        MovimientoDAO dao = new MovimientoDAO(cx);
+
+        // ¡LA MAGIA! Extraemos el ID de la tarjeta que el usuario está viendo actualmente
+        int idTarjetaActual = idsTarjetas.get(indiceActual);
+        String tipoActual = tiposTarjetas.get(indiceActual);
+
+        // Si la tarjeta es de débito, cargamos sus movimientos
+        if (tipoActual.equals("debito")) {
+            ArrayList<Movimiento> lista = dao.listarMovimientosDebito(idTarjetaActual);
+            System.out.println("Cargando ID " + idTarjetaActual + " - Registros: " + lista.size());
+
+            for (Movimiento mov : lista) {
+                registroMovimientos panel = new registroMovimientos(mov);
+                ContSCP.add(panel);
+            }
+        } else {
+            // (Opcional) Aquí irá tu lógica para tarjetas de crédito cuando la tengas
+            System.out.println("Tarjeta de crédito. Aún no se programan sus movimientos.");
+        }
+
+        ContSCP.revalidate();
+        ContSCP.repaint();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     private void actualizarLabelTarjeta() {
         if (!nombresTarjetas.isEmpty()) {
@@ -120,40 +170,6 @@ private ArrayList<String> nombresTarjetas;
             jLabel1.setText("No hay tarjetas");
         }
     }
-public void cargarMovimientos() {
-
-    ContSCP.removeAll();
-
-    try {
-
-        dataUsuarios db = new dataUsuarios();
-        Connection cx = db.conectar();
-
-        MovimientoDAO dao =
-                new MovimientoDAO(cx);
-
-        ArrayList<Movimiento> lista =
-                dao.listarMovimientosDebito(1);
-
-        System.out.println("Registros encontrados: "
-                + lista.size());
-
-        for (Movimiento mov : lista) {
-
-            registroMovimientos panel =
-                    new registroMovimientos(mov);
-
-            ContSCP.add(panel);
-        }
-
-        ContSCP.revalidate();
-        ContSCP.repaint();
-
-    } catch (Exception e) {
-
-        e.printStackTrace();
-    }
-}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -291,26 +307,28 @@ public void cargarMovimientos() {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
-            indiceActual--;
-            // Si retrocedemos más allá de la posición 0, vamos a la última tarjeta
-            if (indiceActual < 0) {
-                indiceActual = nombresTarjetas.size() - 1; 
-            }
-            actualizarLabelTarjeta();
+if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
+        indiceActual--;
+        if (indiceActual < 0) {
+            indiceActual = nombresTarjetas.size() - 1; 
         }
+        actualizarLabelTarjeta();
+        cargarMovimientos(); // <-- NUEVO: Recargar movimientos al retroceder
+    }
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
-            indiceActual++;
-            // Si pasamos el límite de la lista, volvemos a la posición 0
-            if (indiceActual >= nombresTarjetas.size()) {
-                indiceActual = 0; 
-            }
-            actualizarLabelTarjeta();
+       if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
+        indiceActual++;
+        if (indiceActual >= nombresTarjetas.size()) {
+            indiceActual = 0; 
         }
+        actualizarLabelTarjeta();
+        cargarMovimientos(); // <-- NUEVO: Recargar movimientos al avanzar
+    }
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnBorrarCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarCardActionPerformed

@@ -60,14 +60,18 @@ public class TarjetasAddC extends javax.swing.JPanel {
         jSpinner2 = new javax.swing.JSpinner();
         jComboBox1 = new javax.swing.JComboBox<>();
         jSpinner3 = new javax.swing.JSpinner();
+        jLabel7 = new javax.swing.JLabel();
+        jSpinner4 = new javax.swing.JSpinner();
+        jLabel8 = new javax.swing.JLabel();
+        jSpinner5 = new javax.swing.JSpinner();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jTextField1.setText("jTextField1");
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
+        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
 
         jFormattedTextField1.setText("jFormattedTextField1");
-        add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 70, -1, -1));
+        add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, -1, -1));
 
         jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -75,27 +79,27 @@ public class TarjetasAddC extends javax.swing.JPanel {
                 jButton1ActionPerformed(evt);
             }
         });
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 310, 110, -1));
+        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 130, 70));
 
         jLabel1.setText("Dia de Corte");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 250, -1, -1));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 130, -1, -1));
 
         jLabel2.setText("Banco");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 0, -1, -1));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, -1, -1));
 
-        jLabel3.setText("FechaVencimiento");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
+        jLabel3.setText("PorcentajeDeInteres");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
         jLabel4.setText("Estado");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 100, -1, -1));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 130, -1, -1));
 
         jLabel5.setText("SaldoActual");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 150, -1, -1));
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, -1, -1));
 
         jLabel6.setText("LimiteCredito");
-        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, -1, -1));
-        add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 220, -1, -1));
-        add(jSpinner2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 170, -1, -1));
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, -1, -1));
+        add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 100, -1, -1));
+        add(jSpinner2, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 50, -1, -1));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "pagado", "vencido", "espera" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
@@ -103,59 +107,59 @@ public class TarjetasAddC extends javax.swing.JPanel {
                 jComboBox1ActionPerformed(evt);
             }
         });
-        add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 120, -1, -1));
-        add(jSpinner3, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 270, -1, -1));
+        add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+        add(jSpinner3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, -1, -1));
+
+        jLabel7.setText("FechaVencimiento");
+        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        add(jSpinner4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, -1, -1));
+
+        jLabel8.setText("CantidadAbonada");
+        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, -1, -1));
+        add(jSpinner5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 200, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+       try {
+        TarjetasCred tCred = new TarjetasCred();
+
+        tCred.setBanco(jTextField1.getText());
+        
+        // Se extraen los nuevos valores numéricos usando Number para evitar errores de casteo
+        tCred.setCantidadab(((Number) jSpinner5.getValue()).doubleValue());
+        tCred.setPctinteres(((Number) jSpinner4.getValue()).intValue());
+
+        String textoFecha = jFormattedTextField1.getText();
         try {
-                TarjetasCred tCred = new TarjetasCred();
+            java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date fechaParseada = formatoEntrada.parse(textoFecha);
+            tCred.setFecha_vencimiento(new java.sql.Date(fechaParseada.getTime()));
+        } catch (java.text.ParseException e) {
+            JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
 
-                tCred.setBanco(jTextField1.getText());
-                
-                // 1. Obtenemos el texto que escribió el usuario
-String textoFecha = jFormattedTextField1.getText();
+        tCred.setEstado(jComboBox1.getSelectedItem().toString());
+        tCred.setSaldo_actual(((Number) jSpinner1.getValue()).doubleValue());
+        tCred.setLimite_credito(((Number) jSpinner2.getValue()).doubleValue());
+        tCred.setFecha_corte(((Number) jSpinner3.getValue()).intValue());
+        tCred.setId_usuario(idUser);
 
-try {
-    // 2. Le decimos a Java que el usuario escribe en formato Día/Mes/Año
-    java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
-    
-    // 3. Convertimos el texto a una fecha normal de Java
-    java.util.Date fechaParseada = formatoEntrada.parse(textoFecha);
-    
-    // 4. Transformamos esa fecha al formato estricto que requiere SQL y la guardamos en tu objeto
-    tCred.setFecha_vencimiento(new java.sql.Date(fechaParseada.getTime()));
-    
-} catch (java.text.ParseException e) {
-    // Si el usuario escribe letras o algo que no es una fecha válida, mostramos error y detenemos el proceso
-    JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
-    return; // Este return evita que el código siga intentando guardar en la base de datos
-}
-                tCred.setEstado(jComboBox1.getSelectedItem().toString());
-                tCred.setSaldo_actual((int) jSpinner1.getValue());
-                tCred.setLimite_credito((int)jSpinner2.getValue());
-                tCred.setFecha_corte((int)jSpinner3.getValue());
-tCred.setId_usuario(idUser);
-
-                if (tCred.insertarTarjetac()) {
-                    JOptionPane.showMessageDialog(this, "Tarjeta de crédito agregada con éxito.");
-                    home ventanaHome = new home(idUser);
-                    
-                    // 2. Hacemos visible el home
-                    ventanaHome.setVisible(true);
-                    
-                    // 3. Cerramos la ventana actual
-                    java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
-                    if (ventanaPadre != null) {
-                        ventanaPadre.dispose();
-                    } 
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
+        if (tCred.insertarTarjetac()) {
+            JOptionPane.showMessageDialog(this, "Tarjeta de crédito agregada con éxito.");
+            home ventanaHome = new home(idUser);
+            ventanaHome.setVisible(true);
+            
+            java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
+            if (ventanaPadre != null) {
+                ventanaPadre.dispose();
+            } 
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -173,9 +177,13 @@ tCred.setId_usuario(idUser);
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JSpinner jSpinner2;
     private javax.swing.JSpinner jSpinner3;
+    private javax.swing.JSpinner jSpinner4;
+    private javax.swing.JSpinner jSpinner5;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

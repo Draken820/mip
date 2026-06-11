@@ -13,7 +13,7 @@ import java.sql.Date;
 public class Movimiento {
     private int idMovimiento;
     private int idCardDebito;
-    private int idCategoria;
+  
     private Date fechaMovimiento;
     private String concepto;
     private double monto;
@@ -23,10 +23,10 @@ public class Movimiento {
     public Movimiento(){
     }
     
-    public Movimiento(int idMovimiento, int idCardDebito, int  idCategoria, Date fechaMovimiento, String concepto, double monto, String tipoMovimiento){
+    public Movimiento(int idMovimiento, int idCardDebito, Date fechaMovimiento, String concepto, double monto, String tipoMovimiento){
         this.idMovimiento = idMovimiento;
         this.idCardDebito = idCardDebito;
-        this.idCategoria = idCategoria;
+      
         this.fechaMovimiento = fechaMovimiento;
         this.concepto = concepto;
         this.monto = monto;
@@ -49,13 +49,6 @@ public class Movimiento {
         this.idCardDebito = idCardDebito;
     }
 
-    public int getIdCategoria() {
-        return idCategoria;
-    }
-
-    public void setIdCategoria(int idCategoria) {
-        this.idCategoria = idCategoria;
-    }
 
     public Date getFechaMovimiento() {
         return fechaMovimiento;
