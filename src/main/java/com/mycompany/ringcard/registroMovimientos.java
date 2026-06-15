@@ -86,7 +86,7 @@ public class registroMovimientos extends javax.swing.JPanel {
         LabMonto.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         LabMonto.setForeground(new java.awt.Color(0, 0, 0));
         LabMonto.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
-        add(LabMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 60, 180, 30));
+        add(LabMonto, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 70, 180, 30));
 
         LabCons.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         LabCons.setForeground(new java.awt.Color(0, 0, 0));

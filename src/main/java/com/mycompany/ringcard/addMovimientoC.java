@@ -29,13 +29,18 @@ public class addMovimientoC extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(200, 200, 200));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setText("jLabel1");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, 160, 30));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Registro de movimiento");
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 740, 30));
 
-        jTextField1.setText("jTextField1");
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 60, -1, -1));
+        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTextField1.setText("Registrar");
+        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 492, 90, 50));
     }// </editor-fold>//GEN-END:initComponents
 
 

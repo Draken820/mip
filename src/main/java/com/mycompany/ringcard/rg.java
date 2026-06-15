@@ -43,10 +43,10 @@ public class rg extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         txttel = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jLabel7 = new javax.swing.JLabel();
 
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(200, 200, 200));
+        jPanel1.setForeground(new java.awt.Color(200, 200, 200));
         jPanel1.setMaximumSize(new java.awt.Dimension(168, 255));
         jPanel1.setMinimumSize(new java.awt.Dimension(168, 255));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -54,9 +54,11 @@ public class rg extends javax.swing.JPanel {
         jLabel1.setBackground(new java.awt.Color(0, 0, 0));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpersonN1.png"))); // NOI18N
         jLabel1.setText("Nombre:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 170, 260, 30));
 
+        txtn.setForeground(new java.awt.Color(153, 153, 153));
         txtn.setText("ingresa el nombre");
         txtn.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -64,66 +66,119 @@ public class rg extends javax.swing.JPanel {
             }
         });
         txtn.addActionListener(this::txtnActionPerformed);
-        jPanel1.add(txtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 260, -1));
+        jPanel1.add(txtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, 260, -1));
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpersonN1.png"))); // NOI18N
         jLabel2.setText("Apellido Paterno:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 90, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, 250, 30));
 
+        txtap.setForeground(new java.awt.Color(153, 153, 153));
         txtap.setText("Ingresa Apellido");
-        jPanel1.add(txtap, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 110, 260, -1));
+        txtap.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtapFocusGained(evt);
+            }
+        });
+        jPanel1.add(txtap, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 260, 260, -1));
 
         jLabel3.setBackground(new java.awt.Color(0, 0, 0));
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpersonN1.png"))); // NOI18N
         jLabel3.setText("Apellido Materno:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 290, 170, 30));
 
+        txtam.setForeground(new java.awt.Color(153, 153, 153));
         txtam.setText("Ingresa Apellido");
-        jPanel1.add(txtam, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, 260, -1));
+        txtam.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtamFocusGained(evt);
+            }
+        });
+        jPanel1.add(txtam, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 320, 260, -1));
 
+        txtem.setForeground(new java.awt.Color(153, 153, 153));
         txtem.setText("Ingresa tu Gmail");
+        txtem.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtemFocusGained(evt);
+            }
+        });
         txtem.addActionListener(this::txtemActionPerformed);
-        jPanel1.add(txtem, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 260, -1));
+        jPanel1.add(txtem, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 440, 260, -1));
 
         jLabel4.setBackground(new java.awt.Color(0, 0, 0));
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpasswN.png"))); // NOI18N
         jLabel4.setText("Contraseña:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 190, -1, -1));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 350, 140, 30));
 
         jLabel5.setBackground(new java.awt.Color(0, 0, 0));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ImailN.png"))); // NOI18N
         jLabel5.setText("Email:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 410, 90, 30));
 
-        txtpas.setText("********");
-        jPanel1.add(txtpas, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 210, 260, -1));
+        txtpas.setForeground(new java.awt.Color(153, 153, 153));
+        txtpas.setText("Ingresa Contraseña");
+        txtpas.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtpasFocusGained(evt);
+            }
+        });
+        jPanel1.add(txtpas, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 380, 260, -1));
 
         jLabel6.setBackground(new java.awt.Color(0, 0, 0));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IphoneN.png"))); // NOI18N
         jLabel6.setText("Telefono:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 290, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 470, 110, 30));
 
+        txttel.setForeground(new java.awt.Color(153, 153, 153));
         txttel.setText("55-5555-5555");
+        txttel.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txttelFocusGained(evt);
+            }
+        });
         txttel.addActionListener(this::txttelActionPerformed);
         txttel.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txttelKeyTyped(evt);
             }
         });
-        jPanel1.add(txttel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 310, 260, -1));
+        jPanel1.add(txttel, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 500, 260, -1));
 
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IaddB.png"))); // NOI18N
         jButton1.setText("Registrar");
+        jButton1.setMargin(new java.awt.Insets(2, 3, 3, 14));
         jButton1.addActionListener(this::jButton1ActionPerformed);
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 370, 90, 40));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 560, -1, 40));
 
-        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 410, 474));
+        jLabel7.setFont(new java.awt.Font("Segoe UI Emoji", 1, 24)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpersonN.png"))); // NOI18N
+        jLabel7.setText("Registrarse");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 620, 70));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -173,6 +228,7 @@ public class rg extends javax.swing.JPanel {
 
     private void txtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnActionPerformed
         // TODO add your handling code here:
+        //txtn
     }//GEN-LAST:event_txtnActionPerformed
 
     private void txttelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttelKeyTyped
@@ -198,6 +254,46 @@ public class rg extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txttelActionPerformed
 
+    private void txtapFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtapFocusGained
+        // TODO add your handling code here:
+        if(txtap.getText().equals("Ingresa Apellido")){
+            txtap.setText("");
+            txtap.setForeground(java.awt.Color.BLACK);
+        }
+    }//GEN-LAST:event_txtapFocusGained
+
+    private void txtamFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtamFocusGained
+        // TODO add your handling code here:
+        if (txtam.getText().equals("Ingresa Apellido")) {
+            txtam.setText("");
+            txtam.setForeground(java.awt.Color.BLACK);
+        }
+    }//GEN-LAST:event_txtamFocusGained
+
+    private void txtpasFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtpasFocusGained
+        // TODO add your handling code here:
+        if (txtpas.getText().equals("ingresa contraseña")) {
+            txtpas.setText("");
+            txtpas.setForeground(java.awt.Color.BLACK);
+        }
+    }//GEN-LAST:event_txtpasFocusGained
+
+    private void txtemFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtemFocusGained
+        // TODO add your handling code here:
+        if (txtem.getText().equals("Ingresa tu Gmail")) {
+            txtem.setText("");
+            txtem.setForeground(java.awt.Color.BLACK);
+        }
+    }//GEN-LAST:event_txtemFocusGained
+
+    private void txttelFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txttelFocusGained
+        // TODO add your handling code here:
+        if (txttel.getText().equals("55-5555-5555")) {
+            txttel.setText("");
+            txttel.setForeground(java.awt.Color.BLACK);
+        }
+    }//GEN-LAST:event_txttelFocusGained
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -207,6 +303,7 @@ public class rg extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JTextField txtam;
     private javax.swing.JTextField txtap;

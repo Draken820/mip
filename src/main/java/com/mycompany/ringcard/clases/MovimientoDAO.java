@@ -29,16 +29,16 @@ public class MovimientoDAO {
             String sql = 
                 "INSERT INTO movimientos_debito " +
                 "(id_carddebito,  fecha_movimiento, concepto, monto, tipo_movimiento) " +
-                "VALUES (?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?)";
 
             PreparedStatement ps = cx.prepareStatement(sql);
 
             ps.setInt(1, mov.getIdCardDebito());
         
-            ps.setDate(3, mov.getFechaMovimiento());
-            ps.setString(4, mov.getConcepto());
-            ps.setDouble(5, mov.getMonto());
-            ps.setString(6, mov.getTipoMovimiento());
+            ps.setDate(2, mov.getFechaMovimiento());
+            ps.setString(3, mov.getConcepto());
+            ps.setDouble(4, mov.getMonto());
+            ps.setString(5, mov.getTipoMovimiento());
 
             return ps.executeUpdate() > 0;
 
@@ -112,6 +112,7 @@ public class MovimientoDAO {
             PreparedStatement ps = cx.prepareStatement(sql);
             ps.setInt(1, idMovimiento);
             ResultSet rs = ps.executeQuery();
+            
 
             if (rs.next()) {
                 Movimiento mov = new Movimiento();
@@ -133,4 +134,209 @@ public class MovimientoDAO {
 
         return null;
     }
+    
+    //TODOS LOS MOVIENTOS
+    public ResultSet obtenerTodosLosMovimientos(int idUsuario) {
+
+    try {
+
+        String sql = """
+            SELECT mc.fecha_movimiento,
+                   mc.concepto,
+                   mc.monto,
+                   mc.tipo_movimiento,
+                   'Credito' AS tarjeta,
+                   mc.id_movimiento
+            FROM movimientos_credito mc
+            INNER JOIN cardscredito cc
+                ON mc.id_cardcredito = cc.id_cardcredito
+            WHERE cc.id_usuario = ?
+
+            UNION ALL
+
+            SELECT md.fecha_movimiento,
+                   md.concepto,
+                   md.monto,
+                   md.tipo_movimiento,
+                   'Debito' AS tarjeta,
+                   md.id_movimiento
+            FROM movimientos_debito md
+            INNER JOIN cardsdebito cd
+                ON md.id_carddebito = cd.id_carddebito
+            WHERE cd.id_usuario = ?
+
+            ORDER BY fecha_movimiento DESC,
+                     id_movimiento DESC
+            """;
+
+        PreparedStatement ps = cx.prepareStatement(sql);
+
+        ps.setInt(1, idUsuario);
+        ps.setInt(2, idUsuario);
+        
+
+        return ps.executeQuery();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
+
+    public ResultSet obtenerEgresos(int idUsuario) {
+
+    try {
+
+        String sql = """
+            SELECT mc.fecha_movimiento,
+                   mc.concepto,
+                   mc.monto,
+                   mc.tipo_movimiento,
+                   'Credito' AS tarjeta
+            FROM movimientos_credito mc
+            INNER JOIN cardscredito cc
+                ON mc.id_cardcredito = cc.id_cardcredito
+            WHERE cc.id_usuario = ?
+              AND UPPER(mc.tipo_movimiento) = 'EGRESO'
+
+            UNION ALL
+
+            SELECT md.fecha_movimiento,
+                   md.concepto,
+                   md.monto,
+                   md.tipo_movimiento,
+                   'Debito' AS tarjeta
+            FROM movimientos_debito md
+            INNER JOIN cardsdebito cd
+                ON md.id_carddebito = cd.id_carddebito
+            WHERE cd.id_usuario = ?
+              AND UPPER(md.tipo_movimiento) = 'EGRESO'
+
+            ORDER BY fecha_movimiento DESC
+            """;
+
+        PreparedStatement ps = cx.prepareStatement(sql);
+
+        ps.setInt(1, idUsuario);
+        ps.setInt(2, idUsuario);
+
+        return ps.executeQuery();
+
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
+
+public ResultSet obtenerIngresos(int idUsuario) {
+
+    try {
+
+        String sql = """
+            SELECT mc.fecha_movimiento,
+                   mc.concepto,
+                   mc.monto,
+                   mc.tipo_movimiento,
+                   'Credito' AS tarjeta
+            FROM movimientos_credito mc
+            INNER JOIN cardscredito cc
+                ON mc.id_cardcredito = cc.id_cardcredito
+            WHERE cc.id_usuario = ?
+              AND UPPER(mc.tipo_movimiento) = 'INGRESO'
+
+            UNION ALL
+
+            SELECT md.fecha_movimiento,
+                   md.concepto,
+                   md.monto,
+                   md.tipo_movimiento,
+                   'Debito' AS tarjeta
+            FROM movimientos_debito md
+            INNER JOIN cardsdebito cd
+                ON md.id_carddebito = cd.id_carddebito
+            WHERE cd.id_usuario = ?
+              AND UPPER(md.tipo_movimiento) = 'INGRESO'
+
+            ORDER BY fecha_movimiento DESC
+            """;
+
+        PreparedStatement ps = cx.prepareStatement(sql);
+
+        ps.setInt(1, idUsuario);
+        ps.setInt(2, idUsuario);
+
+        return ps.executeQuery();
+
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
+
+public ResultSet obtenerSoloCredito(int idUsuario) {
+
+    try {
+
+        String sql = """
+            SELECT mc.fecha_movimiento,
+                   mc.concepto,
+                   mc.monto,
+                   mc.tipo_movimiento,
+                   'Credito' AS tarjeta
+            FROM movimientos_credito mc
+            INNER JOIN cardscredito cc
+                ON mc.id_cardcredito = cc.id_cardcredito
+            WHERE cc.id_usuario = ?
+            ORDER BY mc.fecha_movimiento DESC,
+                     mc.id_movimiento DESC
+            """;
+
+        PreparedStatement ps = cx.prepareStatement(sql);
+
+        ps.setInt(1, idUsuario);
+
+        return ps.executeQuery();
+
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
+
+public ResultSet obtenerSoloDebito(int idUsuario) {
+
+    try {
+
+        String sql = """
+            SELECT md.fecha_movimiento,
+                   md.concepto,
+                   md.monto,
+                   md.tipo_movimiento,
+                   'Debito' AS tarjeta
+            FROM movimientos_debito md
+            INNER JOIN cardsdebito cd
+                ON md.id_carddebito = cd.id_carddebito
+            WHERE cd.id_usuario = ?
+            ORDER BY md.fecha_movimiento DESC,
+                     md.id_movimiento DESC
+            """;
+
+        PreparedStatement ps = cx.prepareStatement(sql);
+
+        ps.setInt(1, idUsuario);
+
+        return ps.executeQuery();
+
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
+
+
 }

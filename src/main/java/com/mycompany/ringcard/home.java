@@ -4,14 +4,12 @@
  */
 package com.mycompany.ringcard;
 
-import com.formdev.flatlaf.FlatDarkLaf;
-import java.awt.BorderLayout;
-import javax.swing.text.AbstractDocument;
 
-/**
- *
- * @author DELL
- */
+import com.mycompany.ringcard.data.dataUsuarios;
+import java.sql.Connection;
+import com.mycompany.ringcard.clases.MovimientoDAO;
+import java.sql.ResultSet;
+import javax.swing.table.DefaultTableModel;
 
 public class home extends javax.swing.JFrame {
     
@@ -25,13 +23,48 @@ public class home extends javax.swing.JFrame {
  
     public home(int id) {
         initComponents();
+        
         this.idUsuarioLogueado = id;
         
         // (Opcional) Puedes imprimir un mensaje en consola para comprobar que llegó bien
         System.out.println("Sesión iniciada. ID del usuario: " + this.idUsuarioLogueado);
         this.setLocationRelativeTo(null);
-      
+        
+        dataUsuarios du = new dataUsuarios();
+        Connection con = du.conectar();
+
+        MovimientoDAO dao = new MovimientoDAO(con);
+        ResultSet rs =
+        dao.obtenerTodosLosMovimientos(idUsuarioLogueado);
+        llenarTabla(rs);
     }
+    
+    private void llenarTabla(ResultSet rs) {
+
+    try {
+
+        DefaultTableModel modelo =
+                (DefaultTableModel) jTable1.getModel();
+
+        modelo.setRowCount(0);
+
+        while(rs.next()) {
+
+            modelo.addRow(new Object[]{
+
+                rs.getDate("fecha_movimiento"),
+                rs.getString("tarjeta"),
+                rs.getString("tipo_movimiento"),
+                rs.getString("concepto"),
+                rs.getDouble("monto")
+
+            });
+        }
+
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -63,7 +96,6 @@ public class home extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(950, 550));
 
         ContentPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -75,21 +107,19 @@ public class home extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(200, 200, 200));
 
         CBMostrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        CBMostrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar Todo", "Ingresos", "Egresos", "Solo Credito", "Solo debito" }));
+        CBMostrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar Todo", "Ingresos", "Egresos", "Solo Credito", "Solo Debito" }));
         CBMostrar.addActionListener(this::CBMostrarActionPerformed);
 
         jTable1.setBackground(new java.awt.Color(64, 64, 64));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Fecha", "Targeta", "Tipo", "Concepto", "Monto"
             }
         ));
+        jTable1.setOpaque(false);
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -103,8 +133,8 @@ public class home extends javax.swing.JFrame {
                         .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(38, 38, 38)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(43, Short.MAX_VALUE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 861, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,11 +142,13 @@ public class home extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(55, Short.MAX_VALUE))
         );
 
-        ContenedorGeneralCyD.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 660, -1));
+        ContenedorGeneralCyD.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 720));
+
+        panprincipal.add(ContenedorGeneralCyD, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 720));
 
         jPanel3.setBackground(new java.awt.Color(64, 64, 64));
 
@@ -139,7 +171,7 @@ public class home extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(118, Short.MAX_VALUE)
+                .addContainerGap(158, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,22 +195,24 @@ public class home extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(31, 31, 31)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(65, Short.MAX_VALUE))
+                .addContainerGap(255, Short.MAX_VALUE))
         );
 
-        ContenedorGeneralCyD.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 0, -1, 530));
+        panprincipal.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 0, 330, 720));
 
-        panprincipal.add(ContenedorGeneralCyD, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 530));
-
-        ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 530));
+        ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
 
         jMenu1.setText("Opciones");
+        jMenu1.setPreferredSize(new java.awt.Dimension(70, 22));
         jMenu1.addActionListener(this::jMenu1ActionPerformed);
 
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IcardmovB.png"))); // NOI18N
         jMenuItem1.setText("Movimientos");
+        jMenuItem1.setPreferredSize(new java.awt.Dimension(146, 31));
         jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
         jMenu1.add(jMenuItem1);
 
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icardgenB.png"))); // NOI18N
         jMenuItem2.setText("General");
         jMenuItem2.addActionListener(this::jMenuItem2ActionPerformed);
         jMenu1.add(jMenuItem2);
@@ -186,11 +220,14 @@ public class home extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Tarjeta");
+        jMenu2.setPreferredSize(new java.awt.Dimension(60, 22));
 
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IcardB.png"))); // NOI18N
         jMenuItem3.setText("TarjetasC");
         jMenuItem3.addActionListener(this::jMenuItem3ActionPerformed);
         jMenu2.add(jMenuItem3);
 
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IcardB.png"))); // NOI18N
         jMenuItem4.setText("TarjetasD");
         jMenuItem4.addActionListener(this::jMenuItem4ActionPerformed);
         jMenu2.add(jMenuItem4);
@@ -214,7 +251,48 @@ public class home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CBMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBMostrarActionPerformed
-        // TODO add your handling code here:
+    dataUsuarios du = new dataUsuarios();
+    Connection con = du.conectar();
+
+    MovimientoDAO dao = new MovimientoDAO(con);
+
+    String opcion = CBMostrar.getSelectedItem().toString();
+
+    System.out.println("Seleccionado: " + opcion);
+
+    switch(opcion) {
+
+        case "Mostrar Todo":
+            llenarTabla(
+                dao.obtenerTodosLosMovimientos(idUsuarioLogueado)
+            );
+            break;
+
+        case "Ingresos":
+            llenarTabla(
+                dao.obtenerIngresos(idUsuarioLogueado)
+            );
+            break;
+
+        case "Egresos":
+            llenarTabla(
+                dao.obtenerEgresos(idUsuarioLogueado)
+            );
+            break;
+
+        case "Solo Credito":
+            llenarTabla(
+                dao.obtenerSoloCredito(idUsuarioLogueado)
+            );
+            break;
+
+        case "Solo Debito":
+            llenarTabla(
+                dao.obtenerSoloDebito(idUsuarioLogueado)
+            );
+            break;
+    }
+
     }//GEN-LAST:event_CBMostrarActionPerformed
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
@@ -229,7 +307,7 @@ public class home extends javax.swing.JFrame {
         
 
         ContentPrincipal.removeAll();
-        ContentPrincipal.add(panmov,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950,550));
+        ContentPrincipal.add(panmov,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280,720));
         ContentPrincipal.revalidate();
         ContentPrincipal.repaint();
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -239,7 +317,7 @@ public class home extends javax.swing.JFrame {
         panprincipal.setSize(ContentPrincipal.getSize());
         panprincipal.setLocation(0,0);
         ContentPrincipal.removeAll();
-        ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0,0,950,550));
+        ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0,0,1280,720));
         ContentPrincipal.revalidate();
         ContentPrincipal.repaint();
         
@@ -253,7 +331,7 @@ public class home extends javax.swing.JFrame {
         
 
         ContentPrincipal.removeAll();
-        ContentPrincipal.add(tac,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950,550));
+        ContentPrincipal.add(tac,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280,720));
         ContentPrincipal.revalidate();
         ContentPrincipal.repaint();
     }//GEN-LAST:event_jMenuItem3ActionPerformed
@@ -266,7 +344,7 @@ public class home extends javax.swing.JFrame {
         
 
         ContentPrincipal.removeAll();
-        ContentPrincipal.add(tad,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950,550));
+        ContentPrincipal.add(tad,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280,720));
         ContentPrincipal.revalidate();
         ContentPrincipal.repaint();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
@@ -274,10 +352,10 @@ public class home extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        FlatDarkLaf.setup();
+    /*public static void main(String args[]) {
+        //FlatDarkLaf.setup();
         java.awt.EventQueue.invokeLater(() -> new home(0).setVisible(true));
-    }
+    }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> CBMostrar;
@@ -300,4 +378,6 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JPanel panprincipal;
     // End of variables declaration//GEN-END:variables
+
+    
 }

@@ -41,52 +41,60 @@ public class Lg extends javax.swing.JPanel {
         BtnIngresar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
 
-        lg1.setBackground(new java.awt.Color(255, 255, 255));
+        lg1.setBackground(new java.awt.Color(200, 200, 200));
+        lg1.setForeground(new java.awt.Color(0, 0, 0));
         lg1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ImailN.png"))); // NOI18N
         jLabel1.setText("Correo");
-        lg1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, 70, -1));
+        lg1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 110, -1));
 
+        txt2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt2.setForeground(new java.awt.Color(153, 153, 153));
         txt2.setText("********");
         txt2.addActionListener(this::txt2ActionPerformed);
-        lg1.add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 280, 230, -1));
+        lg1.add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 380, 250, 30));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpasswN.png"))); // NOI18N
         jLabel2.setText("Password");
-        lg1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 100, -1));
+        lg1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 330, 140, -1));
 
+        txt1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt1.setForeground(new java.awt.Color(153, 153, 153));
-        txt1.setText("Ingresa el correo");
+        txt1.setText("gael@mail.com");
         txt1.addActionListener(this::txt1ActionPerformed);
-        lg1.add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 200, 230, -1));
+        lg1.add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, 250, 30));
 
         BtnIngresar.setText("Ingresar");
+        BtnIngresar.setBorderPainted(false);
+        BtnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         BtnIngresar.addActionListener(this::BtnIngresarActionPerformed);
-        lg1.add(BtnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 360, 100, 40));
+        lg1.add(BtnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 480, 100, 40));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI Emoji", 1, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI Emoji", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpersonN.png"))); // NOI18N
         jLabel3.setText("Iniciar Seción");
-        lg1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 420, 60));
+        lg1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 620, 60));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 

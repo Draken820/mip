@@ -13,6 +13,11 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.ImageIcon;
+import java.awt.Image;
+import java.net.URL;
+import javax.swing.Icon;
+import javax.swing.JLabel;
 
 /**
  *
@@ -23,6 +28,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
     private ArrayList<String> nombresTarjetas;
     private ArrayList<Integer> idsTarjetas;  // <-- NUEVO: Guarda los IDs reales
     private ArrayList<String> tiposTarjetas; // <-- NUEVO: Guarda "debito" o "credito"
+    private ArrayList<String> bancosTargetasc;
     private int indiceActual = 0;
     private int idUsuarioLogueado;
     
@@ -32,11 +38,12 @@ public class PanleMovimientos extends javax.swing.JPanel {
      */
     public PanleMovimientos(int idUsuario) {
         initComponents();
+        
         this.idUsuarioLogueado = idUsuario;
         this.nombresTarjetas = new ArrayList<>();
         this.idsTarjetas = new ArrayList<>();   // <-- INICIALIZAR
         this.tiposTarjetas = new ArrayList<>(); // <-- INICIALIZAR
-        
+        this.bancosTargetasc = new ArrayList<>();
         this.idUsuarioLogueado = idUsuario;
         this.nombresTarjetas = new ArrayList<>();
         
@@ -44,6 +51,8 @@ public class PanleMovimientos extends javax.swing.JPanel {
         ContSCP.removeAll();
         
         // 1. Cargamos la lista de tarjetas desde la BD
+        //Images a escala
+        actualizarImagenTarjeta();
         obtenerTarjetasDelUsuario();
         
         // 2. Mostramos la primera tarjeta en el JLabel
@@ -89,7 +98,8 @@ public class PanleMovimientos extends javax.swing.JPanel {
     private void obtenerTarjetasDelUsuario() {
     nombresTarjetas.clear();
     idsTarjetas.clear();     // Limpiamos la lista
-    tiposTarjetas.clear();   // Limpiamos la lista
+    tiposTarjetas.clear();
+    bancosTargetasc.clear();
     try {
         dataUsuarios db = new dataUsuarios();
         Connection cx = db.conectar();
@@ -100,8 +110,13 @@ public class PanleMovimientos extends javax.swing.JPanel {
         psDeb.setInt(1, this.idUsuarioLogueado);
         java.sql.ResultSet rsDeb = psDeb.executeQuery();
         while(rsDeb.next()) {
-            nombresTarjetas.add(rsDeb.getString("banco") + " (Débito)");
-            idsTarjetas.add(rsDeb.getInt("id_carddebito")); // Guardamos el ID real
+
+            String banco = rsDeb.getString("banco");
+
+            nombresTarjetas.add(banco + " (Débito)");
+            bancosTargetasc.add(banco.toLowerCase());
+
+            idsTarjetas.add(rsDeb.getInt("id_carddebito"));
             tiposTarjetas.add("debito");
         }
         
@@ -111,8 +126,13 @@ public class PanleMovimientos extends javax.swing.JPanel {
         psCred.setInt(1, this.idUsuarioLogueado);
         java.sql.ResultSet rsCred = psCred.executeQuery();
         while(rsCred.next()) {
-            nombresTarjetas.add(rsCred.getString("banco") + " (Crédito)");
-            idsTarjetas.add(rsCred.getInt("id_cardcredito")); // Guardamos el ID real
+
+            String banco = rsCred.getString("banco");
+
+            nombresTarjetas.add(banco + " (Crédito)");
+            bancosTargetasc.add(banco.toLowerCase());
+
+            idsTarjetas.add(rsCred.getInt("id_cardcredito"));
             tiposTarjetas.add("credito");
         }
         
@@ -165,11 +185,73 @@ public void cargarMovimientos() {
 
     private void actualizarLabelTarjeta() {
         if (!nombresTarjetas.isEmpty()) {
-            jLabel1.setText(nombresTarjetas.get(indiceActual));
+            System.out.println((nombresTarjetas.get(indiceActual)));
         } else {
             jLabel1.setText("No hay tarjetas");
         }
     }
+    
+    private void actualizarImagenTarjeta() {
+
+    if (bancosTargetasc.isEmpty()) {
+        jLabel1.setIcon(null);
+        return;
+    }
+
+    String banco = bancosTargetasc.get(indiceActual);
+    String tipo = tiposTarjetas.get(indiceActual);
+
+    String ruta = "";
+
+    if (banco.equals("santander")) {
+
+        if (tipo.equals("credito")) {
+            ruta = "/img/Credito_Red.png";
+        } else {
+            ruta = "/img/debito_Red.png";
+        }
+
+    } else if (banco.equals("bbva")) {
+
+        if (tipo.equals("credito")) {
+            ruta = "/img/Credito_blue.png";
+        } else {
+            ruta = "/img/debito_blue.png";
+        }
+
+    } else if (banco.equals("banorte")) {
+
+        if (tipo.equals("credito")) {
+            ruta = "/img/Credito_black.png";
+        } else {
+            ruta = "/img/debito_black.png";
+        }
+
+    }
+
+    SetImageLabel(jLabel1, ruta);
+}
+    
+    
+   /* public void seleccionarMovimiento(
+        Movimiento mov,
+        registroMovimientos panel
+) {
+
+    if(panelSeleccionado != null){
+        panelSeleccionado.setBorder(null);
+    }
+
+    movimientoSeleccionado = mov;
+    panelSeleccionado = panel;
+
+    panel.setBorder(
+        BorderFactory.createLineBorder(Color.BLUE, 3)
+    );
+
+    btnModificar.setEnabled(true);
+    btnEliminar.setEnabled(true);
+}*/
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -181,11 +263,11 @@ public void cargarMovimientos() {
 
         ContCards = new javax.swing.JPanel();
         jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         btnBorrarCard = new javax.swing.JButton();
         btnModificarCard = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         ScrollContent = new javax.swing.JScrollPane();
         ContSCP = new javax.swing.JPanel();
         ControlMovimientos = new javax.swing.JPanel();
@@ -201,12 +283,12 @@ public void cargarMovimientos() {
         ContCards.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar todo", "Por Mes", "Por Semana" }));
-        ContCards.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(207, 6, -1, -1));
-
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Cards");
-        jLabel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-        ContCards.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(77, 198, 199, 120));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+        ContCards.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, -1, -1));
 
         jButton4.setText(">");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -214,7 +296,7 @@ public void cargarMovimientos() {
                 jButton4ActionPerformed(evt);
             }
         });
-        ContCards.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(299, 246, -1, -1));
+        ContCards.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 300, -1, -1));
 
         jButton5.setText("<");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -222,7 +304,7 @@ public void cargarMovimientos() {
                 jButton5ActionPerformed(evt);
             }
         });
-        ContCards.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 246, -1, -1));
+        ContCards.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
 
         btnBorrarCard.setText("Borrar");
         btnBorrarCard.addActionListener(new java.awt.event.ActionListener() {
@@ -230,7 +312,7 @@ public void cargarMovimientos() {
                 btnBorrarCardActionPerformed(evt);
             }
         });
-        ContCards.add(btnBorrarCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, 100, -1));
+        ContCards.add(btnBorrarCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 410, 80, -1));
 
         btnModificarCard.setText("Modificar");
         btnModificarCard.addActionListener(new java.awt.event.ActionListener() {
@@ -238,9 +320,12 @@ public void cargarMovimientos() {
                 btnModificarCardActionPerformed(evt);
             }
         });
-        ContCards.add(btnModificarCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(175, 290, 100, -1));
+        ContCards.add(btnModificarCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 410, 90, -1));
 
-        add(ContCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 340, 550));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        ContCards.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(56, 178, 410, 260));
+
+        add(ContCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 720));
 
         ScrollContent.setBackground(new java.awt.Color(60, 64, 64));
 
@@ -250,16 +335,16 @@ public void cargarMovimientos() {
         ContSCP.setLayout(ContSCPLayout);
         ContSCPLayout.setHorizontalGroup(
             ContSCPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 611, Short.MAX_VALUE)
+            .addGap(0, 938, Short.MAX_VALUE)
         );
         ContSCPLayout.setVerticalGroup(
             ContSCPLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 462, Short.MAX_VALUE)
+            .addGap(0, 628, Short.MAX_VALUE)
         );
 
         ScrollContent.setViewportView(ContSCP);
 
-        add(ScrollContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 0, 610, 460));
+        add(ScrollContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 0, 760, 610));
 
         ControlMovimientos.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -279,43 +364,49 @@ public void cargarMovimientos() {
         ControlMovimientosLayout.setHorizontalGroup(
             ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ControlMovimientosLayout.createSequentialGroup()
-                .addGap(95, 95, 95)
+                .addGap(60, 60, 60)
                 .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 113, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 203, Short.MAX_VALUE)
                 .addComponent(jButton2)
-                .addGap(91, 91, 91)
+                .addGap(196, 196, 196)
                 .addComponent(jButton3)
-                .addGap(84, 84, 84))
+                .addGap(74, 74, 74))
         );
         ControlMovimientosLayout.setVerticalGroup(
             ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(ControlMovimientosLayout.createSequentialGroup()
-                .addGap(26, 26, 26)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ControlMovimientosLayout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
                 .addGroup(ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(40, 40, 40))
         );
 
-        add(ControlMovimientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 460, 610, 90));
+        add(ControlMovimientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 610, 760, 110));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        String tipo = tiposTarjetas.get(indiceActual);
+        if (tipo.equals("credito")) {
+            
+        }else{
+            
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
-        indiceActual--;
-        if (indiceActual < 0) {
-            indiceActual = nombresTarjetas.size() - 1; 
+        if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
+            indiceActual--;
+            if (indiceActual < 0) {
+                indiceActual = nombresTarjetas.size() - 1; 
+            }
+            actualizarLabelTarjeta();
+            cargarMovimientos();
+            actualizarImagenTarjeta();// <-- NUEVO: Recargar movimientos al retroceder
         }
-        actualizarLabelTarjeta();
-        cargarMovimientos(); // <-- NUEVO: Recargar movimientos al retroceder
-    }
-
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -326,7 +417,8 @@ if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
             indiceActual = 0; 
         }
         actualizarLabelTarjeta();
-        cargarMovimientos(); // <-- NUEVO: Recargar movimientos al avanzar
+        cargarMovimientos(); 
+        actualizarImagenTarjeta();// <-- NUEVO: Recargar movimientos al avanzar
     }
 
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -425,6 +517,10 @@ if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
         }
     }//GEN-LAST:event_btnModificarCardActionPerformed
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ContCards;
@@ -441,4 +537,24 @@ if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
+private void SetImageLabel(JLabel label, String ruta) {
+
+    URL url = getClass().getResource(ruta);
+
+    if (url != null) {
+
+        ImageIcon image = new ImageIcon(url);
+
+        Image imgEscalada = image.getImage().getScaledInstance(
+                label.getWidth(),
+                label.getHeight(),
+                Image.SCALE_SMOOTH
+        );
+
+        label.setIcon(new ImageIcon(imgEscalada));
+
+    } else {
+        System.out.println("No se encontró la imagen: " + ruta);
+    }
+}
 }
