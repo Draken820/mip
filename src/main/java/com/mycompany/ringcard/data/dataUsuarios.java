@@ -19,7 +19,7 @@ public class dataUsuarios {
     Connection cx;
 
    String url = "jdbc:postgresql://localhost:5432/proyecto1";
-    String pass = "pokoyo5505";
+    String pass = "volvo";
     String user = "postgres";
 
         public Connection conectar() {

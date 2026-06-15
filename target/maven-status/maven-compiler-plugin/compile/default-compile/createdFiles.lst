@@ -15,6 +15,7 @@ com\mycompany\ringcard\Lg.class
 com\mycompany\ringcard\rg$1.class
 com\mycompany\ringcard\PanleMovimientos$9.class
 com\mycompany\ringcard\addMovimientoC.class
+com\mycompany\ringcard\data\dataMovimientos.class
 com\mycompany\ringcard\data\dataTarjetascred.class
 com\mycompany\ringcard\ConfNotificacion.class
 com\mycompany\ringcard\RingCard$1.class
@@ -27,13 +28,13 @@ com\mycompany\ringcard\PanleMovimientos$5.class
 com\mycompany\ringcard\clases\usuarios.class
 com\mycompany\ringcard\clases\TarjetasCred.class
 com\mycompany\ringcard\PanleMovimientos$8.class
-com\mycompany\ringcard\clases\MovimientoDAO.class
 com\mycompany\ringcard\TarjetasAddC$1.class
 com\mycompany\ringcard\PanleMovimientos$1.class
 com\mycompany\ringcard\RingCard$2.class
 com\mycompany\ringcard\TarjetasAddC.class
 com\mycompany\ringcard\TarjetasAddC$2.class
 com\mycompany\ringcard\rg$6.class
+com\mycompany\ringcard\data\MovimientoDAO.class
 com\mycompany\ringcard\PanleMovimientos.class
 com\mycompany\ringcard\home.class
 com\mycompany\ringcard\PanleMovimientos$4.class

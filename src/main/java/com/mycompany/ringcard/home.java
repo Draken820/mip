@@ -7,7 +7,7 @@ package com.mycompany.ringcard;
 
 import com.mycompany.ringcard.data.dataUsuarios;
 import java.sql.Connection;
-import com.mycompany.ringcard.clases.MovimientoDAO;
+import com.mycompany.ringcard.data.MovimientoDAO;
 import java.sql.ResultSet;
 import javax.swing.table.DefaultTableModel;
 

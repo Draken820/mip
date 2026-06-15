@@ -6,7 +6,8 @@ package com.mycompany.ringcard;
 
 
 import com.mycompany.ringcard.clases.Movimiento;
-import com.mycompany.ringcard.clases.MovimientoDAO;
+import com.mycompany.ringcard.data.MovimientoDAO;
+import com.mycompany.ringcard.data.dataMovimientos;
 import com.mycompany.ringcard.data.dataUsuarios;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -25,13 +26,15 @@ import javax.swing.JLabel;
  */
 public class PanleMovimientos extends javax.swing.JPanel {
 
-    private ArrayList<String> nombresTarjetas;
-    private ArrayList<Integer> idsTarjetas;  // <-- NUEVO: Guarda los IDs reales
-    private ArrayList<String> tiposTarjetas; // <-- NUEVO: Guarda "debito" o "credito"
+   private ArrayList<String> nombresTarjetas;
+    private ArrayList<Integer> idsTarjetas;  
+    private ArrayList<String> tiposTarjetas; 
     private ArrayList<String> bancosTargetasc;
     private int indiceActual = 0;
     private int idUsuarioLogueado;
     
+    // Instancia de nuestra nueva clase de acceso a datos
+    private dataMovimientos dataMov;
 
     /**
      * Creates new form PanleMovimientos
@@ -41,25 +44,22 @@ public class PanleMovimientos extends javax.swing.JPanel {
         
         this.idUsuarioLogueado = idUsuario;
         this.nombresTarjetas = new ArrayList<>();
-        this.idsTarjetas = new ArrayList<>();   // <-- INICIALIZAR
-        this.tiposTarjetas = new ArrayList<>(); // <-- INICIALIZAR
+        this.idsTarjetas = new ArrayList<>();   
+        this.tiposTarjetas = new ArrayList<>(); 
         this.bancosTargetasc = new ArrayList<>();
-        this.idUsuarioLogueado = idUsuario;
-        this.nombresTarjetas = new ArrayList<>();
+        this.dataMov = new dataMovimientos(); // Inicializamos el controlador de DB
         
         ContSCP.setLayout(new BoxLayout(ContSCP, BoxLayout.Y_AXIS));
         ContSCP.removeAll();
         
         // 1. Cargamos la lista de tarjetas desde la BD
-        //Images a escala
         actualizarImagenTarjeta();
         obtenerTarjetasDelUsuario();
         
         // 2. Mostramos la primera tarjeta en el JLabel
         actualizarLabelTarjeta();
         
-        // 3. Cargamos los movimientos (puedes modificar este método para que dependa de la tarjeta seleccionada)
-// ... tu código anterior del constructor ...
+        // 3. Cargamos los movimientos
         cargarMovimientos(); 
 
         // 1. Ocultar los botones apenas se abre el panel
@@ -69,7 +69,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
         // 2. Evento para MOSTRAR los botones al pasar el mouse sobre el Label
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+           public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnModificarCard.setVisible(true);
                 btnBorrarCard.setVisible(true);
             }
@@ -78,7 +78,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
         // 3. (Opcional pero recomendado) Mantenerlos visibles si el mouse pasa sobre los botones mismos
         java.awt.event.MouseAdapter mantenerVisible = new java.awt.event.MouseAdapter() {
             @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
+           public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnModificarCard.setVisible(true);
                 btnBorrarCard.setVisible(true);
             }
@@ -96,92 +96,50 @@ public class PanleMovimientos extends javax.swing.JPanel {
         });
     } // <-- Cierre del constructor
     private void obtenerTarjetasDelUsuario() {
-    nombresTarjetas.clear();
-    idsTarjetas.clear();     // Limpiamos la lista
-    tiposTarjetas.clear();
-    bancosTargetasc.clear();
-    try {
-        dataUsuarios db = new dataUsuarios();
-        Connection cx = db.conectar();
-        
-        // Obtenemos ID y Banco de Débito
-        String sqlDebito = "SELECT id_carddebito, banco FROM cardsdebito WHERE id_usuario = ?";
-        java.sql.PreparedStatement psDeb = cx.prepareStatement(sqlDebito);
-        psDeb.setInt(1, this.idUsuarioLogueado);
-        java.sql.ResultSet rsDeb = psDeb.executeQuery();
-        while(rsDeb.next()) {
-
-            String banco = rsDeb.getString("banco");
-
-            nombresTarjetas.add(banco + " (Débito)");
-            bancosTargetasc.add(banco.toLowerCase());
-
-            idsTarjetas.add(rsDeb.getInt("id_carddebito"));
-            tiposTarjetas.add("debito");
-        }
-        
-        // Obtenemos ID y Banco de Crédito
-        String sqlCredito = "SELECT id_cardcredito, banco FROM cardscredito WHERE id_usuario = ?";
-        java.sql.PreparedStatement psCred = cx.prepareStatement(sqlCredito);
-        psCred.setInt(1, this.idUsuarioLogueado);
-        java.sql.ResultSet rsCred = psCred.executeQuery();
-        while(rsCred.next()) {
-
-            String banco = rsCred.getString("banco");
-
-            nombresTarjetas.add(banco + " (Crédito)");
-            bancosTargetasc.add(banco.toLowerCase());
-
-            idsTarjetas.add(rsCred.getInt("id_cardcredito"));
-            tiposTarjetas.add("credito");
-        }
-        
-        cx.close();
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+    dataMov.cargarTarjetas(idUsuarioLogueado, nombresTarjetas, idsTarjetas, tiposTarjetas, bancosTargetasc);
 }
 
 public void cargarMovimientos() {
-    ContSCP.removeAll();
+   ContSCP.removeAll();
 
-    // Si no hay tarjetas, no hacemos nada
-    if (idsTarjetas == null || idsTarjetas.isEmpty()) {
-        ContSCP.revalidate();
-        ContSCP.repaint();
-        return;
-    }
-
-    try {
-        dataUsuarios db = new dataUsuarios();
-        Connection cx = db.conectar();
-        MovimientoDAO dao = new MovimientoDAO(cx);
-
-        // ¡LA MAGIA! Extraemos el ID de la tarjeta que el usuario está viendo actualmente
-        int idTarjetaActual = idsTarjetas.get(indiceActual);
-        String tipoActual = tiposTarjetas.get(indiceActual);
-
-        // Si la tarjeta es de débito, cargamos sus movimientos
-        if (tipoActual.equals("debito")) {
-            ArrayList<Movimiento> lista = dao.listarMovimientosDebito(idTarjetaActual);
-            System.out.println("Cargando ID " + idTarjetaActual + " - Registros: " + lista.size());
-
-            for (Movimiento mov : lista) {
-                registroMovimientos panel = new registroMovimientos(mov);
-                ContSCP.add(panel);
-            }
-        } else {
-            // (Opcional) Aquí irá tu lógica para tarjetas de crédito cuando la tengas
-            System.out.println("Tarjeta de crédito. Aún no se programan sus movimientos.");
+        // Si no hay tarjetas, no hacemos nada
+        if (idsTarjetas == null || idsTarjetas.isEmpty()) {
+            ContSCP.revalidate();
+            ContSCP.repaint();
+            return;
         }
 
-        ContSCP.revalidate();
-        ContSCP.repaint();
+        try {
+            // Obtenemos la conexión directamente desde nuestra nueva clase
+            Connection cx = dataMov.getConnection(); 
+            MovimientoDAO dao = new MovimientoDAO(cx);
 
-    } catch (Exception e) {
-        e.printStackTrace();
+            int idTarjetaActual = idsTarjetas.get(indiceActual);
+            String tipoActual = tiposTarjetas.get(indiceActual);
+
+            // Si la tarjeta es de débito, cargamos sus movimientos
+            if (tipoActual.equals("debito")) {
+                ArrayList<Movimiento> lista = dao.listarMovimientosDebito(idTarjetaActual);
+                System.out.println("Cargando ID " + idTarjetaActual + " - Registros: " + lista.size());
+
+                for (Movimiento mov : lista) {
+                    registroMovimientos panel = new registroMovimientos(mov);
+                    ContSCP.add(panel);
+                }
+            } else {
+                System.out.println("Tarjeta de crédito. Aún no se programan sus movimientos.");
+            }
+
+            ContSCP.revalidate();
+            ContSCP.repaint();
+
+            // Cerramos la conexión manualmente aquí si MovimientoDAO no lo hace
+            cx.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-}
 
     private void actualizarLabelTarjeta() {
         if (!nombresTarjetas.isEmpty()) {
@@ -192,71 +150,30 @@ public void cargarMovimientos() {
     }
     
     private void actualizarImagenTarjeta() {
-
-    if (bancosTargetasc.isEmpty()) {
-        jLabel1.setIcon(null);
-        return;
-    }
-
-    String banco = bancosTargetasc.get(indiceActual);
-    String tipo = tiposTarjetas.get(indiceActual);
-
-    String ruta = "";
-
-    if (banco.equals("santander")) {
-
-        if (tipo.equals("credito")) {
-            ruta = "/img/Credito_Red.png";
-        } else {
-            ruta = "/img/debito_Red.png";
+        if (bancosTargetasc.isEmpty()) {
+            jLabel1.setIcon(null);
+            return;
         }
 
-    } else if (banco.equals("bbva")) {
+        String banco = bancosTargetasc.get(indiceActual);
+        String tipo = tiposTarjetas.get(indiceActual);
+        String ruta = "";
 
-        if (tipo.equals("credito")) {
-            ruta = "/img/Credito_blue.png";
-        } else {
-            ruta = "/img/debito_blue.png";
+        if (banco.equals("santander")) {
+            ruta = tipo.equals("credito") ? "/img/Credito_Red.png" : "/img/debito_Red.png";
+        } else if (banco.equals("bbva")) {
+            ruta = tipo.equals("credito") ? "/img/Credito_blue.png" : "/img/debito_blue.png";
+        } else if (banco.equals("banorte")) {
+            ruta = tipo.equals("credito") ? "/img/Credito_black.png" : "/img/debito_black.png";
         }
 
-    } else if (banco.equals("banorte")) {
-
-        if (tipo.equals("credito")) {
-            ruta = "/img/Credito_black.png";
-        } else {
-            ruta = "/img/debito_black.png";
-        }
-
+        SetImageLabel(jLabel1, ruta);
     }
 
-    SetImageLabel(jLabel1, ruta);
-}
-    
-    
-   /* public void seleccionarMovimiento(
-        Movimiento mov,
-        registroMovimientos panel
-) {
+    // ... [AQUÍ SE MANTIENE TODO TU BLOQUE initComponents GENERADO POR NETBEANS] ...
+    // (Por brevedad visual en la respuesta no se re-escribe initComponents, déjalo exactamente igual)
 
-    if(panelSeleccionado != null){
-        panelSeleccionado.setBorder(null);
-    }
-
-    movimientoSeleccionado = mov;
-    panelSeleccionado = panel;
-
-    panel.setBorder(
-        BorderFactory.createLineBorder(Color.BLUE, 3)
-    );
-
-    btnModificar.setEnabled(true);
-    btnEliminar.setEnabled(true);
-}*/
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -387,40 +304,36 @@ public void cargarMovimientos() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        String tipo = tiposTarjetas.get(indiceActual);
+               String tipo = tiposTarjetas.get(indiceActual);
         if (tipo.equals("credito")) {
             
-        }else{
+        } else {
             
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
+        if (nombresTarjetas != null && !nombresTarjetas.isEmpty()) {
             indiceActual--;
             if (indiceActual < 0) {
                 indiceActual = nombresTarjetas.size() - 1; 
             }
             actualizarLabelTarjeta();
             cargarMovimientos();
-            actualizarImagenTarjeta();// <-- NUEVO: Recargar movimientos al retroceder
+            actualizarImagenTarjeta();
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-       if (nombresTarjetas != null && nombresTarjetas.size() > 0) {
-        indiceActual++;
-        if (indiceActual >= nombresTarjetas.size()) {
-            indiceActual = 0; 
+       if (nombresTarjetas != null && !nombresTarjetas.isEmpty()) {
+            indiceActual++;
+            if (indiceActual >= nombresTarjetas.size()) {
+                indiceActual = 0; 
+            }
+            actualizarLabelTarjeta();
+            cargarMovimientos(); 
+            actualizarImagenTarjeta();
         }
-        actualizarLabelTarjeta();
-        cargarMovimientos(); 
-        actualizarImagenTarjeta();// <-- NUEVO: Recargar movimientos al avanzar
-    }
-
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void btnBorrarCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBorrarCardActionPerformed
@@ -429,90 +342,57 @@ public void cargarMovimientos() {
             return;
         }
 
-        // 1. Extraer datos de la tarjeta seleccionada
         String tarjetaSeleccionada = nombresTarjetas.get(indiceActual);
         String tabla = tarjetaSeleccionada.contains("(Débito)") ? "cardsdebito" : "cardscredito";
         String nombreBanco = tarjetaSeleccionada.replace(" (Débito)", "").replace(" (Crédito)", "");
 
-        // 2. Pedir confirmación al usuario
         int confirmacion = JOptionPane.showConfirmDialog(this, 
                 "¿Estás seguro de que deseas eliminar la tarjeta de " + nombreBanco + "?\nEsta acción no se puede deshacer.", 
                 "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-            try {
-                dataUsuarios db = new dataUsuarios();
-                Connection cx = db.conectar();
-
-                // 3. Consulta SQL dinámica (se adapta a crédito o débito)
-                String sql = "DELETE FROM " + tabla + " WHERE banco = ? AND id_usuario = ?";
-                java.sql.PreparedStatement ps = cx.prepareStatement(sql);
-                ps.setString(1, nombreBanco);
-                ps.setInt(2, this.idUsuarioLogueado);
-
-                int filasAfectadas = ps.executeUpdate();
-
-                if (filasAfectadas > 0) {
-                    JOptionPane.showMessageDialog(this, "Tarjeta eliminada con éxito.");
-                    // 4. Refrescar la interfaz para que desaparezca la tarjeta borrada
-                    indiceActual = 0; 
-                    obtenerTarjetasDelUsuario();
-                    actualizarLabelTarjeta();
-                } else {
-                    JOptionPane.showMessageDialog(this, "No se pudo eliminar la tarjeta.");
-                }
-
-                cx.close();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-                e.printStackTrace();
+            
+            // Usamos nuestra nueva clase DAO
+            boolean eliminado = dataMov.borrarTarjeta(tabla, nombreBanco, idUsuarioLogueado);
+            
+            if (eliminado) {
+                JOptionPane.showMessageDialog(this, "Tarjeta eliminada con éxito.");
+                indiceActual = 0; 
+                obtenerTarjetasDelUsuario();
+                actualizarLabelTarjeta();
+                cargarMovimientos(); // <-- Refrescamos la vista
+                actualizarImagenTarjeta();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo eliminar la tarjeta o ocurrió un error.");
             }
         }
     }//GEN-LAST:event_btnBorrarCardActionPerformed
 
     private void btnModificarCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCardActionPerformed
-       if (nombresTarjetas.isEmpty()) {
+      if (nombresTarjetas.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No hay tarjetas para modificar.");
             return;
         }
 
-        // 1. Extraer datos actuales
         String tarjetaSeleccionada = nombresTarjetas.get(indiceActual);
         String tabla = tarjetaSeleccionada.contains("(Débito)") ? "cardsdebito" : "cardscredito";
         String nombreBancoActual = tarjetaSeleccionada.replace(" (Débito)", "").replace(" (Crédito)", "");
 
-        // 2. Pedir el nuevo nombre
         String nuevoNombre = JOptionPane.showInputDialog(this, 
                 "Ingresa el nuevo nombre para la tarjeta:", nombreBancoActual);
 
-        // Si el usuario presiona cancelar o lo deja en blanco, no hacemos nada
         if (nuevoNombre != null && !nuevoNombre.trim().isEmpty() && !nuevoNombre.equals(nombreBancoActual)) {
-            try {
-                dataUsuarios db = new dataUsuarios();
-                Connection cx = db.conectar();
-
-                // 3. Consulta UPDATE dinámica
-                String sql = "UPDATE " + tabla + " SET banco = ? WHERE banco = ? AND id_usuario = ?";
-                java.sql.PreparedStatement ps = cx.prepareStatement(sql);
-                ps.setString(1, nuevoNombre.trim());
-                ps.setString(2, nombreBancoActual);
-                ps.setInt(3, this.idUsuarioLogueado);
-
-                int filasAfectadas = ps.executeUpdate();
-
-                if (filasAfectadas > 0) {
-                    JOptionPane.showMessageDialog(this, "Tarjeta actualizada con éxito.");
-                    
-                    obtenerTarjetasDelUsuario();
-                    actualizarLabelTarjeta();
-                } else {
-                    JOptionPane.showMessageDialog(this, "No se pudo actualizar la tarjeta.");
-                }
-
-                cx.close();
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error de base de datos: " + e.getMessage());
-                e.printStackTrace();
+            
+            // Usamos nuestra nueva clase DAO
+            boolean actualizado = dataMov.modificarTarjeta(tabla, nuevoNombre.trim(), nombreBancoActual, idUsuarioLogueado);
+            
+            if (actualizado) {
+                JOptionPane.showMessageDialog(this, "Tarjeta actualizada con éxito.");
+                obtenerTarjetasDelUsuario();
+                actualizarLabelTarjeta();
+                actualizarImagenTarjeta(); // <-- Actualizar por si cambió a una imagen válida
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar la tarjeta o ocurrió un error.");
             }
         }
     }//GEN-LAST:event_btnModificarCardActionPerformed
@@ -538,23 +418,17 @@ public void cargarMovimientos() {
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 private void SetImageLabel(JLabel label, String ruta) {
-
-    URL url = getClass().getResource(ruta);
-
-    if (url != null) {
-
-        ImageIcon image = new ImageIcon(url);
-
-        Image imgEscalada = image.getImage().getScaledInstance(
-                label.getWidth(),
-                label.getHeight(),
-                Image.SCALE_SMOOTH
-        );
-
-        label.setIcon(new ImageIcon(imgEscalada));
-
-    } else {
-        System.out.println("No se encontró la imagen: " + ruta);
+        URL url = getClass().getResource(ruta);
+        if (url != null) {
+            ImageIcon image = new ImageIcon(url);
+            Image imgEscalada = image.getImage().getScaledInstance(
+                    label.getWidth(),
+                    label.getHeight(),
+                    Image.SCALE_SMOOTH
+            );
+            label.setIcon(new ImageIcon(imgEscalada));
+        } else {
+            System.out.println("No se encontró la imagen: " + ruta);
+        }
     }
-}
 }
