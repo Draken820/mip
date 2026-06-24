@@ -65,7 +65,7 @@ public class Lg extends javax.swing.JPanel {
 
         txt1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txt1.setForeground(new java.awt.Color(153, 153, 153));
-        txt1.setText("gael@mail.com");
+        txt1.setText("Ingresa Tu correo");
         txt1.addActionListener(this::txt1ActionPerformed);
         lg1.add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, 250, 30));
 
@@ -100,12 +100,14 @@ public class Lg extends javax.swing.JPanel {
 
     private void txt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt2ActionPerformed
         // TODO add your handling code here:
-        txt2.setText("");
+       
+            txt2.setText("");
+       
     }//GEN-LAST:event_txt2ActionPerformed
 
     private void txt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt1ActionPerformed
         // TODO add your handling code here:
-        txt1.setText("");
+       txt1.setText(null);
     }//GEN-LAST:event_txt1ActionPerformed
 
     private void BtnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIngresarActionPerformed

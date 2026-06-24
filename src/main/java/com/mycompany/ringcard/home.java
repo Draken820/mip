@@ -116,7 +116,7 @@ public class home extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Fecha", "Targeta", "Tipo", "Concepto", "Monto"
+                "Banco", "CantidadGastada", "LimiteDeCredito", "A pagar", "Fecha de corte", "Estado"
             }
         ));
         jTable1.setOpaque(false);

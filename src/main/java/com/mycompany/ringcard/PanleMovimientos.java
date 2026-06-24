@@ -304,9 +304,17 @@ public void cargarMovimientos() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-               String tipo = tiposTarjetas.get(indiceActual);
+        String tipo = tiposTarjetas.get(indiceActual);
         if (tipo.equals("credito")) {
-            
+        MovimientosAddC panmov = new MovimientosAddC(idUsuarioLogueado);
+        panmov.setSize(ContSCP.getSize());
+        panmov.setLocation(0,0);
+        
+
+        ContSCP.removeAll();
+        ContSCP.add(panmov,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280,720));
+        ContSCP.revalidate();
+        ContSCP.repaint();
         } else {
             
         }

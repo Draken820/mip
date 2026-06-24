@@ -17,6 +17,7 @@ com\mycompany\ringcard\PanleMovimientos$9.class
 com\mycompany\ringcard\addMovimientoC.class
 com\mycompany\ringcard\data\dataMovimientos.class
 com\mycompany\ringcard\data\dataTarjetascred.class
+com\mycompany\ringcard\MovimientosAddC.class
 com\mycompany\ringcard\ConfNotificacion.class
 com\mycompany\ringcard\RingCard$1.class
 com\mycompany\ringcard\PanleMovimientos$2.class
@@ -30,6 +31,7 @@ com\mycompany\ringcard\clases\TarjetasCred.class
 com\mycompany\ringcard\PanleMovimientos$8.class
 com\mycompany\ringcard\TarjetasAddC$1.class
 com\mycompany\ringcard\PanleMovimientos$1.class
+com\mycompany\ringcard\MovimientosAddD.class
 com\mycompany\ringcard\RingCard$2.class
 com\mycompany\ringcard\TarjetasAddC.class
 com\mycompany\ringcard\TarjetasAddC$2.class
