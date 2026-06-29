@@ -4,8 +4,6 @@
  */
 package com.mycompany.ringcard;
 
-
-
 import java.awt.BorderLayout;
 import javax.swing.ImageIcon;
 import java.awt.Image;
@@ -18,7 +16,7 @@ import javax.swing.JLabel;
  * @author DELL
  */
 public class RingCard extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RingCard.class.getName());
 
     /**
@@ -31,12 +29,8 @@ public class RingCard extends javax.swing.JFrame {
         lolillo.setLayout(new BorderLayout());
 
         SetImageLabel(jLabel3, "/img/icon.png");
-        
-        
-        
-        
-    }
 
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -140,9 +134,9 @@ public class RingCard extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        rg rg=new rg();
-        rg.setSize(410,474);
-        rg.setLocation(0,0);
+        rg rg = new rg();
+        rg.setSize(410, 474);
+        rg.setLocation(0, 0);
         lolillo.removeAll();
         lolillo.add(rg, BorderLayout.CENTER);
         lolillo.revalidate();
@@ -150,9 +144,9 @@ public class RingCard extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Lg lg=new Lg();
-        lg.setSize(410,474);
-        lg.setLocation(0,0);
+        Lg lg = new Lg();
+        lg.setSize(410, 474);
+        lg.setLocation(0, 0);
         lolillo.removeAll();
         lolillo.add(lg, BorderLayout.CENTER);
         lolillo.revalidate();
@@ -161,9 +155,9 @@ public class RingCard extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        Lg lg=new Lg();
-        lg.setSize(410,474);
-        lg.setLocation(0,0);
+        Lg lg = new Lg();
+        lg.setSize(410, 474);
+        lg.setLocation(0, 0);
         lolillo.removeAll();
         lolillo.add(lg, BorderLayout.CENTER);
         lolillo.revalidate();
@@ -173,20 +167,20 @@ public class RingCard extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-public static void main(String args[]) {
-    try {
-        com.formdev.flatlaf.FlatDarkLaf.setup();
-    } catch (Exception ex) {
-        System.err.println("No se pudo cargar el estilo moderno.");
-    }
-
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        @Override
-        public void run() {
-            new RingCard().setVisible(true);
+    public static void main(String args[]) {
+        try {
+            com.formdev.flatlaf.FlatDarkLaf.setup();
+        } catch (Exception ex) {
+            System.err.println("No se pudo cargar el estilo moderno.");
         }
-    });
-}
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new RingCard().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Content;
@@ -199,24 +193,24 @@ public static void main(String args[]) {
     // End of variables declaration//GEN-END:variables
 private void SetImageLabel(JLabel labelname, String ruta) {
 
-    URL url = getClass().getResource(ruta);
+        URL url = getClass().getResource(ruta);
 
-    if (url != null) {
+        if (url != null) {
 
-        ImageIcon image = new ImageIcon(url);
+            ImageIcon image = new ImageIcon(url);
 
-        Icon icon = new ImageIcon(
-                image.getImage().getScaledInstance(
-                        labelname.getWidth(),
-                        labelname.getHeight(),
-                        Image.SCALE_SMOOTH));
+            Icon icon = new ImageIcon(
+                    image.getImage().getScaledInstance(
+                            labelname.getWidth(),
+                            labelname.getHeight(),
+                            Image.SCALE_SMOOTH));
 
-        labelname.setIcon(icon);
+            labelname.setIcon(icon);
 
-    } else {
-        System.out.println("No se encontró la imagen: " + ruta);
+        } else {
+            System.out.println("No se encontró la imagen: " + ruta);
+        }
+
+        this.repaint();
     }
-
-    this.repaint();
-}
 }

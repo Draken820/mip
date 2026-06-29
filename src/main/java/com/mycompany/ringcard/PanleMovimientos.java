@@ -4,7 +4,6 @@
  */
 package com.mycompany.ringcard;
 
-
 import com.mycompany.ringcard.clases.Movimiento;
 import com.mycompany.ringcard.data.MovimientoDAO;
 import com.mycompany.ringcard.data.dataMovimientos;
@@ -25,14 +24,16 @@ import javax.swing.JLabel;
  * @author Gael
  */
 public class PanleMovimientos extends javax.swing.JPanel {
-
-   private ArrayList<String> nombresTarjetas;
-    private ArrayList<Integer> idsTarjetas;  
-    private ArrayList<String> tiposTarjetas; 
+// Variable para almacenar el movimiento seleccionado actualmente
+private Movimiento movSeleccionado = null;
+private javax.swing.JPanel panelMovSeleccionado = null; // Para cambiarle el color al seleccionarlo
+    private ArrayList<String> nombresTarjetas;
+    private ArrayList<Integer> idsTarjetas;
+    private ArrayList<String> tiposTarjetas;
     private ArrayList<String> bancosTargetasc;
     private int indiceActual = 0;
     private int idUsuarioLogueado;
-    
+
     // Instancia de nuestra nueva clase de acceso a datos
     private dataMovimientos dataMov;
 
@@ -41,26 +42,26 @@ public class PanleMovimientos extends javax.swing.JPanel {
      */
     public PanleMovimientos(int idUsuario) {
         initComponents();
-        
+
         this.idUsuarioLogueado = idUsuario;
         this.nombresTarjetas = new ArrayList<>();
-        this.idsTarjetas = new ArrayList<>();   
-        this.tiposTarjetas = new ArrayList<>(); 
+        this.idsTarjetas = new ArrayList<>();
+        this.tiposTarjetas = new ArrayList<>();
         this.bancosTargetasc = new ArrayList<>();
         this.dataMov = new dataMovimientos(); // Inicializamos el controlador de DB
-        
+
         ContSCP.setLayout(new BoxLayout(ContSCP, BoxLayout.Y_AXIS));
         ContSCP.removeAll();
-        
+
         // 1. Cargamos la lista de tarjetas desde la BD
         actualizarImagenTarjeta();
         obtenerTarjetasDelUsuario();
-        
+
         // 2. Mostramos la primera tarjeta en el JLabel
         actualizarLabelTarjeta();
-        
+
         // 3. Cargamos los movimientos
-        cargarMovimientos(); 
+        cargarMovimientos();
 
         // 1. Ocultar los botones apenas se abre el panel
         btnModificarCard.setVisible(false);
@@ -69,7 +70,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
         // 2. Evento para MOSTRAR los botones al pasar el mouse sobre el Label
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
-           public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnModificarCard.setVisible(true);
                 btnBorrarCard.setVisible(true);
             }
@@ -78,7 +79,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
         // 3. (Opcional pero recomendado) Mantenerlos visibles si el mouse pasa sobre los botones mismos
         java.awt.event.MouseAdapter mantenerVisible = new java.awt.event.MouseAdapter() {
             @Override
-           public void mouseEntered(java.awt.event.MouseEvent evt) {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnModificarCard.setVisible(true);
                 btnBorrarCard.setVisible(true);
             }
@@ -95,51 +96,72 @@ public class PanleMovimientos extends javax.swing.JPanel {
             }
         });
     } // <-- Cierre del constructor
+
     private void obtenerTarjetasDelUsuario() {
-    dataMov.cargarTarjetas(idUsuarioLogueado, nombresTarjetas, idsTarjetas, tiposTarjetas, bancosTargetasc);
-}
-
-public void cargarMovimientos() {
-   ContSCP.removeAll();
-
-        // Si no hay tarjetas, no hacemos nada
-        if (idsTarjetas == null || idsTarjetas.isEmpty()) {
-            ContSCP.revalidate();
-            ContSCP.repaint();
-            return;
-        }
-
-        try {
-            // Obtenemos la conexión directamente desde nuestra nueva clase
-            Connection cx = dataMov.getConnection(); 
-            MovimientoDAO dao = new MovimientoDAO(cx);
-
-            int idTarjetaActual = idsTarjetas.get(indiceActual);
-            String tipoActual = tiposTarjetas.get(indiceActual);
-
-            // Si la tarjeta es de débito, cargamos sus movimientos
-            if (tipoActual.equals("debito")) {
-                ArrayList<Movimiento> lista = dao.listarMovimientosDebito(idTarjetaActual);
-                System.out.println("Cargando ID " + idTarjetaActual + " - Registros: " + lista.size());
-
-                for (Movimiento mov : lista) {
-                    registroMovimientos panel = new registroMovimientos(mov);
-                    ContSCP.add(panel);
-                }
-            } else {
-                System.out.println("Tarjeta de crédito. Aún no se programan sus movimientos.");
-            }
-
-            ContSCP.revalidate();
-            ContSCP.repaint();
-
-            // Cerramos la conexión manualmente aquí si MovimientoDAO no lo hace
-            cx.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        dataMov.cargarTarjetas(idUsuarioLogueado, nombresTarjetas, idsTarjetas, tiposTarjetas, bancosTargetasc);
     }
+
+    public void cargarMovimientos() {
+    ContSCP.removeAll();
+
+    // Si no hay tarjetas, no hacemos nada
+    if (idsTarjetas == null || idsTarjetas.isEmpty()) {
+        ContSCP.revalidate();
+        ContSCP.repaint();
+        return;
+    }
+
+    try {
+        java.sql.Connection cx = dataMov.getConnection(); 
+        com.mycompany.ringcard.data.MovimientoDAO dao = new com.mycompany.ringcard.data.MovimientoDAO(cx);
+
+        int idTarjetaActual = idsTarjetas.get(indiceActual);
+        String tipoActual = tiposTarjetas.get(indiceActual);
+
+        // 1. Declaramos 'lista' AQUÍ AFUERA para que exista en todo el método
+        java.util.ArrayList<com.mycompany.ringcard.clases.Movimiento> lista = new java.util.ArrayList<>();
+
+        // 2. Llenamos la lista dependiendo de si es débito o crédito
+        if (tipoActual.equals("debito")) {
+            lista = dao.listarMovimientosDebito(idTarjetaActual);
+            System.out.println("Cargando Débito ID " + idTarjetaActual + " - Registros: " + lista.size());
+        } else if (tipoActual.equals("credito")) {
+            // IMPORTANTE: Asegúrate de tener creado el método listarMovimientosCredito en tu MovimientoDAO
+            lista = dao.listarMovimientosCredito(idTarjetaActual); 
+            System.out.println("Cargando Crédito ID " + idTarjetaActual + " - Registros: " + lista.size());
+        }
+
+        // 3. Recorremos la lista (sin importar si es débito o crédito) y agregamos el panel con su clic
+        for (com.mycompany.ringcard.clases.Movimiento mov : lista) {
+            registroMovimientos panel = new registroMovimientos(mov);
+            
+            // Evento para seleccionar el movimiento al darle clic
+            panel.addMouseListener(new java.awt.event.MouseAdapter() {
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    // Restaurar color del panel anterior si había uno seleccionado
+                    if (panelMovSeleccionado != null) {
+                        panelMovSeleccionado.setBackground(new java.awt.Color(240, 240, 240)); // Tu color original (ajústalo si era otro)
+                    }
+                    // Marcar el nuevo panel como seleccionado
+                    movSeleccionado = mov;
+                    panelMovSeleccionado = panel;
+                    panel.setBackground(new java.awt.Color(200, 220, 255)); // Color azul claro para resaltar
+                }
+            });
+            
+            ContSCP.add(panel);
+        }
+
+        ContSCP.revalidate();
+        ContSCP.repaint();
+
+        cx.close();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     private void actualizarLabelTarjeta() {
         if (!nombresTarjetas.isEmpty()) {
@@ -148,7 +170,7 @@ public void cargarMovimientos() {
             jLabel1.setText("No hay tarjetas");
         }
     }
-    
+
     private void actualizarImagenTarjeta() {
         if (bancosTargetasc.isEmpty()) {
             jLabel1.setIcon(null);
@@ -172,8 +194,6 @@ public void cargarMovimientos() {
 
     // ... [AQUÍ SE MANTIENE TODO TU BLOQUE initComponents GENERADO POR NETBEANS] ...
     // (Por brevedad visual en la respuesta no se re-escribe initComponents, déjalo exactamente igual)
-
-  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -273,8 +293,18 @@ public void cargarMovimientos() {
         });
 
         jButton2.setText("Modificar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Eliminar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout ControlMovimientosLayout = new javax.swing.GroupLayout(ControlMovimientos);
         ControlMovimientos.setLayout(ControlMovimientosLayout);
@@ -304,19 +334,38 @@ public void cargarMovimientos() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        String tipo = tiposTarjetas.get(indiceActual);
-        if (tipo.equals("credito")) {
-        MovimientosAddC panmov = new MovimientosAddC(idUsuarioLogueado);
-        panmov.setSize(ContSCP.getSize());
-        panmov.setLocation(0,0);
-        
+        if (idsTarjetas == null || idsTarjetas.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No hay tarjetas seleccionadas.");
+            return;
+        }
 
-        ContSCP.removeAll();
-        ContSCP.add(panmov,new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280,720));
-        ContSCP.revalidate();
-        ContSCP.repaint();
-        } else {
-            
+        // Obtener el ID y el tipo de la tarjeta actualmente seleccionada en el carrusel
+        int idTarjetaActual = idsTarjetas.get(indiceActual);
+        String tipoActual = tiposTarjetas.get(indiceActual);
+
+        if (tipoActual.equals("debito")) {
+            // Le pasamos el usuario, el ID de la tarjeta, y la referencia a ESTE panel (this)
+            MovimientosAddD panmov = new MovimientosAddD(idUsuarioLogueado, idTarjetaActual, this);
+            panmov.setSize(ContSCP.getSize());
+            panmov.setLocation(0, 0);
+
+            ContSCP.removeAll();
+            ContSCP.add(panmov, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
+            ContSCP.revalidate();
+            ContSCP.repaint();
+        } else if (tipoActual.equals("credito")) {
+            // Obtenemos el nombre del banco de la lista
+            String nombreBancoActual = nombresTarjetas.get(indiceActual);
+
+            // Le pasamos Usuario, ID Tarjeta, Nombre del Banco y 'this' (panel principal)
+            MovimientosAddC panmov = new MovimientosAddC(idUsuarioLogueado, idTarjetaActual, nombreBancoActual, this);
+            panmov.setSize(ContSCP.getSize());
+            panmov.setLocation(0, 0);
+
+            ContSCP.removeAll();
+            ContSCP.add(panmov, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
+            ContSCP.revalidate();
+            ContSCP.repaint();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -324,7 +373,7 @@ public void cargarMovimientos() {
         if (nombresTarjetas != null && !nombresTarjetas.isEmpty()) {
             indiceActual--;
             if (indiceActual < 0) {
-                indiceActual = nombresTarjetas.size() - 1; 
+                indiceActual = nombresTarjetas.size() - 1;
             }
             actualizarLabelTarjeta();
             cargarMovimientos();
@@ -333,13 +382,13 @@ public void cargarMovimientos() {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       if (nombresTarjetas != null && !nombresTarjetas.isEmpty()) {
+        if (nombresTarjetas != null && !nombresTarjetas.isEmpty()) {
             indiceActual++;
             if (indiceActual >= nombresTarjetas.size()) {
-                indiceActual = 0; 
+                indiceActual = 0;
             }
             actualizarLabelTarjeta();
-            cargarMovimientos(); 
+            cargarMovimientos();
             actualizarImagenTarjeta();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -354,18 +403,18 @@ public void cargarMovimientos() {
         String tabla = tarjetaSeleccionada.contains("(Débito)") ? "cardsdebito" : "cardscredito";
         String nombreBanco = tarjetaSeleccionada.replace(" (Débito)", "").replace(" (Crédito)", "");
 
-        int confirmacion = JOptionPane.showConfirmDialog(this, 
-                "¿Estás seguro de que deseas eliminar la tarjeta de " + nombreBanco + "?\nEsta acción no se puede deshacer.", 
+        int confirmacion = JOptionPane.showConfirmDialog(this,
+                "¿Estás seguro de que deseas eliminar la tarjeta de " + nombreBanco + "?\nEsta acción no se puede deshacer.",
                 "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-            
+
             // Usamos nuestra nueva clase DAO
             boolean eliminado = dataMov.borrarTarjeta(tabla, nombreBanco, idUsuarioLogueado);
-            
+
             if (eliminado) {
                 JOptionPane.showMessageDialog(this, "Tarjeta eliminada con éxito.");
-                indiceActual = 0; 
+                indiceActual = 0;
                 obtenerTarjetasDelUsuario();
                 actualizarLabelTarjeta();
                 cargarMovimientos(); // <-- Refrescamos la vista
@@ -377,7 +426,7 @@ public void cargarMovimientos() {
     }//GEN-LAST:event_btnBorrarCardActionPerformed
 
     private void btnModificarCardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarCardActionPerformed
-      if (nombresTarjetas.isEmpty()) {
+        if (nombresTarjetas.isEmpty()) {
             JOptionPane.showMessageDialog(this, "No hay tarjetas para modificar.");
             return;
         }
@@ -386,14 +435,14 @@ public void cargarMovimientos() {
         String tabla = tarjetaSeleccionada.contains("(Débito)") ? "cardsdebito" : "cardscredito";
         String nombreBancoActual = tarjetaSeleccionada.replace(" (Débito)", "").replace(" (Crédito)", "");
 
-        String nuevoNombre = JOptionPane.showInputDialog(this, 
+        String nuevoNombre = JOptionPane.showInputDialog(this,
                 "Ingresa el nuevo nombre para la tarjeta:", nombreBancoActual);
 
         if (nuevoNombre != null && !nuevoNombre.trim().isEmpty() && !nuevoNombre.equals(nombreBancoActual)) {
-            
+
             // Usamos nuestra nueva clase DAO
             boolean actualizado = dataMov.modificarTarjeta(tabla, nuevoNombre.trim(), nombreBancoActual, idUsuarioLogueado);
-            
+
             if (actualizado) {
                 JOptionPane.showMessageDialog(this, "Tarjeta actualizada con éxito.");
                 obtenerTarjetasDelUsuario();
@@ -408,6 +457,185 @@ public void cargarMovimientos() {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if (movSeleccionado == null) {
+        JOptionPane.showMessageDialog(this, "Por favor, selecciona un movimiento de la lista dando clic sobre él.");
+        return;
+    }
+
+    int confirm = JOptionPane.showConfirmDialog(this, "¿Estás seguro de eliminar este movimiento?\nEl saldo de la tarjeta se reajustará.", "Confirmar", JOptionPane.YES_NO_OPTION);
+    if (confirm != JOptionPane.YES_OPTION) return;
+
+    String tipoTarjeta = tiposTarjetas.get(indiceActual);
+    int idTarjeta = idsTarjetas.get(indiceActual);
+    
+    Connection cx = null;
+    try {
+        cx = dataMov.getConnection();
+        cx.setAutoCommit(false); // Iniciar transacción
+
+        String sqlDelete = "";
+        String sqlUpdateSaldo = "";
+        java.sql.PreparedStatement psDelete = null;
+        java.sql.PreparedStatement psUpdate = null;
+
+        if (tipoTarjeta.equals("debito")) {
+            sqlDelete = "DELETE FROM movimientos_debito WHERE id_movimiento = ?";
+            
+            // Lógica inversa para débito
+            if (movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
+                sqlUpdateSaldo = "UPDATE cardsdebito SET saldo_actual = saldo_actual + ? WHERE id_carddebito = ?";
+            } else {
+                sqlUpdateSaldo = "UPDATE cardsdebito SET saldo_actual = saldo_actual - ? WHERE id_carddebito = ?";
+            }
+            
+        } else if (tipoTarjeta.equals("credito")) {
+            sqlDelete = "DELETE FROM movimientos_credito WHERE id_movimiento = ?";
+            
+            // Lógica inversa para crédito
+            if (movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
+                // Borrar un egreso (compra) -> mi deuda baja
+                sqlUpdateSaldo = "UPDATE cardscredito SET saldo_actual = saldo_actual - ? WHERE id_cardcredito = ?";
+            } else {
+                // Borrar un ingreso (pago) -> mi deuda sube y la cantidad abonada baja
+                sqlUpdateSaldo = "UPDATE cardscredito SET saldo_actual = saldo_actual + ?, cantidadabonada = cantidadabonada - ? WHERE id_cardcredito = ?";
+            }
+        }
+
+        // Ejecutar Borrado
+        psDelete = cx.prepareStatement(sqlDelete);
+        psDelete.setInt(1, movSeleccionado.getIdMovimiento()); // Asumiendo que tu clase Movimiento tiene getId_movimiento()
+        psDelete.executeUpdate();
+
+        // Ejecutar Actualización de Saldo
+        psUpdate = cx.prepareStatement(sqlUpdateSaldo);
+        psUpdate.setDouble(1, movSeleccionado.getMonto());
+        if (tipoTarjeta.equals("credito") && movSeleccionado.getConcepto().equalsIgnoreCase("ingreso")) {
+            psUpdate.setDouble(2, movSeleccionado.getMonto()); // Para cantidadabonada
+            psUpdate.setInt(3, idTarjeta);
+        } else {
+            psUpdate.setInt(2, idTarjeta);
+        }
+        psUpdate.executeUpdate();
+
+        cx.commit();
+        JOptionPane.showMessageDialog(this, "Movimiento eliminado y saldo restaurado.");
+        movSeleccionado = null; // Limpiar selección
+        cargarMovimientos(); // Recargar la vista
+
+    } catch (Exception ex) {
+        if (cx != null) try { cx.rollback(); } catch (Exception r) {}
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        if (movSeleccionado == null) {
+        JOptionPane.showMessageDialog(this, "Selecciona un movimiento para modificar.");
+        return;
+    }
+
+    String nuevoMontoStr = JOptionPane.showInputDialog(this, "Monto actual: " + movSeleccionado.getMonto() + "\nIngresa el nuevo monto:", movSeleccionado.getMonto());
+    if (nuevoMontoStr == null || nuevoMontoStr.trim().isEmpty()) return;
+
+    double nuevoMonto;
+    try {
+        nuevoMonto = Double.parseDouble(nuevoMontoStr);
+        if (nuevoMonto < 0) throw new NumberFormatException();
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Monto inválido.");
+        return;
+    }
+
+    double diferencia = nuevoMonto - movSeleccionado.getMonto();
+    if (diferencia == 0) return; // No hubo cambios
+
+    String tipoTarjeta = tiposTarjetas.get(indiceActual);
+    int idTarjeta = idsTarjetas.get(indiceActual);
+
+    Connection cx = null;
+    try {
+        cx = dataMov.getConnection();
+        cx.setAutoCommit(false);
+
+        // --- VALIDACIONES DE LÍMITE ---
+        if (tipoTarjeta.equals("credito") && movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
+            // Consultar saldo actual y límite antes de permitir el aumento
+            java.sql.PreparedStatement psCheck = cx.prepareStatement("SELECT saldo_actual, limite_credito FROM cardscredito WHERE id_cardcredito = ?");
+            psCheck.setInt(1, idTarjeta);
+            java.sql.ResultSet rs = psCheck.executeQuery();
+            if (rs.next()) {
+                double saldoActual = rs.getDouble("saldo_actual");
+                double limite = rs.getDouble("limite_credito");
+                // Si la diferencia aumenta la deuda, checar que no pase del límite
+                if (diferencia > 0 && (saldoActual + diferencia > limite)) {
+                    JOptionPane.showMessageDialog(this, "Error: El nuevo monto excede tu límite de crédito disponible.");
+                    return;
+                }
+            }
+        } else if (tipoTarjeta.equals("debito") && movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
+             // Validar que la de débito tenga fondos suficientes si el gasto aumenta
+             java.sql.PreparedStatement psCheck = cx.prepareStatement("SELECT saldo_actual FROM cardsdebito WHERE id_carddebito = ?");
+             psCheck.setInt(1, idTarjeta);
+             java.sql.ResultSet rs = psCheck.executeQuery();
+             if (rs.next()) {
+                 if (diferencia > 0 && rs.getDouble("saldo_actual") < diferencia) {
+                     JOptionPane.showMessageDialog(this, "Error: Saldo insuficiente en la tarjeta de débito para este aumento.");
+                     return;
+                 }
+             }
+        }
+
+        // --- ACTUALIZAR EL MOVIMIENTO ---
+        String tablaMov = tipoTarjeta.equals("debito") ? "movimientos_debito" : "movimientos_credito";
+        java.sql.PreparedStatement psUpdateMov = cx.prepareStatement("UPDATE " + tablaMov + " SET monto = ? WHERE id_movimiento = ?");
+        psUpdateMov.setDouble(1, nuevoMonto);
+        psUpdateMov.setInt(2, movSeleccionado.getIdMovimiento());
+        psUpdateMov.executeUpdate();
+
+        // --- ACTUALIZAR EL SALDO ---
+        String sqlUpdateSaldo = "";
+        java.sql.PreparedStatement psUpdateSaldo = null;
+
+        if (tipoTarjeta.equals("debito")) {
+            if (movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
+                sqlUpdateSaldo = "UPDATE cardsdebito SET saldo_actual = saldo_actual - ? WHERE id_carddebito = ?";
+            } else {
+                sqlUpdateSaldo = "UPDATE cardsdebito SET saldo_actual = saldo_actual + ? WHERE id_carddebito = ?";
+            }
+            psUpdateSaldo = cx.prepareStatement(sqlUpdateSaldo);
+            psUpdateSaldo.setDouble(1, diferencia);
+            psUpdateSaldo.setInt(2, idTarjeta);
+
+        } else if (tipoTarjeta.equals("credito")) {
+            if (movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
+                sqlUpdateSaldo = "UPDATE cardscredito SET saldo_actual = saldo_actual + ? WHERE id_cardcredito = ?";
+                psUpdateSaldo = cx.prepareStatement(sqlUpdateSaldo);
+                psUpdateSaldo.setDouble(1, diferencia);
+                psUpdateSaldo.setInt(2, idTarjeta);
+            } else {
+                sqlUpdateSaldo = "UPDATE cardscredito SET saldo_actual = saldo_actual - ?, cantidadabonada = cantidadabonada + ? WHERE id_cardcredito = ?";
+                psUpdateSaldo = cx.prepareStatement(sqlUpdateSaldo);
+                psUpdateSaldo.setDouble(1, diferencia);
+                psUpdateSaldo.setDouble(2, diferencia);
+                psUpdateSaldo.setInt(3, idTarjeta);
+            }
+        }
+        
+        psUpdateSaldo.executeUpdate();
+        cx.commit();
+        JOptionPane.showMessageDialog(this, "Movimiento modificado correctamente.");
+        movSeleccionado = null;
+        cargarMovimientos();
+
+    } catch (Exception ex) {
+        if (cx != null) try { cx.rollback(); } catch (Exception r) {}
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

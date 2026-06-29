@@ -16,50 +16,49 @@ public class registroMovimientos extends javax.swing.JPanel {
     /**
      * Creates new form registroMovimientos
      */
-    
-    public registroMovimientos(Movimiento mov) { 
-        
+    public registroMovimientos(Movimiento mov) {
+
         initComponents();
-         setPreferredSize(new java.awt.Dimension(580, 100));
+        setPreferredSize(new java.awt.Dimension(580, 100));
         LabTM.setText(
-            mov.getTipoMovimiento().toUpperCase()
+                mov.getTipoMovimiento().toUpperCase()
         );
 
         LabCons.setText(
-            mov.getConcepto()
+                mov.getConcepto()
         );
 
         LabDate.setText(
-            mov.getFechaMovimiento().toString()
+                mov.getFechaMovimiento().toString()
         );
 
-        if(mov.getTipoMovimiento()
-                .equalsIgnoreCase("egreso")){
+        if (mov.getTipoMovimiento()
+                .equalsIgnoreCase("egreso")) {
 
             LabMonto.setText(
-                "-$" + mov.getMonto()
+                    "-$" + mov.getMonto()
             );
 
             LabMonto.setForeground(Color.RED);
 
-        }else{
+        } else {
 
             LabMonto.setText(
-                "+$" + mov.getMonto()
+                    "+$" + mov.getMonto()
             );
 
             LabMonto.setForeground(
-                new Color(0,153,0)
+                    new Color(0, 153, 0)
             );
         }
 
         setBorder(
-            javax.swing.BorderFactory
-                .createLineBorder(
-                    Color.LIGHT_GRAY
-                )
+                javax.swing.BorderFactory
+                        .createLineBorder(
+                                Color.LIGHT_GRAY
+                        )
         );
-        
+
     }
 
     /**

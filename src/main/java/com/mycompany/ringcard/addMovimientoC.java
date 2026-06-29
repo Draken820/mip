@@ -10,6 +10,7 @@ package com.mycompany.ringcard;
  */
 public class addMovimientoC extends javax.swing.JPanel {
 //[611, 462]
+
     /**
      * Creates new form addMovimiento
      */

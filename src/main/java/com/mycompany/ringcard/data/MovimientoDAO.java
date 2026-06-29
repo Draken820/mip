@@ -338,6 +338,65 @@ public ResultSet obtenerSoloDebito(int idUsuario) {
 
     return null;
 }
+public ResultSet obtenerTarjetasDashboard(int idUsuario) {
+    try {
+        String sql = """
+            SELECT id_cardcredito AS id_tarjeta, banco, 'Credito' AS tipo, 
+                   saldo_actual, limite_credito, cantidadabonada, 
+                   fecha_corte, fecha_vencimiento, estado 
+            FROM cardscredito WHERE id_usuario = ?
+            UNION ALL
+            SELECT id_carddebito AS id_tarjeta, banco, 'Debito' AS tipo, 
+                   saldo_actual, 0 AS limite_credito, 0 AS cantidadabonada, 
+                   0 AS fecha_corte, NULL AS fecha_vencimiento, 'N/A' AS estado 
+            FROM cardsdebito WHERE id_usuario = ?
+            ORDER BY tipo, banco
+            """;
+        java.sql.PreparedStatement ps = cx.prepareStatement(sql);
+        ps.setInt(1, idUsuario);
+        ps.setInt(2, idUsuario);
+        return ps.executeQuery();
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+public ArrayList<Movimiento> listarMovimientosCredito(int idCardCredito) {
+        ArrayList<Movimiento> lista = new ArrayList<>();
 
+        try {
+            String sql = 
+                "SELECT * FROM movimientos_credito " +
+                "WHERE id_cardcredito = ? " +
+                "ORDER BY fecha_movimiento DESC";
+
+            PreparedStatement ps = cx.prepareStatement(sql);
+            ps.setInt(1, idCardCredito);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Movimiento mov = new Movimiento();
+
+                mov.setIdMovimiento(rs.getInt("id_movimiento"));
+                
+                // OJO AQUÍ: Si tu clase Movimiento tiene un método setIdCardCredito, úsalo.
+                // Si reciclas la misma variable para ambas tarjetas, usa el que ya tienes.
+                // mov.setIdCardCredito(rs.getInt("id_cardcredito")); 
+                mov.setIdCardDebito(rs.getInt("id_cardcredito")); // Usando el de débito de forma genérica temporalmente
+                
+                mov.setFechaMovimiento(rs.getDate("fecha_movimiento"));
+                mov.setConcepto(rs.getString("concepto"));
+                mov.setMonto(rs.getDouble("monto"));
+                mov.setTipoMovimiento(rs.getString("tipo_movimiento"));
+
+                lista.add(mov);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
 
 }

@@ -23,22 +23,21 @@ public class TarjetasAddD extends javax.swing.JPanel {
      * Creates new form TarjetasAddD
      */
     public int iduser;
+
     public TarjetasAddD(int id) {
         initComponents();
-        this.iduser=id;
+        this.iduser = id;
         try {
-  
-    MaskFormatter mascaraFecha = new MaskFormatter("##/##/####");
-    
-   
-    mascaraFecha.setPlaceholderCharacter('_');
-    
-   
-    mascaraFecha.install(jFormattedTextField1);
-    
-} catch (ParseException ex) {
-    System.err.println("Error en el formato de la fecha: " + ex.getMessage());
-}
+
+            MaskFormatter mascaraFecha = new MaskFormatter("##/##/####");
+
+            mascaraFecha.setPlaceholderCharacter('_');
+
+            mascaraFecha.install(jFormattedTextField1);
+
+        } catch (ParseException ex) {
+            System.err.println("Error en el formato de la fecha: " + ex.getMessage());
+        }
     }
 
     /**
@@ -156,54 +155,54 @@ public class TarjetasAddD extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         try {
-                TarjetasDeb tCred = new TarjetasDeb();
-             // Asume un ID de usuario activo en tu sesión
-              
-                tCred.setBanco(jTextField1.getText());
-                String textoFecha = jFormattedTextField1.getText();
+            TarjetasDeb tCred = new TarjetasDeb();
+            // Asume un ID de usuario activo en tu sesión
 
-try {
-    // 2. Le decimos a Java que el usuario escribe en formato Día/Mes/Año
-    java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
-    
-    // 3. Convertimos el texto a una fecha normal de Java
-    java.util.Date fechaParseada = formatoEntrada.parse(textoFecha);
-    
-    // 4. Transformamos esa fecha al formato estricto que requiere SQL y la guardamos en tu objeto
-    tCred.setFecha_vencimiento(new java.sql.Date(fechaParseada.getTime()));
-    
-} catch (java.text.ParseException e) {
-    // Si el usuario escribe letras o algo que no es una fecha válida, mostramos error y detenemos el proceso
-    JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
-    return; // Este return evita que el código siga intentando guardar en la base de datos
-}
-                tCred.setSaldo_actual((int) jSpinner1.getValue());
-                
-tCred.setId_usuario(iduser);
-                dataTarjetasdeb dao = new dataTarjetasdeb();
-                if (dao.insertarTarjetad(tCred)) {
-                    JOptionPane.showMessageDialog(this, "Tarjeta de Debito agregada con éxito.");
-                    home ventanaHome = new home(iduser);
-                    
-                    // 2. Hacemos visible el home
-                    ventanaHome.setVisible(true);
-                    
-                    // 3. Cerramos la ventana actual
-                    java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
-                    if (ventanaPadre != null) {
-                        ventanaPadre.dispose();
-                    } 
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Revisa los datos ingresados. Fechas en formato YYYY-MM-DD y montos numéricos.", "Error de formato", JOptionPane.WARNING_MESSAGE);
+            tCred.setBanco(jTextField1.getText());
+            String textoFecha = jFormattedTextField1.getText();
+
+            try {
+                // 2. Le decimos a Java que el usuario escribe en formato Día/Mes/Año
+                java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
+
+                // 3. Convertimos el texto a una fecha normal de Java
+                java.util.Date fechaParseada = formatoEntrada.parse(textoFecha);
+
+                // 4. Transformamos esa fecha al formato estricto que requiere SQL y la guardamos en tu objeto
+                tCred.setFecha_vencimiento(new java.sql.Date(fechaParseada.getTime()));
+
+            } catch (java.text.ParseException e) {
+                // Si el usuario escribe letras o algo que no es una fecha válida, mostramos error y detenemos el proceso
+                JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
+                return; // Este return evita que el código siga intentando guardar en la base de datos
             }
+            tCred.setSaldo_actual((int) jSpinner1.getValue());
+
+            tCred.setId_usuario(iduser);
+            dataTarjetasdeb dao = new dataTarjetasdeb();
+            if (dao.insertarTarjetad(tCred)) {
+                JOptionPane.showMessageDialog(this, "Tarjeta de Debito agregada con éxito.");
+                home ventanaHome = new home(iduser);
+
+                // 2. Hacemos visible el home
+                ventanaHome.setVisible(true);
+
+                // 3. Cerramos la ventana actual
+                java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
+                if (ventanaPadre != null) {
+                    ventanaPadre.dispose();
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Revisa los datos ingresados. Fechas en formato YYYY-MM-DD y montos numéricos.", "Error de formato", JOptionPane.WARNING_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
 

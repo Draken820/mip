@@ -184,44 +184,40 @@ public class rg extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         usuarios o = new usuarios();
-        try{
+        try {
             o.setNombre(txtn.getText());
             o.setAp(txtap.getText());
             o.setAm(txtam.getText());
             o.setEmail(txtem.getText());
             o.setPass(txtpas.getText());
             o.setTelefono(Integer.parseInt(txttel.getText()));
-            
-            if(o.insertarUsuario()){
+
+            if (o.insertarUsuario()) {
                 JOptionPane.showMessageDialog(null, "Registrado correctamente");
-                
-      
-                
-                
+
                 java.awt.Container contenedorPadre = this.getParent();
-                
+
                 if (contenedorPadre != null) {
-                    
+
                     contenedorPadre.removeAll();
-                    
-                   
+
                     Lg panelLogin = new Lg();
                     panelLogin.setSize(contenedorPadre.getSize());
                     panelLogin.setLocation(0, 0);
-                    
+
                     contenedorPadre.add(panelLogin);
-                    
+
                     contenedorPadre.revalidate();
                     contenedorPadre.repaint();
                 }
                 // ---------------------------------------------
                 // ---------------------------------------------
-                
-            }else{
+
+            } else {
                 JOptionPane.showMessageDialog(null, "Datos invalidos");
             }
-            
-        }catch(Exception e){
+
+        } catch (Exception e) {
             e.printStackTrace(); // Es buena práctica imprimir el error en consola si algo falla
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -233,7 +229,7 @@ public class rg extends javax.swing.JPanel {
 
     private void txttelKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txttelKeyTyped
         // TODO add your handling code here:
-        if(txttel.getText().length()>=10){
+        if (txttel.getText().length() >= 10) {
             evt.consume();
         }
     }//GEN-LAST:event_txttelKeyTyped
@@ -244,7 +240,7 @@ public class rg extends javax.swing.JPanel {
 
     private void txtnFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtnFocusGained
         // TODO add your handling code here:
-        if(txtn.getText().equals("ingresa el nombre")){
+        if (txtn.getText().equals("ingresa el nombre")) {
             txtn.setText("");
             txtn.setForeground(java.awt.Color.BLACK);
         }
@@ -256,7 +252,7 @@ public class rg extends javax.swing.JPanel {
 
     private void txtapFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtapFocusGained
         // TODO add your handling code here:
-        if(txtap.getText().equals("Ingresa Apellido")){
+        if (txtap.getText().equals("Ingresa Apellido")) {
             txtap.setText("");
             txtap.setForeground(java.awt.Color.BLACK);
         }

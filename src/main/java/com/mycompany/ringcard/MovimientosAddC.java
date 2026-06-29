@@ -4,19 +4,38 @@
  */
 package com.mycompany.ringcard;
 
+import java.text.ParseException;
+import javax.swing.text.MaskFormatter;
+
 /**
  *
  * @author DELL
  */
 public class MovimientosAddC extends javax.swing.JPanel {
-private int idUsuarioLog;
-    /**
-     * Creates new form MovimientosAdd
-     */
-    public MovimientosAddC(int idUsuarioLogueado) {
+
+    private int idUsuarioLog;
+    private int idTarjeta;
+    private javax.swing.JPanel panelPadre;
+
+    // Actualizamos el constructor para recibir más datos
+    public MovimientosAddC(int idUsuarioLogueado, int idTarjetaSeleccionada, String nombreBanco, javax.swing.JPanel padre) {
         initComponents();
         this.idUsuarioLog = idUsuarioLogueado;
+        this.idTarjeta = idTarjetaSeleccionada;
+        this.panelPadre = padre;
+
+        // Actualizamos el Label con el nombre del banco
+        jLabel1.setText("Tarjeta a hacer el cambio: " + nombreBanco);
+
+        try {
+            MaskFormatter mascaraFecha = new MaskFormatter("##/##/####");
+            mascaraFecha.setPlaceholderCharacter('_');
+            mascaraFecha.install(jFormattedTextField1);
+        } catch (ParseException ex) {
+            System.err.println("Error en el formato de la fecha: " + ex.getMessage());
+        }
     }
+// ... resto de tu código generado
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,6 +56,7 @@ private int idUsuarioLog;
         jLabel5 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
         jButton2 = new javax.swing.JButton();
+        jFormattedTextField1 = new javax.swing.JFormattedTextField();
 
         setPreferredSize(new java.awt.Dimension(938, 628));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -75,11 +95,14 @@ private int idUsuarioLog;
         jButton2.setText("Agregar");
         jButton2.addActionListener(this::jButton2ActionPerformed);
         add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 320, -1, -1));
+
+        jFormattedTextField1.setText("jFormattedTextField1");
+        add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 160, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
+        volverAtras();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -87,7 +110,94 @@ private int idUsuarioLog;
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:çç
+
+        String tipoMovimiento = jComboBox1.getSelectedItem().toString().toLowerCase(); // "ingreso" o "egreso"
+        String fechaStr = jFormattedTextField1.getText();
+        String concepto = jTextField1.getText();
+
+        Object valorSpinner = jSpinner1.getValue();
+        double monto = 0;
+        if (valorSpinner instanceof Number) {
+            monto = ((Number) valorSpinner).doubleValue();
+        }
+
+        if (monto <= 0) {
+            javax.swing.JOptionPane.showMessageDialog(this, "El monto debe ser mayor a cero.");
+            return;
+        }
+
+        java.sql.Date fechaSQL = null;
+        try {
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date fecha = sdf.parse(fechaStr);
+            fechaSQL = new java.sql.Date(fecha.getTime());
+        } catch (ParseException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Usa el formato DD/MM/YYYY");
+            return;
+        }
+
+        java.sql.Connection cx = null;
+        java.sql.PreparedStatement psInsert = null;
+        java.sql.PreparedStatement psUpdate = null;
+
+        try {
+            cx = new com.mycompany.ringcard.data.dataMovimientos().getConnection();
+            cx.setAutoCommit(false); // Transacción segura
+
+            // 1. Insertar en movimientos_credito
+            String sqlInsert = "INSERT INTO movimientos_credito (id_cardcredito, tipo_movimiento, fecha_movimiento, concepto, monto) VALUES (?, ?, ?, ?, ?)";
+            psInsert = cx.prepareStatement(sqlInsert);
+            psInsert.setInt(1, this.idTarjeta);
+            psInsert.setString(2, tipoMovimiento);
+            psInsert.setDate(3, fechaSQL);
+            psInsert.setString(4, concepto);
+            psInsert.setDouble(5, monto);
+            psInsert.executeUpdate();
+
+            // 2. Lógica inversa para el crédito (la deuda sube o baja)
+            String sqlUpdate = "";
+            if (tipoMovimiento.equals("egreso")) { // Si compro algo, mi deuda sube (+)
+                sqlUpdate = "UPDATE cardscredito SET saldo_actual = saldo_actual + ? WHERE id_cardcredito = ?";
+            } else if (tipoMovimiento.equals("ingreso")) { // Si abono a la tarjeta, mi deuda baja (-)
+                sqlUpdate = "UPDATE cardscredito SET saldo_actual = saldo_actual - ? WHERE id_cardcredito = ?";
+            }
+
+            psUpdate = cx.prepareStatement(sqlUpdate);
+            psUpdate.setDouble(1, monto);
+            psUpdate.setInt(2, this.idTarjeta);
+            psUpdate.executeUpdate();
+
+            // Confirmar cambios
+            cx.commit();
+
+            javax.swing.JOptionPane.showMessageDialog(this, "Movimiento de crédito registrado con éxito.");
+            volverAtras();
+
+        } catch (Exception ex) {
+            if (cx != null) {
+                try {
+                    cx.rollback();
+                } catch (Exception r) {
+                    r.printStackTrace();
+                }
+            }
+            javax.swing.JOptionPane.showMessageDialog(this, "Error al guardar el movimiento: " + ex.getMessage());
+        } finally {
+            try {
+                if (psInsert != null) {
+                    psInsert.close();
+                }
+                if (psUpdate != null) {
+                    psUpdate.close();
+                }
+                if (cx != null) {
+                    cx.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -95,6 +205,7 @@ private int idUsuarioLog;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -103,4 +214,18 @@ private int idUsuarioLog;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
+private void volverAtras() {
+        java.awt.Container contenedor = this.getParent();
+        if (contenedor != null) {
+            contenedor.remove(this);
+
+            if (panelPadre instanceof PanleMovimientos) {
+                ((PanleMovimientos) panelPadre).cargarMovimientos();
+            }
+
+            contenedor.revalidate();
+            contenedor.repaint();
+        }
+    }
+
 }
