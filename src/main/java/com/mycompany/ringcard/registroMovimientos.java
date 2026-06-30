@@ -17,48 +17,32 @@ public class registroMovimientos extends javax.swing.JPanel {
      * Creates new form registroMovimientos
      */
     public registroMovimientos(Movimiento mov) {
-
         initComponents();
         setPreferredSize(new java.awt.Dimension(580, 100));
-        LabTM.setText(
-                mov.getTipoMovimiento().toUpperCase()
-        );
+        
+        // 1. Fondo oscuro para la tarjeta del movimiento
+        setBackground(new java.awt.Color(45, 45, 45));
 
-        LabCons.setText(
-                mov.getConcepto()
-        );
+        LabTM.setText(mov.getTipoMovimiento().toUpperCase());
+        LabCons.setText(mov.getConcepto());
+        LabDate.setText(mov.getFechaMovimiento().toString());
 
-        LabDate.setText(
-                mov.getFechaMovimiento().toString()
-        );
+        // 2. Cambiar el color de las letras a Blanco/Gris claro para que contrasten
+        LabTM.setForeground(java.awt.Color.WHITE);
+        LabCons.setForeground(java.awt.Color.WHITE);
+        LabDate.setForeground(java.awt.Color.LIGHT_GRAY);
 
-        if (mov.getTipoMovimiento()
-                .equalsIgnoreCase("egreso")) {
-
-            LabMonto.setText(
-                    "-$" + mov.getMonto()
-            );
-
-            LabMonto.setForeground(Color.RED);
-
+        // 3. Colores pastel para el monto
+        if (mov.getTipoMovimiento().equalsIgnoreCase("egreso")) {
+            LabMonto.setText("-$" + mov.getMonto());
+            LabMonto.setForeground(new java.awt.Color(239, 83, 80)); // Rojo Material
         } else {
-
-            LabMonto.setText(
-                    "+$" + mov.getMonto()
-            );
-
-            LabMonto.setForeground(
-                    new Color(0, 153, 0)
-            );
+            LabMonto.setText("+$" + mov.getMonto());
+            LabMonto.setForeground(new java.awt.Color(102, 187, 106)); // Verde Material
         }
 
-        setBorder(
-                javax.swing.BorderFactory
-                        .createLineBorder(
-                                Color.LIGHT_GRAY
-                        )
-        );
-
+        // 4. Un borde sutil para separar cada movimiento
+        setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(30, 30, 30), 2));
     }
 
     /**

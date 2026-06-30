@@ -3,7 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.ringcard;
-
+import org.jfree.chart.labels.PieSectionLabelGenerator;
+import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
+import java.text.DecimalFormat;
 import com.mycompany.ringcard.data.dataUsuarios;
 import com.mycompany.ringcard.data.MovimientoDAO;
 import java.awt.BorderLayout;
@@ -46,8 +48,11 @@ public class home extends javax.swing.JFrame {
         jTable1.setRowHeight(35);
         jTable1.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         jTable1.getTableHeader().setOpaque(false);
-        jTable1.getTableHeader().setBackground(new Color(32, 136, 203));
+
+        // Cambia el azul por un gris oscuro elegante o el color de fondo general
+        jTable1.getTableHeader().setBackground(new Color(50, 50, 50));
         jTable1.getTableHeader().setForeground(Color.WHITE);
+        jTable1.setShowGrid(false); // Quitar las líneas de la cuadrícula lo hace ver más limpio
 
         dataUsuarios du = new dataUsuarios();
         this.con = du.conectar();
@@ -237,23 +242,23 @@ public class home extends javax.swing.JFrame {
             if (!isSelected) {
                 switch (estado) {
                     case "vencido":
-                        c.setBackground(new Color(255, 102, 102)); // Rojo
-                        c.setForeground(Color.BLACK);
+                        c.setBackground(new Color(239, 83, 80)); // Rojo Material
+                        c.setForeground(Color.WHITE);
                         break;
                     case "pagado":
-                        c.setBackground(new Color(144, 238, 144)); // Verde
-                        c.setForeground(Color.BLACK);
+                        c.setBackground(new Color(102, 187, 106)); // Verde Material
+                        c.setForeground(Color.WHITE);
                         break;
                     case "espera":
-                        c.setBackground(new Color(255, 255, 153)); // Amarillo
-                        c.setForeground(Color.BLACK);
+                        c.setBackground(new Color(255, 167, 38)); // Naranja/Amarillo Material
+                        c.setForeground(Color.WHITE);
                         break;
                     case "Expirada":
-                        c.setBackground(new Color(180, 180, 180)); // Gris (Plástico caducado)
-                        c.setForeground(Color.DARK_GRAY);
+                        c.setBackground(new Color(97, 97, 97)); // Gris apagado
+                        c.setForeground(Color.WHITE);
                         break;
                     default:
-                        c.setBackground(new Color(64, 64, 64)); // Débito
+                        c.setBackground(new Color(45, 45, 45)); // Gris oscuro para Débito
                         c.setForeground(Color.WHITE);
                         break;
                 }
@@ -344,11 +349,11 @@ public class home extends javax.swing.JFrame {
         try {
             // 1. Limpiamos cualquier renderizador personalizado (colores y botones) de la vista anterior
             jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
-            
+
             // 2. Creamos un modelo completamente nuevo específico para Movimientos (5 columnas)
             DefaultTableModel modelo = new DefaultTableModel(
-                new Object [][] {},
-                new String [] {"Fecha", "Tarjeta", "Tipo Movimiento", "Concepto", "Monto"}
+                    new Object[][]{},
+                    new String[]{"Fecha", "Tarjeta", "Tipo Movimiento", "Concepto", "Monto"}
             ) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
@@ -621,14 +626,14 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-       panprincipal.setSize(ContentPrincipal.getSize());
+        panprincipal.setSize(ContentPrincipal.getSize());
         panprincipal.setLocation(0, 0);
         ContentPrincipal.removeAll();
         ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
-        
+
         // Volvemos a cargar la vista del dashboard con los colores y botones
-        cargarTarjetasEnTabla(); 
-        
+        cargarTarjetasEnTabla();
+
         ContentPrincipal.revalidate();
         ContentPrincipal.repaint();
 
@@ -784,6 +789,17 @@ public class home extends javax.swing.JFrame {
         plot.setSectionPaint(0, colorIngreso);
         plot.setSectionPaint(1, colorEgreso);
 
+
+// 1. Quitar el fondo blanco (ponerlo totalmente transparente)
+        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
+
+// 2. Quitar sombras y bordes de la etiqueta
+        plot.setLabelShadowPaint(null);
+        plot.setLabelOutlinePaint(null);
+
+// 3. Cambiar el color del texto a blanco y darle una fuente más limpia
+        plot.setLabelPaint(Color.WHITE);
+        plot.setLabelFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
 // Configurar las etiquetas
         PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator(
                 "{0}: {1} ({2})", new DecimalFormat("0.00"), new DecimalFormat("0%")

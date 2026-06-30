@@ -168,6 +168,7 @@ public class RingCard extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        com.formdev.flatlaf.FlatDarkLaf.setup();
         try {
             com.formdev.flatlaf.FlatDarkLaf.setup();
         } catch (Exception ex) {

@@ -20,13 +20,21 @@ public class MovimientosAddD extends javax.swing.JPanel {
     private int idUsuarioLog;
     private int idTarjeta;
     private JPanel panelPadre; // Referencia al panel principal
+    private String nombreBanco; // Guardamos el nombre del banco
 
     // Actualizamos el constructor
-    public MovimientosAddD(int idUsuarioLogueado, int idTarjetaSeleccionada, JPanel padre) {
+    public MovimientosAddD(int idUsuarioLogueado, int idTarjetaSeleccionada, String nombreBanco, JPanel padre) {
         initComponents();
         this.idUsuarioLog = idUsuarioLogueado;
         this.idTarjeta = idTarjetaSeleccionada;
+        this.nombreBanco = nombreBanco;
         this.panelPadre = padre;
+        
+        // 1. Actualizamos el Label
+        jLabel1.setText("Tarjeta a hacer el cambio: " + this.nombreBanco);
+
+        // --- ESTILO VISUAL DE LA PANTALLA ---
+        aplicarEstilosModernos();
 
         try {
             MaskFormatter mascaraFecha = new MaskFormatter("##/##/####");
@@ -36,6 +44,7 @@ public class MovimientosAddD extends javax.swing.JPanel {
             System.err.println("Error en el formato de la fecha: " + ex.getMessage());
         }
     }
+    // ...resto del código
 
     private void volverAtras() {
         // this.getParent() nos da el ContSCP (el contenedor donde estamos metidos)
@@ -79,46 +88,100 @@ public class MovimientosAddD extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(938, 628));
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Tarjeta a hacer el cambio:");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 50, 280, -1));
 
         jButton1.setText("volver");
         jButton1.addActionListener(this::jButton1ActionPerformed);
-        add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, -1, -1));
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ingreso", "Egreso" }));
         jComboBox1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
-        add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, 140, -1));
 
         jLabel2.setText("Tipo Movimeinto");
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 80, -1, -1));
 
         jLabel3.setText("Fecha Movimeinto");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, -1, -1));
 
         jLabel4.setText("Concepto");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 190, -1, -1));
 
         jTextField1.setText("jTextField1");
-        add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 210, 140, -1));
 
         jLabel5.setText("Monto");
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 250, -1, -1));
 
         jSpinner1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         jSpinner1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 270, 140, -1));
 
         jFormattedTextField1.setText("jFormattedTextField1");
         jFormattedTextField1.addActionListener(this::jFormattedTextField1ActionPerformed);
-        add(jFormattedTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 160, -1, -1));
 
         jButton2.setText("Guardar");
         jButton2.addActionListener(this::jButton2ActionPerformed);
-        add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 320, -1, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(193, 193, 193)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(360, 360, 360))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(413, 413, 413)
+                        .addComponent(jLabel5))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(373, 373, 373)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(365, 365, 365)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel3)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(357, 357, 357)
+                        .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(403, 403, 403)
+                        .addComponent(jLabel4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(367, 367, 367)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(380, 380, 380)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -233,7 +296,71 @@ public class MovimientosAddD extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
+private void aplicarEstilosModernos() {
+        // 1. Fondo oscuro para que combine con el resto de la app
+        this.setBackground(new java.awt.Color(45, 45, 45));
 
+        // 2. Fuente moderna para las etiquetas
+        java.awt.Font fuenteEtiquetas = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14);
+        java.awt.Color colorTexto = java.awt.Color.WHITE;
+
+        // Estilizar todas las etiquetas
+        javax.swing.JLabel[] etiquetas = {jLabel1, jLabel2, jLabel3, jLabel4, jLabel5};
+        for (javax.swing.JLabel label : etiquetas) {
+            label.setFont(fuenteEtiquetas);
+            label.setForeground(colorTexto);
+        }
+
+        // 3. Estilizar el JComboBox (Desplegable)
+        jComboBox1.setBackground(new java.awt.Color(64, 64, 64));
+        jComboBox1.setForeground(colorTexto);
+        jComboBox1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        jComboBox1.setFocusable(false); // Quitar borde punteado
+
+        // 4. Estilizar los campos de texto
+        java.awt.Color fondoInputs = new java.awt.Color(64, 64, 64);
+        
+        jFormattedTextField1.setBackground(fondoInputs);
+        jFormattedTextField1.setForeground(colorTexto);
+        jFormattedTextField1.setCaretColor(colorTexto); // Color del cursor titilante
+        jFormattedTextField1.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)),
+            javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5) // Padding interno
+        ));
+
+        jTextField1.setBackground(fondoInputs);
+        jTextField1.setForeground(colorTexto);
+        jTextField1.setCaretColor(colorTexto);
+        jTextField1.setBorder(jFormattedTextField1.getBorder()); // Mismo borde
+        jTextField1.setText(""); // Limpiar el texto por defecto
+
+        // Estilizar Spinner (es un poco más complejo porque tiene botones adentro)
+        jSpinner1.setFont(new java.awt.Font("Segoe UI", java.awt.Font.PLAIN, 14));
+        javax.swing.JComponent editor = jSpinner1.getEditor();
+        if (editor instanceof javax.swing.JSpinner.DefaultEditor) {
+            javax.swing.JSpinner.DefaultEditor spinnerEditor = (javax.swing.JSpinner.DefaultEditor) editor;
+            spinnerEditor.getTextField().setBackground(fondoInputs);
+            spinnerEditor.getTextField().setForeground(colorTexto);
+            spinnerEditor.getTextField().setCaretColor(colorTexto);
+        }
+
+        // 5. Estilizar los botones inferiores
+        java.awt.Font fuenteBotones = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14);
+
+        // Botón "volver" (Gris claro)
+        jButton1.setBackground(new java.awt.Color(100, 100, 100));
+        jButton1.setForeground(java.awt.Color.WHITE);
+        jButton1.setFont(fuenteBotones);
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setFocusPainted(false);
+
+        // Botón "Guardar" (Verde Material)
+        jButton2.setBackground(new java.awt.Color(67, 160, 71));
+        jButton2.setForeground(java.awt.Color.WHITE);
+        jButton2.setFont(fuenteBotones);
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton2.setFocusPainted(false);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
