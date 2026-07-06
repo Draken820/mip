@@ -4,6 +4,8 @@
  */
 package com.mycompany.ringcard;
 import com.mycompany.ringcard.clases.usuarios;
+import com.mycompany.ringcard.reutilizables.BotonRedondo;
+import com.mycompany.ringcard.reutilizables.PanelRedondeado;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.BorderLayout;
@@ -33,68 +35,115 @@ public class Lg extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lg1 = new javax.swing.JPanel();
+        lg1 = new PanelRedondeado();
         jLabel1 = new javax.swing.JLabel();
         txt2 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txt1 = new javax.swing.JTextField();
-        BtnIngresar = new javax.swing.JButton();
+        BtnIngresar = new BotonRedondo("Ingresar");
         jLabel3 = new javax.swing.JLabel();
 
-        lg1.setBackground(new java.awt.Color(200, 200, 200));
-        lg1.setForeground(new java.awt.Color(0, 0, 0));
-        lg1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setBackground(new java.awt.Color(20, 20, 0));
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lg1.setBackground(new java.awt.Color(217, 217, 217));
+        lg1.setForeground(new java.awt.Color(0, 0, 0));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/ImailN.png"))); // NOI18N
-        jLabel1.setText("Correo");
-        lg1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 230, 110, -1));
+        jLabel1.setText("Correo:");
 
+        txt2.setBackground(new java.awt.Color(217, 217, 217));
         txt2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt2.setForeground(new java.awt.Color(153, 153, 153));
-        txt2.setText("********");
+        txt2.setForeground(new java.awt.Color(0, 0, 0));
+        txt2.setText("Ingresa tu Contraseña");
+        txt2.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txt2FocusGained(evt);
+            }
+        });
         txt2.addActionListener(this::txt2ActionPerformed);
-        lg1.add(txt2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 380, 250, 30));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpasswN.png"))); // NOI18N
-        jLabel2.setText("Password");
-        lg1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 330, 140, -1));
+        jLabel2.setText("Contraseña:");
 
+        txt1.setBackground(new java.awt.Color(217, 217, 217));
         txt1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txt1.setForeground(new java.awt.Color(153, 153, 153));
-        txt1.setText("Ingresa Tu correo");
+        txt1.setForeground(new java.awt.Color(0, 0, 0));
+        txt1.setText("Ingresa tu Correo Electronico");
+        txt1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txt1FocusGained(evt);
+            }
+        });
         txt1.addActionListener(this::txt1ActionPerformed);
-        lg1.add(txt1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 270, 250, 30));
 
+        BtnIngresar.setBackground(new java.awt.Color(59, 56, 62));
+        BtnIngresar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         BtnIngresar.setText("Ingresar");
         BtnIngresar.setBorderPainted(false);
         BtnIngresar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         BtnIngresar.addActionListener(this::BtnIngresarActionPerformed);
-        lg1.add(BtnIngresar, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 480, 100, 40));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Emoji", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IpersonN.png"))); // NOI18N
         jLabel3.setText("Iniciar Seción");
-        lg1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 620, 60));
+
+        javax.swing.GroupLayout lg1Layout = new javax.swing.GroupLayout(lg1);
+        lg1.setLayout(lg1Layout);
+        lg1Layout.setHorizontalGroup(
+            lg1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(lg1Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addGroup(lg1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(lg1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txt1, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(lg1Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(BtnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        lg1Layout.setVerticalGroup(
+            lg1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(lg1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(50, 50, 50)
+                .addGroup(lg1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txt1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(72, 72, 72)
+                .addGroup(lg1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(txt2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
+                .addComponent(BtnIngresar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(88, 88, 88))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(89, 89, 89)
+                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, 720, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(100, 100, 100)
+                .addComponent(lg1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(100, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -141,6 +190,20 @@ public class Lg extends javax.swing.JPanel {
             e.printStackTrace();
         }
     }//GEN-LAST:event_BtnIngresarActionPerformed
+
+    private void txt1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt1FocusGained
+        // TODO add your handling code here:
+        if (txt1.getText().equals("Ingresa tu Correo Electronico")) {
+            txt1.setText("");
+        }
+    }//GEN-LAST:event_txt1FocusGained
+
+    private void txt2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt2FocusGained
+        // TODO add your handling code here:
+        if (txt2.getText().equals("Ingresa tu Contraseña")) {
+            txt2.setText("");
+        }
+    }//GEN-LAST:event_txt2FocusGained
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
