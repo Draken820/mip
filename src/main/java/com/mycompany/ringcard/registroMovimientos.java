@@ -4,7 +4,7 @@
  */
 package com.mycompany.ringcard;
 
-import com.mycompany.ringcard.clases.Movimiento;
+import com.mycompany.ringcard.models.Movimiento;
 import java.awt.Color;
 
 /**

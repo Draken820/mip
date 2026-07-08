@@ -4,10 +4,9 @@
  */
 package com.mycompany.ringcard;
 
-import com.mycompany.ringcard.clases.TarjetasCred;
-import com.mycompany.ringcard.clases.TarjetasDeb;
-import com.mycompany.ringcard.data.dataTarjetascred;
-import com.mycompany.ringcard.data.dataTarjetasdeb;
+import com.mycompany.ringcard.models.TarjetasCred;
+import com.mycompany.ringcard.models.TarjetasDeb;
+
 import java.sql.Date;
 import java.text.ParseException;
 import javax.swing.JOptionPane;
@@ -38,8 +37,16 @@ public class TarjetasAddD extends javax.swing.JPanel {
         } catch (ParseException ex) {
             System.err.println("Error en el formato de la fecha: " + ex.getMessage());
         }
+        new com.mycompany.ringcard.controllers.TarjetaDebitoController(
+            this, 
+            new com.mycompany.ringcard.dao.impl.TarjetaDebitoDAOImpl(), 
+            this.iduser
+        );
     }
-
+public javax.swing.JTextField getTxtBanco() { return jTextField1; }
+    public javax.swing.JFormattedTextField getTxtFecha() { return jFormattedTextField1; }
+    public javax.swing.JSpinner getSpnSaldo() { return jSpinner1; }
+    public javax.swing.JButton getBtnGuardar() { return jButton1; }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -153,51 +160,7 @@ public class TarjetasAddD extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        try {
-            TarjetasDeb tCred = new TarjetasDeb();
-            // Asume un ID de usuario activo en tu sesión
-
-            tCred.setBanco(jTextField1.getText());
-            String textoFecha = jFormattedTextField1.getText();
-
-            try {
-                // 2. Le decimos a Java que el usuario escribe en formato Día/Mes/Año
-                java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
-
-                // 3. Convertimos el texto a una fecha normal de Java
-                java.util.Date fechaParseada = formatoEntrada.parse(textoFecha);
-
-                // 4. Transformamos esa fecha al formato estricto que requiere SQL y la guardamos en tu objeto
-                tCred.setFecha_vencimiento(new java.sql.Date(fechaParseada.getTime()));
-
-            } catch (java.text.ParseException e) {
-                // Si el usuario escribe letras o algo que no es una fecha válida, mostramos error y detenemos el proceso
-                JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
-                return; // Este return evita que el código siga intentando guardar en la base de datos
-            }
-            tCred.setSaldo_actual((int) jSpinner1.getValue());
-
-            tCred.setId_usuario(iduser);
-            dataTarjetasdeb dao = new dataTarjetasdeb();
-            if (dao.insertarTarjetad(tCred)) {
-                JOptionPane.showMessageDialog(this, "Tarjeta de Debito agregada con éxito.");
-                home ventanaHome = new home(iduser);
-
-                // 2. Hacemos visible el home
-                ventanaHome.setVisible(true);
-
-                // 3. Cerramos la ventana actual
-                java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
-                if (ventanaPadre != null) {
-                    ventanaPadre.dispose();
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "Revisa los datos ingresados. Fechas en formato YYYY-MM-DD y montos numéricos.", "Error de formato", JOptionPane.WARNING_MESSAGE);
-        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jFormattedTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFormattedTextField1ActionPerformed

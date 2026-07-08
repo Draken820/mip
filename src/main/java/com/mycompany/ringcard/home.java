@@ -1,13 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package com.mycompany.ringcard;
-import org.jfree.chart.labels.PieSectionLabelGenerator;
-import org.jfree.chart.labels.StandardPieSectionLabelGenerator;
-import java.text.DecimalFormat;
-import com.mycompany.ringcard.data.dataUsuarios;
-import com.mycompany.ringcard.data.MovimientoDAO;
+
+import com.mycompany.ringcard.dao.impl.MovimientoDAOImpl;
+import com.mycompany.ringcard.utils.ConexionDB;
 import java.awt.BorderLayout;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,10 +31,9 @@ import org.jfree.data.general.DefaultPieDataset;
 public class home extends javax.swing.JFrame {
 
     public int idUsuarioLogueado;
-    private Connection con;
 
     public home(int id) {
-        initComponents();
+        initComponents(); // ESTE ES TU INIT COMPONENTS GENERADO POR NETBEANS
         this.idUsuarioLogueado = id;
         this.setLocationRelativeTo(null);
 
@@ -48,137 +41,112 @@ public class home extends javax.swing.JFrame {
         jTable1.setRowHeight(35);
         jTable1.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         jTable1.getTableHeader().setOpaque(false);
-
-        // Cambia el azul por un gris oscuro elegante o el color de fondo general
         jTable1.getTableHeader().setBackground(new Color(50, 50, 50));
         jTable1.getTableHeader().setForeground(Color.WHITE);
-        jTable1.setShowGrid(false); // Quitar las líneas de la cuadrícula lo hace ver más limpio
-
-        dataUsuarios du = new dataUsuarios();
-        this.con = du.conectar();
+        jTable1.setShowGrid(false);
 
         cargarTarjetasEnTabla();
 
         // --- LÓGICA PARA INSERTAR LAS GRÁFICAS ---
-        // Convertimos jLabel3 y jLabel4 (tus placeholders) a layouts que acepten componentes anidados
         jLabel3.setLayout(new BorderLayout());
         jLabel4.setLayout(new BorderLayout());
-
-        // Vaciamos cualquier texto que tuvieran
         jLabel3.setText("");
         jLabel4.setText("");
 
-        // Generamos los ChartPanels
         ChartPanel panelGraficaDebito = crearGraficaDebito();
         ChartPanel panelGraficaCredito = crearGraficaCredito();
 
-        // Los añadimos al centro de los JLabels
         jLabel3.add(panelGraficaDebito, BorderLayout.CENTER);
         jLabel4.add(panelGraficaCredito, BorderLayout.CENTER);
 
-        // Forzamos actualización visual
         jPanel3.revalidate();
         jPanel3.repaint();
     }
 
     public void cargarTarjetasEnTabla() {
         try {
-            MovimientoDAO dao = new MovimientoDAO(con);
+            MovimientoDAOImpl dao = new MovimientoDAOImpl();
             ResultSet rs = dao.obtenerTarjetasDashboard(idUsuarioLogueado);
 
-            // Ajustamos las columnas para incluir el Día de Corte y el Límite de Crédito de forma explícita
             DefaultTableModel modelo = new DefaultTableModel(
                     new Object[][]{},
                     new String[]{"ID", "Banco", "Tipo", "Límite Crédito", "Día Corte", "Deuda Actual", "Falta Pagar", "Fecha Límite Pago", "Estado", "Acción"}
             ) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
-                    return column == 9; // Ahora el botón de acción está en la columna 9
+                    return column == 9;
                 }
             };
 
             LocalDate hoy = LocalDate.now();
 
-            while (rs.next()) {
-                int id = rs.getInt("id_tarjeta");
-                String banco = rs.getString("banco");
-                String tipo = rs.getString("tipo");
-                double saldoActual = rs.getDouble("saldo_actual");
-                double limiteCredito = rs.getDouble("limite_credito");
-                double abonado = rs.getDouble("cantidadabonada");
-                int diaCorte = rs.getInt("fecha_corte");
-                java.sql.Date fechaVencimientoPlastico = rs.getDate("fecha_vencimiento");
-                String estadoBD = rs.getString("estado");
+            if (rs != null) {
+                while (rs.next()) {
+                    int id = rs.getInt("id_tarjeta");
+                    String banco = rs.getString("banco");
+                    String tipo = rs.getString("tipo");
+                    double saldoActual = rs.getDouble("saldo_actual");
+                    double limiteCredito = rs.getDouble("limite_credito");
+                    double abonado = rs.getDouble("cantidadabonada");
+                    int diaCorte = rs.getInt("fecha_corte");
+                    java.sql.Date fechaVencimientoPlastico = rs.getDate("fecha_vencimiento");
+                    String estadoBD = rs.getString("estado");
 
-                double faltaPagar = 0;
-                String estadoReal = "N/A";
-                String fechaLimitePagoStr = "N/A";
+                    double faltaPagar = 0;
+                    String estadoReal = "N/A";
+                    String fechaLimitePagoStr = "N/A";
 
-                // 1. VALIDACIÓN PRIMORDIAL: ¿El plástico de la tarjeta ya expiró?
-                if (fechaVencimientoPlastico != null && hoy.isAfter(fechaVencimientoPlastico.toLocalDate())) {
-                    estadoReal = "Expirada";
-                    if (tipo.equals("Credito")) {
+                    if (fechaVencimientoPlastico != null && hoy.isAfter(fechaVencimientoPlastico.toLocalDate())) {
+                        estadoReal = "Expirada";
+                        if (tipo.equals("Credito")) {
+                            faltaPagar = saldoActual - abonado;
+                        }
+                    } else if (tipo.equals("Credito")) {
                         faltaPagar = saldoActual - abonado;
-                    }
-                } // 2. LÓGICA PARA TARJETAS DE CRÉDITO ACTIVAS
-                else if (tipo.equals("Credito")) {
-                    faltaPagar = saldoActual - abonado;
-                    if (faltaPagar < 0) {
-                        faltaPagar = 0;
+                        if (faltaPagar < 0) {
+                            faltaPagar = 0;
+                        }
+
+                        LocalDate fechaCorteEvaluada;
+                        if (hoy.getDayOfMonth() > diaCorte) {
+                            fechaCorteEvaluada = LocalDate.of(hoy.getYear(), hoy.getMonth(), diaCorte);
+                        } else {
+                            fechaCorteEvaluada = LocalDate.of(hoy.getYear(), hoy.getMonth(), diaCorte).minusMonths(1);
+                        }
+
+                        LocalDate fechaLimitePago = fechaCorteEvaluada.plusDays(20);
+                        fechaLimitePagoStr = fechaLimitePago.toString();
+
+                        if (faltaPagar <= 0) {
+                            estadoReal = "pagado";
+                        } else if (hoy.isAfter(fechaLimitePago)) {
+                            estadoReal = "vencido";
+                        } else {
+                            estadoReal = "espera";
+                        }
+
+                        if (!estadoReal.equals(estadoBD)) {
+                            actualizarEstadoDB(id, estadoReal);
+                        }
                     }
 
-                    // Determinar la fecha exacta del corte de este ciclo
-                    LocalDate fechaCorteEvaluada;
-                    if (hoy.getDayOfMonth() > diaCorte) {
-                        // Si ya pasamos el día de corte de este mes, el corte ocurrió este mes
-                        fechaCorteEvaluada = LocalDate.of(hoy.getYear(), hoy.getMonth(), diaCorte);
-                    } else {
-                        // Si no hemos llegado al día de corte, corresponde al corte del mes pasado
-                        fechaCorteEvaluada = LocalDate.of(hoy.getYear(), hoy.getMonth(), diaCorte).minusMonths(1);
-                    }
-
-                    // La fecha límite de pago estándar son 20 días después de la fecha de corte
-                    LocalDate fechaLimitePago = fechaCorteEvaluada.plusDays(20);
-                    fechaLimitePagoStr = fechaLimitePago.toString();
-
-                    // Evaluar el estado del pago
-                    if (faltaPagar <= 0) {
-                        estadoReal = "pagado";
-                    } else if (hoy.isAfter(fechaLimitePago)) {
-                        estadoReal = "vencido"; // Ya pasó la fecha límite y no se ha liquidado
-                    } else {
-                        estadoReal = "espera"; // Está dentro del plazo de pago
-                    }
-
-                    // Sincronizar el estado con la base de datos si hubo cambios automáticos
-                    if (!estadoReal.equals(estadoBD)) {
-                        actualizarEstadoDB(id, estadoReal);
-                    }
+                    modelo.addRow(new Object[]{
+                        id, banco, tipo,
+                        tipo.equals("Credito") ? "$" + limiteCredito : "N/A",
+                        tipo.equals("Credito") ? diaCorte : "N/A",
+                        "$" + saldoActual,
+                        tipo.equals("Credito") ? "$" + faltaPagar : "N/A",
+                        fechaLimitePagoStr, estadoReal,
+                        tipo.equals("Credito") ? "Abonar" : "-"
+                    });
                 }
-
-                // Agregar la fila con el nuevo orden de columnas
-                modelo.addRow(new Object[]{
-                    id,
-                    banco,
-                    tipo,
-                    tipo.equals("Credito") ? "$" + limiteCredito : "N/A",
-                    tipo.equals("Credito") ? diaCorte : "N/A",
-                    "$" + saldoActual,
-                    tipo.equals("Credito") ? "$" + faltaPagar : "N/A",
-                    fechaLimitePagoStr,
-                    estadoReal,
-                    tipo.equals("Credito") ? "Abonar" : "-"
-                });
             }
 
             jTable1.setModel(modelo);
-
-            // Vincular los renderizadores visuales a las nuevas posiciones de columnas
             jTable1.setDefaultRenderer(Object.class, new CustomRowRenderer());
             jTable1.getColumnModel().getColumn(9).setCellRenderer(new ButtonRenderer());
             jTable1.getColumnModel().getColumn(9).setCellEditor(new ButtonEditor(new javax.swing.JCheckBox(), this));
 
-            // Mantener oculto el ID de la tarjeta en la columna 0
             jTable1.getColumnModel().getColumn(0).setMinWidth(0);
             jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
             jTable1.getColumnModel().getColumn(0).setWidth(0);
@@ -189,8 +157,7 @@ public class home extends javax.swing.JFrame {
     }
 
     private void actualizarEstadoDB(int idTarjeta, String nuevoEstado) {
-        try {
-            PreparedStatement ps = con.prepareStatement("UPDATE cardscredito SET estado = ? WHERE id_cardcredito = ?");
+        try (Connection con = ConexionDB.getInstance(); PreparedStatement ps = con.prepareStatement("UPDATE cardscredito SET estado = ? WHERE id_cardcredito = ?")) {
             ps.setString(1, nuevoEstado);
             ps.setInt(2, idTarjeta);
             ps.executeUpdate();
@@ -199,7 +166,6 @@ public class home extends javax.swing.JFrame {
         }
     }
 
-    // Método para aplicar un abono desde el botón de la tabla
     public void aplicarAbono(int idTarjeta, String banco) {
         try {
             String montoStr = JOptionPane.showInputDialog(this, "Ingresa la cantidad a abonar a la tarjeta de crédito " + banco + ":");
@@ -213,13 +179,14 @@ public class home extends javax.swing.JFrame {
                 return;
             }
 
-            PreparedStatement ps = con.prepareStatement("UPDATE cardscredito SET cantidadabonada = cantidadabonada + ? WHERE id_cardcredito = ?");
-            ps.setDouble(1, montoAbono);
-            ps.setInt(2, idTarjeta);
-            ps.executeUpdate();
+            try (Connection con = ConexionDB.getInstance(); PreparedStatement ps = con.prepareStatement("UPDATE cardscredito SET cantidadabonada = cantidadabonada + ? WHERE id_cardcredito = ?")) {
+                ps.setDouble(1, montoAbono);
+                ps.setInt(2, idTarjeta);
+                ps.executeUpdate();
+            }
 
             JOptionPane.showMessageDialog(this, "Abono registrado correctamente.");
-            cargarTarjetasEnTabla(); // Refrescar la tabla para reevaluar la lógica
+            cargarTarjetasEnTabla();
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Por favor, ingresa una cantidad numérica válida.");
@@ -228,37 +195,32 @@ public class home extends javax.swing.JFrame {
         }
     }
 
-    // --- CLASES INTERNAS PARA EL DISEÑO DE LA TABLA ---
-    // 1. Renderizador para pintar las filas según el estado
     class CustomRowRenderer extends DefaultTableCellRenderer {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-
-            // Cambiado a la columna 8 que ahora guarda el "Estado"
             String estado = table.getValueAt(row, 8).toString();
-
             if (!isSelected) {
                 switch (estado) {
                     case "vencido":
-                        c.setBackground(new Color(239, 83, 80)); // Rojo Material
+                        c.setBackground(new Color(239, 83, 80));
                         c.setForeground(Color.WHITE);
                         break;
                     case "pagado":
-                        c.setBackground(new Color(102, 187, 106)); // Verde Material
+                        c.setBackground(new Color(102, 187, 106));
                         c.setForeground(Color.WHITE);
                         break;
                     case "espera":
-                        c.setBackground(new Color(255, 167, 38)); // Naranja/Amarillo Material
+                        c.setBackground(new Color(255, 167, 38));
                         c.setForeground(Color.WHITE);
                         break;
                     case "Expirada":
-                        c.setBackground(new Color(97, 97, 97)); // Gris apagado
+                        c.setBackground(new Color(97, 97, 97));
                         c.setForeground(Color.WHITE);
                         break;
                     default:
-                        c.setBackground(new Color(45, 45, 45)); // Gris oscuro para Débito
+                        c.setBackground(new Color(45, 45, 45));
                         c.setForeground(Color.WHITE);
                         break;
                 }
@@ -267,7 +229,6 @@ public class home extends javax.swing.JFrame {
         }
     }
 
-    // 2. Renderizador visual para el botón
     class ButtonRenderer extends JButton implements TableCellRenderer {
 
         public ButtonRenderer() {
@@ -277,14 +238,13 @@ public class home extends javax.swing.JFrame {
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             if (value != null && value.toString().equals("-")) {
-                return null; // No mostrar botón en Débito
+                return null;
             }
             setText((value == null) ? "Abonar" : value.toString());
             return this;
         }
     }
 
-    // 3. Editor lógico para detectar el clic en el botón
     class ButtonEditor extends AbstractCellEditor implements TableCellEditor, ActionListener {
 
         private JButton button;
@@ -306,12 +266,11 @@ public class home extends javax.swing.JFrame {
             if (value != null && value.toString().equals("-")) {
                 return null;
             }
-
             label = (value == null) ? "Abonar" : value.toString();
             button.setText(label);
             isPushed = true;
-            idTarjetaSeleccionada = (int) table.getModel().getValueAt(row, 0); // ID oculto
-            bancoSeleccionado = table.getModel().getValueAt(row, 1).toString(); // Banco
+            idTarjetaSeleccionada = (int) table.getModel().getValueAt(row, 0);
+            bancoSeleccionado = table.getModel().getValueAt(row, 1).toString();
             return button;
         }
 
@@ -334,7 +293,6 @@ public class home extends javax.swing.JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (isPushed) {
-                // Al hacer clic, llamamos al método del JFrame principal
                 homeRef.aplicarAbono(idTarjetaSeleccionada, bancoSeleccionado);
             }
             isPushed = false;
@@ -342,39 +300,31 @@ public class home extends javax.swing.JFrame {
         }
     }
 
-    // ... (AQUÍ DEBES DEJAR TODO TU BLOQUE initComponents() TAL COMO LO TENÍAS) ...
-    // No modifico initComponents porque NetBeans lo bloquea, solo asegúrate de 
-    // quitar el modelo predeterminado de jTable1 si puedes, ya que lo llenamos por código.
     private void llenarTabla(ResultSet rs) {
         try {
-            // 1. Limpiamos cualquier renderizador personalizado (colores y botones) de la vista anterior
             jTable1.setDefaultRenderer(Object.class, new DefaultTableCellRenderer());
-
-            // 2. Creamos un modelo completamente nuevo específico para Movimientos (5 columnas)
             DefaultTableModel modelo = new DefaultTableModel(
                     new Object[][]{},
                     new String[]{"Fecha", "Tarjeta", "Tipo Movimiento", "Concepto", "Monto"}
             ) {
                 @Override
                 public boolean isCellEditable(int row, int column) {
-                    return false; // Ninguna celda es editable en la vista de movimientos
+                    return false;
                 }
             };
 
-            // 3. Llenamos el modelo con los datos del ResultSet
-            while (rs.next()) {
-                modelo.addRow(new Object[]{
-                    rs.getDate("fecha_movimiento"),
-                    rs.getString("tarjeta"),
-                    rs.getString("tipo_movimiento"),
-                    rs.getString("concepto"),
-                    "$" + rs.getDouble("monto") // Le agregamos el signo de pesos por estética
-                });
+            if (rs != null) {
+                while (rs.next()) {
+                    modelo.addRow(new Object[]{
+                        rs.getDate("fecha_movimiento"),
+                        rs.getString("tarjeta"),
+                        rs.getString("tipo_movimiento"),
+                        rs.getString("concepto"),
+                        "$" + rs.getDouble("monto")
+                    });
+                }
             }
-
-            // 4. Asignamos el nuevo modelo a la tabla
             jTable1.setModel(modelo);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -565,48 +515,26 @@ public class home extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CBMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBMostrarActionPerformed
-        dataUsuarios du = new dataUsuarios();
-        Connection con = du.conectar();
-
-        MovimientoDAO dao = new MovimientoDAO(con);
-
+        MovimientoDAOImpl dao = new MovimientoDAOImpl();
         String opcion = CBMostrar.getSelectedItem().toString();
 
-        System.out.println("Seleccionado: " + opcion);
-
         switch (opcion) {
-
             case "Mostrar Todo":
-                llenarTabla(
-                        dao.obtenerTodosLosMovimientos(idUsuarioLogueado)
-                );
+                llenarTabla(dao.obtenerTodosLosMovimientos(idUsuarioLogueado));
                 break;
-
             case "Ingresos":
-                llenarTabla(
-                        dao.obtenerIngresos(idUsuarioLogueado)
-                );
+                llenarTabla(dao.obtenerIngresos(idUsuarioLogueado));
                 break;
-
             case "Egresos":
-                llenarTabla(
-                        dao.obtenerEgresos(idUsuarioLogueado)
-                );
+                llenarTabla(dao.obtenerEgresos(idUsuarioLogueado));
                 break;
-
             case "Solo Credito":
-                llenarTabla(
-                        dao.obtenerSoloCredito(idUsuarioLogueado)
-                );
+                llenarTabla(dao.obtenerSoloCredito(idUsuarioLogueado));
                 break;
-
             case "Solo Debito":
-                llenarTabla(
-                        dao.obtenerSoloDebito(idUsuarioLogueado)
-                );
+                llenarTabla(dao.obtenerSoloDebito(idUsuarioLogueado));
                 break;
         }
-
     }//GEN-LAST:event_CBMostrarActionPerformed
 
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
@@ -614,11 +542,9 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // Te lleva al panel de Movimientos
         PanleMovimientos panmov = new PanleMovimientos(idUsuarioLogueado);
         panmov.setSize(ContentPrincipal.getSize());
         panmov.setLocation(0, 0);
-
         ContentPrincipal.removeAll();
         ContentPrincipal.add(panmov, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
         ContentPrincipal.revalidate();
@@ -630,21 +556,16 @@ public class home extends javax.swing.JFrame {
         panprincipal.setLocation(0, 0);
         ContentPrincipal.removeAll();
         ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
-
-        // Volvemos a cargar la vista del dashboard con los colores y botones
         cargarTarjetasEnTabla();
-
         ContentPrincipal.revalidate();
         ContentPrincipal.repaint();
 
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
         TarjetasAddC tac = new TarjetasAddC(idUsuarioLogueado);
         tac.setSize(ContentPrincipal.getSize());
         tac.setLocation(0, 0);
-
         ContentPrincipal.removeAll();
         ContentPrincipal.add(tac, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
         ContentPrincipal.revalidate();
@@ -652,11 +573,9 @@ public class home extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
-        // TODO add your handling code here:
         TarjetasAddD tad = new TarjetasAddD(idUsuarioLogueado);
         tad.setSize(ContentPrincipal.getSize());
         tad.setLocation(0, 0);
-
         ContentPrincipal.removeAll();
         ContentPrincipal.add(tad, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
         ContentPrincipal.revalidate();
@@ -692,21 +611,28 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JTable jTable1;
     private javax.swing.JPanel panprincipal;
     // End of variables declaration//GEN-END:variables
-// Método para crear la gráfica de Crédito
+private javax.swing.JLabel lblDummy = new javax.swing.JLabel();
+
+    public javax.swing.JLabel getLblIngresos() {
+        return lblDummy;
+    }
+
+    public javax.swing.JLabel getLblEgresos() {
+        return lblDummy;
+    }
+
+    public javax.swing.JLabel getLblSaldo() {
+        return lblDummy;
+    }
+
     private ChartPanel crearGraficaCredito() {
         DefaultPieDataset dataset = new DefaultPieDataset();
         double totalIngresos = 0;
         double totalEgresos = 0;
 
-        try {
-            // Sumar los ingresos (pagos a la tarjeta) y egresos (compras) de TODAS las tarjetas de crédito del usuario
-            String sql = "SELECT tipo_movimiento, SUM(monto) as total FROM movimientos_credito mc "
-                    + "JOIN cardscredito cc ON mc.id_cardcredito = cc.id_cardcredito "
-                    + "WHERE cc.id_usuario = ? GROUP BY tipo_movimiento";
-            PreparedStatement ps = con.prepareStatement(sql);
+        try (Connection con = ConexionDB.getInstance(); PreparedStatement ps = con.prepareStatement("SELECT tipo_movimiento, SUM(monto) as total FROM movimientos_credito mc JOIN cardscredito cc ON mc.id_cardcredito = cc.id_cardcredito WHERE cc.id_usuario = ? GROUP BY tipo_movimiento")) {
             ps.setInt(1, idUsuarioLogueado);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 String tipo = rs.getString("tipo_movimiento").toLowerCase();
                 if (tipo.equals("ingreso")) {
@@ -721,33 +647,18 @@ public class home extends javax.swing.JFrame {
 
         dataset.setValue("Abonos (Ingresos)", totalIngresos);
         dataset.setValue("Compras (Egresos)", totalEgresos);
-
-        JFreeChart chart = ChartFactory.createPieChart(
-                "Movimientos Crédito", // Título
-                dataset,
-                false, // Leyenda
-                true, // Tooltips
-                false // URLs
-        );
-
+        JFreeChart chart = ChartFactory.createPieChart("Movimientos Crédito", dataset, false, true, false);
         return estilizarGraficaPie(chart, new Color(50, 150, 250), new Color(250, 80, 80));
     }
 
-    // Método para crear la gráfica de Débito
     private ChartPanel crearGraficaDebito() {
         DefaultPieDataset dataset = new DefaultPieDataset();
         double totalIngresos = 0;
         double totalEgresos = 0;
 
-        try {
-            // Sumar ingresos y egresos de TODAS las tarjetas de débito del usuario
-            String sql = "SELECT tipo_movimiento, SUM(monto) as total FROM movimientos_debito md "
-                    + "JOIN cardsdebito cd ON md.id_carddebito = cd.id_carddebito "
-                    + "WHERE cd.id_usuario = ? GROUP BY tipo_movimiento";
-            PreparedStatement ps = con.prepareStatement(sql);
+        try (Connection con = ConexionDB.getInstance(); PreparedStatement ps = con.prepareStatement("SELECT tipo_movimiento, SUM(monto) as total FROM movimientos_debito md JOIN cardsdebito cd ON md.id_carddebito = cd.id_carddebito WHERE cd.id_usuario = ? GROUP BY tipo_movimiento")) {
             ps.setInt(1, idUsuarioLogueado);
             ResultSet rs = ps.executeQuery();
-
             while (rs.next()) {
                 String tipo = rs.getString("tipo_movimiento").toLowerCase();
                 if (tipo.equals("ingreso")) {
@@ -762,55 +673,30 @@ public class home extends javax.swing.JFrame {
 
         dataset.setValue("Ingresos", totalIngresos);
         dataset.setValue("Gastos (Egresos)", totalEgresos);
-
-        JFreeChart chart = ChartFactory.createPieChart(
-                "Movimientos Débito", // Título
-                dataset,
-                false, // Leyenda
-                true, // Tooltips
-                false // URLs
-        );
-
-        // Usamos verde para ingresos en débito y rojo/naranja para gastos
+        JFreeChart chart = ChartFactory.createPieChart("Movimientos Débito", dataset, false, true, false);
         return estilizarGraficaPie(chart, new Color(80, 220, 100), new Color(250, 80, 80));
     }
 
-    // Método genérico para darle un estilo moderno y oscuro a las gráficas
     private ChartPanel estilizarGraficaPie(JFreeChart chart, Color colorIngreso, Color colorEgreso) {
-        chart.setBackgroundPaint(new Color(64, 64, 64)); // Fondo igual a tu jPanel3
-        chart.getTitle().setPaint(Color.WHITE); // Título en blanco
-
-        // ... código anterior
+        chart.setBackgroundPaint(new Color(64, 64, 64));
+        chart.getTitle().setPaint(Color.WHITE);
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setBackgroundPaint(new Color(64, 64, 64));
-        plot.setOutlinePaint(null); // <-- Cambio aquí
-
-// Configurar colores de los gajos
+        plot.setOutlinePaint(null);
         plot.setSectionPaint(0, colorIngreso);
         plot.setSectionPaint(1, colorEgreso);
-
-
-// 1. Quitar el fondo blanco (ponerlo totalmente transparente)
         plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
-
-// 2. Quitar sombras y bordes de la etiqueta
         plot.setLabelShadowPaint(null);
         plot.setLabelOutlinePaint(null);
-
-// 3. Cambiar el color del texto a blanco y darle una fuente más limpia
         plot.setLabelPaint(Color.WHITE);
         plot.setLabelFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-// Configurar las etiquetas
-        PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator(
-                "{0}: {1} ({2})", new DecimalFormat("0.00"), new DecimalFormat("0%")
-        );
+        PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0}: {1} ({2})", new DecimalFormat("0.00"), new DecimalFormat("0%"));
         plot.setLabelGenerator(labelGenerator);
         plot.setLabelBackgroundPaint(new Color(255, 255, 255, 200));
         plot.setLabelShadowPaint(null);
         plot.setLabelOutlinePaint(null);
-// <-- Línea de setSimpleLabels eliminada
         ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setOpaque(false); // Para que se integre bien en tu panel
+        chartPanel.setOpaque(false);
         return chartPanel;
     }
 }

@@ -4,7 +4,7 @@
  */
 package com.mycompany.ringcard;
 
-import com.mycompany.ringcard.clases.usuarios;
+import com.mycompany.ringcard.models.Usuario;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,8 +18,20 @@ public class rg extends javax.swing.JPanel {
      */
     public rg() {
         initComponents();
+        new com.mycompany.ringcard.controllers.RegistroController(
+            this, 
+            new com.mycompany.ringcard.dao.impl.UsuarioDAOImpl()
+        );
     }
 
+    // --- AGREGA ESTOS GETTERS AL FINAL DE TU CLASE ---
+    public javax.swing.JTextField getTxtn() { return txtn; }
+    public javax.swing.JTextField getTxtap() { return txtap; }
+    public javax.swing.JTextField getTxtam() { return txtam; }
+    public javax.swing.JTextField getTxtem() { return txtem; }
+    public javax.swing.JTextField getTxtpas() { return txtpas; }
+    public javax.swing.JTextField getTxttel() { return txttel; }
+    public javax.swing.JButton getBtnRegistrar() { return jButton1; }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -182,44 +194,7 @@ public class rg extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        usuarios o = new usuarios();
-        try {
-            o.setNombre(txtn.getText());
-            o.setAp(txtap.getText());
-            o.setAm(txtam.getText());
-            o.setEmail(txtem.getText());
-            o.setPass(txtpas.getText());
-            o.setTelefono(Integer.parseInt(txttel.getText()));
-
-            if (o.insertarUsuario()) {
-                JOptionPane.showMessageDialog(null, "Registrado correctamente");
-
-                java.awt.Container contenedorPadre = this.getParent();
-
-                if (contenedorPadre != null) {
-
-                    contenedorPadre.removeAll();
-
-                    Lg panelLogin = new Lg();
-                    panelLogin.setSize(contenedorPadre.getSize());
-                    panelLogin.setLocation(0, 0);
-
-                    contenedorPadre.add(panelLogin);
-
-                    contenedorPadre.revalidate();
-                    contenedorPadre.repaint();
-                }
-                // ---------------------------------------------
-                // ---------------------------------------------
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Datos invalidos");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace(); // Es buena práctica imprimir el error en consola si algo falla
-        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnActionPerformed

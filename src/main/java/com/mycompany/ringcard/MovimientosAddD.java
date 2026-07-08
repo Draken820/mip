@@ -19,34 +19,43 @@ public class MovimientosAddD extends javax.swing.JPanel {
 
     private int idUsuarioLog;
     private int idTarjeta;
-    private JPanel panelPadre; // Referencia al panel principal
-    private String nombreBanco; // Guardamos el nombre del banco
+    private javax.swing.JPanel panelPadre;
+    private String nombreBanco;
 
-    // Actualizamos el constructor
-    public MovimientosAddD(int idUsuarioLogueado, int idTarjetaSeleccionada, String nombreBanco, JPanel padre) {
+    public MovimientosAddD(int idUsuarioLogueado, int idTarjetaSeleccionada, String nombreBanco, javax.swing.JPanel padre) {
         initComponents();
         this.idUsuarioLog = idUsuarioLogueado;
         this.idTarjeta = idTarjetaSeleccionada;
         this.nombreBanco = nombreBanco;
         this.panelPadre = padre;
         
-        // 1. Actualizamos el Label
         jLabel1.setText("Tarjeta a hacer el cambio: " + this.nombreBanco);
-
-        // --- ESTILO VISUAL DE LA PANTALLA ---
         aplicarEstilosModernos();
-
+        
         try {
-            MaskFormatter mascaraFecha = new MaskFormatter("##/##/####");
+            javax.swing.text.MaskFormatter mascaraFecha = new javax.swing.text.MaskFormatter("##/##/####");
             mascaraFecha.setPlaceholderCharacter('_');
             mascaraFecha.install(jFormattedTextField1);
-        } catch (ParseException ex) {
-            System.err.println("Error en el formato de la fecha: " + ex.getMessage());
-        }
+        } catch (java.text.ParseException ex) {}
+
+        // ¡Inyectamos el controlador!
+        new com.mycompany.ringcard.controllers.MovimientoDebitoController(
+            this, 
+            new com.mycompany.ringcard.dao.impl.MovimientoDAOImpl(), 
+            this.idTarjeta
+        );
     }
+
+    // --- AGREGA ESTOS GETTERS AL FINAL DE LA CLASE ---
+    public javax.swing.JComboBox<String> getCmbTipo() { return jComboBox1; }
+    public javax.swing.JFormattedTextField getTxtFecha() { return jFormattedTextField1; }
+    public javax.swing.JTextField getTxtConcepto() { return jTextField1; }
+    public javax.swing.JSpinner getSpnMonto() { return jSpinner1; }
+    public javax.swing.JButton getBtnGuardar() { return jButton2; }
+    public javax.swing.JButton getBtnVolver() { return jButton1; }
     // ...resto del código
 
-    private void volverAtras() {
+    public void volverAtras() {
         // this.getParent() nos da el ContSCP (el contenedor donde estamos metidos)
         java.awt.Container contenedor = this.getParent();
 
@@ -198,102 +207,7 @@ public class MovimientosAddD extends javax.swing.JPanel {
     }//GEN-LAST:event_jFormattedTextField1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        String tipoMovimiento = jComboBox1.getSelectedItem().toString().toLowerCase(); // "ingreso" o "egreso"
-        String fechaStr = jFormattedTextField1.getText();
-        String concepto = jTextField1.getText();
 
-        // Obtener valor del Spinner (Monto)
-        Object valorSpinner = jSpinner1.getValue();
-        double monto = 0;
-        if (valorSpinner instanceof Number) {
-            monto = ((Number) valorSpinner).doubleValue();
-        }
-
-        if (monto <= 0) {
-            JOptionPane.showMessageDialog(this, "El monto debe ser mayor a cero.");
-            return;
-        }
-
-        // Convertir la fecha ingresada (dd/MM/yyyy) al formato SQL de PostgreSQL (yyyy-MM-dd)
-        java.sql.Date fechaSQL = null;
-        try {
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
-            java.util.Date fecha = sdf.parse(fechaStr);
-            fechaSQL = new java.sql.Date(fecha.getTime());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(this, "Formato de fecha inválido. Usa el formato DD/MM/YYYY");
-            return;
-        }
-
-        Connection cx = null;
-        PreparedStatement psInsert = null;
-        PreparedStatement psUpdate = null;
-
-        try {
-            // Obtener conexión
-            cx = new com.mycompany.ringcard.data.dataMovimientos().getConnection();
-
-            // Desactivar el auto-commit para manejarlo como una sola transacción (seguridad de datos)
-            cx.setAutoCommit(false);
-
-            // 1. Insertar el movimiento en movimientos_debito
-            String sqlInsert = "INSERT INTO movimientos_debito (id_carddebito, tipo_movimiento, fecha_movimiento, concepto, monto) VALUES (?, ?, ?, ?, ?)";
-            psInsert = cx.prepareStatement(sqlInsert);
-            psInsert.setInt(1, this.idTarjeta);
-            psInsert.setString(2, tipoMovimiento);
-            psInsert.setDate(3, fechaSQL);
-            psInsert.setString(4, concepto);
-            psInsert.setDouble(5, monto);
-            psInsert.executeUpdate();
-
-            // 2. Definir la consulta de actualización de saldo según el tipo de movimiento
-            String sqlUpdate = "";
-            if (tipoMovimiento.equals("ingreso")) {
-                sqlUpdate = "UPDATE cardsdebito SET saldo_actual = saldo_actual + ? WHERE id_carddebito = ?";
-            } else if (tipoMovimiento.equals("egreso")) {
-                sqlUpdate = "UPDATE cardsdebito SET saldo_actual = saldo_actual - ? WHERE id_carddebito = ?";
-            }
-
-            // 3. Ejecutar la actualización del saldo en cardsdebito
-            psUpdate = cx.prepareStatement(sqlUpdate);
-            psUpdate.setDouble(1, monto);
-            psUpdate.setInt(2, this.idTarjeta);
-            psUpdate.executeUpdate();
-
-            // Si ambas consultas fueron exitosas, se guardan los cambios permanentemente
-            cx.commit();
-
-            JOptionPane.showMessageDialog(this, "Movimiento registrado y saldo actualizado con éxito.");
-
-            // Volver a la pantalla principal automáticamente
-            volverAtras();
-
-        } catch (Exception ex) {
-            // Si algo falla, se cancelan las operaciones para no dejar datos inconsistentes
-            if (cx != null) {
-                try {
-                    cx.rollback();
-                } catch (Exception rollbackEx) {
-                    rollbackEx.printStackTrace();
-                }
-            }
-            JOptionPane.showMessageDialog(this, "Error al procesar el movimiento: " + ex.getMessage());
-        } finally {
-            // Cerrar todos los recursos abiertos de forma segura
-            try {
-                if (psInsert != null) {
-                    psInsert.close();
-                }
-                if (psUpdate != null) {
-                    psUpdate.close();
-                }
-                if (cx != null) {
-                    cx.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
 private void aplicarEstilosModernos() {

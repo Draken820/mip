@@ -1,13 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
- */
 package com.mycompany.ringcard;
 
-import com.mycompany.ringcard.clases.Movimiento;
-import com.mycompany.ringcard.data.MovimientoDAO;
-import com.mycompany.ringcard.data.dataMovimientos;
-import com.mycompany.ringcard.data.dataUsuarios;
+
+import com.mycompany.ringcard.dao.impl.MovimientoDAOImpl;
+import com.mycompany.ringcard.models.Movimiento;
+import com.mycompany.ringcard.services.TarjetaService;
+import com.mycompany.ringcard.utils.ConexionDB;
 import java.sql.Connection;
 import java.util.ArrayList;
 import javax.swing.BoxLayout;
@@ -16,18 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.net.URL;
-import javax.swing.Icon;
 import javax.swing.JLabel;
 
-/**
- *
- * @author Gael
- */
 public class PanleMovimientos extends javax.swing.JPanel {
-// Variable para almacenar el movimiento seleccionado actualmente
 
     private Movimiento movSeleccionado = null;
-    private javax.swing.JPanel panelMovSeleccionado = null; // Para cambiarle el color al seleccionarlo
+    private javax.swing.JPanel panelMovSeleccionado = null;
     private ArrayList<String> nombresTarjetas;
     private ArrayList<Integer> idsTarjetas;
     private ArrayList<String> tiposTarjetas;
@@ -35,40 +26,30 @@ public class PanleMovimientos extends javax.swing.JPanel {
     private int indiceActual = 0;
     private int idUsuarioLogueado;
 
-    // Instancia de nuestra nueva clase de acceso a datos
-    private dataMovimientos dataMov;
+    // Nueva clase de servicios
+    private TarjetaService tarjetaService;
 
-    /**
-     * Creates new form PanleMovimientos
-     */
     public PanleMovimientos(int idUsuario) {
-        initComponents();
-
+        initComponents(); // INIT COMPONENTS GENERADO POR NETBEANS
         this.idUsuarioLogueado = idUsuario;
         this.nombresTarjetas = new ArrayList<>();
         this.idsTarjetas = new ArrayList<>();
         this.tiposTarjetas = new ArrayList<>();
         this.bancosTargetasc = new ArrayList<>();
-        this.dataMov = new dataMovimientos(); // Inicializamos el controlador de DB
+
+        this.tarjetaService = new TarjetaService(); // Servicio Limpio
 
         ContSCP.setLayout(new BoxLayout(ContSCP, BoxLayout.Y_AXIS));
         ContSCP.removeAll();
 
-        // 1. Cargamos la lista de tarjetas desde la BD
         actualizarImagenTarjeta();
         obtenerTarjetasDelUsuario();
-
-        // 2. Mostramos la primera tarjeta en el JLabel
         actualizarLabelTarjeta();
-
-        // 3. Cargamos los movimientos
         cargarMovimientos();
 
-        // 1. Ocultar los botones apenas se abre el panel
         btnModificarCard.setVisible(false);
         btnBorrarCard.setVisible(false);
 
-        // 2. Evento para MOSTRAR los botones al pasar el mouse sobre el Label
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -77,7 +58,6 @@ public class PanleMovimientos extends javax.swing.JPanel {
             }
         });
 
-        // 3. (Opcional pero recomendado) Mantenerlos visibles si el mouse pasa sobre los botones mismos
         java.awt.event.MouseAdapter mantenerVisible = new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -88,7 +68,6 @@ public class PanleMovimientos extends javax.swing.JPanel {
         btnModificarCard.addMouseListener(mantenerVisible);
         btnBorrarCard.addMouseListener(mantenerVisible);
 
-        // 4. Evento para OCULTAR los botones cuando el mouse toca el panel de fondo oscuro
         ContCards.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
@@ -96,39 +75,33 @@ public class PanleMovimientos extends javax.swing.JPanel {
                 btnBorrarCard.setVisible(false);
             }
         });
-        // --- ESTILO DE LOS BOTONES INFERIORES ---
-        java.awt.Font fuenteBotones = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14);
 
-        // Botón Agregar (Verde Material)
+        java.awt.Font fuenteBotones = new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14);
         jButton1.setBackground(new java.awt.Color(67, 160, 71));
         jButton1.setForeground(java.awt.Color.WHITE);
         jButton1.setFont(fuenteBotones);
-        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); // Pone la "manita" al pasar el mouse
-        jButton1.setFocusPainted(false); // Quita el recuadro feo al darle clic
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.setFocusPainted(false);
 
-        // Botón Modificar (Naranja Material)
         jButton2.setBackground(new java.awt.Color(251, 140, 0));
         jButton2.setForeground(java.awt.Color.WHITE);
         jButton2.setFont(fuenteBotones);
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.setFocusPainted(false);
 
-        // Botón Eliminar (Rojo Material)
         jButton3.setBackground(new java.awt.Color(229, 57, 53));
         jButton3.setForeground(java.awt.Color.WHITE);
         jButton3.setFont(fuenteBotones);
         jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton3.setFocusPainted(false);
-    } // <-- Cierre del constructor
+    }
 
     private void obtenerTarjetasDelUsuario() {
-        dataMov.cargarTarjetas(idUsuarioLogueado, nombresTarjetas, idsTarjetas, tiposTarjetas, bancosTargetasc);
+        tarjetaService.cargarTarjetas(idUsuarioLogueado, nombresTarjetas, idsTarjetas, tiposTarjetas, bancosTargetasc);
     }
 
     public void cargarMovimientos() {
         ContSCP.removeAll();
-
-        // Si no hay tarjetas, no hacemos nada
         if (idsTarjetas == null || idsTarjetas.isEmpty()) {
             ContSCP.revalidate();
             ContSCP.repaint();
@@ -136,51 +109,36 @@ public class PanleMovimientos extends javax.swing.JPanel {
         }
 
         try {
-            java.sql.Connection cx = dataMov.getConnection();
-            com.mycompany.ringcard.data.MovimientoDAO dao = new com.mycompany.ringcard.data.MovimientoDAO(cx);
-
+            MovimientoDAOImpl dao = new MovimientoDAOImpl();
             int idTarjetaActual = idsTarjetas.get(indiceActual);
             String tipoActual = tiposTarjetas.get(indiceActual);
 
-            // 1. Declaramos 'lista' AQUÍ AFUERA para que exista en todo el método
-            java.util.ArrayList<com.mycompany.ringcard.clases.Movimiento> lista = new java.util.ArrayList<>();
+            java.util.ArrayList<Movimiento> lista = new java.util.ArrayList<>();
 
-            // 2. Llenamos la lista dependiendo de si es débito o crédito
             if (tipoActual.equals("debito")) {
                 lista = dao.listarMovimientosDebito(idTarjetaActual);
-                System.out.println("Cargando Débito ID " + idTarjetaActual + " - Registros: " + lista.size());
             } else if (tipoActual.equals("credito")) {
-                // IMPORTANTE: Asegúrate de tener creado el método listarMovimientosCredito en tu MovimientoDAO
                 lista = dao.listarMovimientosCredito(idTarjetaActual);
-                System.out.println("Cargando Crédito ID " + idTarjetaActual + " - Registros: " + lista.size());
             }
 
-            // 3. Recorremos la lista (sin importar si es débito o crédito) y agregamos el panel con su clic
-            for (com.mycompany.ringcard.clases.Movimiento mov : lista) {
+            for (Movimiento mov : lista) {
                 registroMovimientos panel = new registroMovimientos(mov);
-
-                // Evento para seleccionar el movimiento al darle clic
                 panel.addMouseListener(new java.awt.event.MouseAdapter() {
                     @Override
                     public void mouseClicked(java.awt.event.MouseEvent evt) {
-                        // Restaurar color del panel anterior si había uno seleccionado
                         if (panelMovSeleccionado != null) {
                             panelMovSeleccionado.setBackground(new java.awt.Color(45, 45, 45));
                         }
-                        // Marcar el nuevo panel como seleccionado (Gris-Azulado)
                         movSeleccionado = mov;
                         panelMovSeleccionado = panel;
                         panel.setBackground(new java.awt.Color(60, 80, 110));
                     }
                 });
-
                 ContSCP.add(panel);
             }
 
             ContSCP.revalidate();
             ContSCP.repaint();
-
-            cx.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -215,10 +173,6 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
         SetImageLabel(jLabel1, ruta);
     }
-
-    // ... [AQUÍ SE MANTIENE TODO TU BLOQUE initComponents GENERADO POR NETBEANS] ...
-    // (Por brevedad visual en la respuesta no se re-escribe initComponents, déjalo exactamente igual)
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -358,13 +312,10 @@ public class PanleMovimientos extends javax.swing.JPanel {
             return;
         }
 
-        // Obtener el ID y el tipo de la tarjeta actualmente seleccionada en el carrusel
         int idTarjetaActual = idsTarjetas.get(indiceActual);
         String tipoActual = tiposTarjetas.get(indiceActual);
 
         if (tipoActual.equals("debito")) {
-            // Le pasamos el usuario, el ID de la tarjeta, y la referencia a ESTE panel (this)
-            // En PanleMovimientos.java, dentro de jButton1ActionPerformed
             String nombreBancoActual = nombresTarjetas.get(indiceActual);
             MovimientosAddD panmov = new MovimientosAddD(idUsuarioLogueado, idTarjetaActual, nombreBancoActual, this);
             panmov.setSize(ContSCP.getSize());
@@ -375,10 +326,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
             ContSCP.revalidate();
             ContSCP.repaint();
         } else if (tipoActual.equals("credito")) {
-            // Obtenemos el nombre del banco de la lista
             String nombreBancoActual = nombresTarjetas.get(indiceActual);
-
-            // Le pasamos Usuario, ID Tarjeta, Nombre del Banco y 'this' (panel principal)
             MovimientosAddC panmov = new MovimientosAddC(idUsuarioLogueado, idTarjetaActual, nombreBancoActual, this);
             panmov.setSize(ContSCP.getSize());
             panmov.setLocation(0, 0);
@@ -423,22 +371,18 @@ public class PanleMovimientos extends javax.swing.JPanel {
         String tarjetaSeleccionada = nombresTarjetas.get(indiceActual);
         String tabla = tarjetaSeleccionada.contains("(Débito)") ? "cardsdebito" : "cardscredito";
         String nombreBanco = tarjetaSeleccionada.replace(" (Débito)", "").replace(" (Crédito)", "");
-
         int confirmacion = JOptionPane.showConfirmDialog(this,
                 "¿Estás seguro de que deseas eliminar la tarjeta de " + nombreBanco + "?\nEsta acción no se puede deshacer.",
                 "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
         if (confirmacion == JOptionPane.YES_OPTION) {
-
-            // Usamos nuestra nueva clase DAO
-            boolean eliminado = dataMov.borrarTarjeta(tabla, nombreBanco, idUsuarioLogueado);
-
+            boolean eliminado = tarjetaService.borrarTarjeta(tabla, nombreBanco, idUsuarioLogueado);
             if (eliminado) {
                 JOptionPane.showMessageDialog(this, "Tarjeta eliminada con éxito.");
                 indiceActual = 0;
                 obtenerTarjetasDelUsuario();
                 actualizarLabelTarjeta();
-                cargarMovimientos(); // <-- Refrescamos la vista
+                cargarMovimientos();
                 actualizarImagenTarjeta();
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo eliminar la tarjeta o ocurrió un error.");
@@ -455,20 +399,16 @@ public class PanleMovimientos extends javax.swing.JPanel {
         String tarjetaSeleccionada = nombresTarjetas.get(indiceActual);
         String tabla = tarjetaSeleccionada.contains("(Débito)") ? "cardsdebito" : "cardscredito";
         String nombreBancoActual = tarjetaSeleccionada.replace(" (Débito)", "").replace(" (Crédito)", "");
-
         String nuevoNombre = JOptionPane.showInputDialog(this,
                 "Ingresa el nuevo nombre para la tarjeta:", nombreBancoActual);
 
         if (nuevoNombre != null && !nuevoNombre.trim().isEmpty() && !nuevoNombre.equals(nombreBancoActual)) {
-
-            // Usamos nuestra nueva clase DAO
-            boolean actualizado = dataMov.modificarTarjeta(tabla, nuevoNombre.trim(), nombreBancoActual, idUsuarioLogueado);
-
+            boolean actualizado = tarjetaService.modificarTarjeta(tabla, nuevoNombre.trim(), nombreBancoActual, idUsuarioLogueado);
             if (actualizado) {
                 JOptionPane.showMessageDialog(this, "Tarjeta actualizada con éxito.");
                 obtenerTarjetasDelUsuario();
                 actualizarLabelTarjeta();
-                actualizarImagenTarjeta(); // <-- Actualizar por si cambió a una imagen válida
+                actualizarImagenTarjeta();
             } else {
                 JOptionPane.showMessageDialog(this, "No se pudo actualizar la tarjeta o ocurrió un error.");
             }
@@ -480,7 +420,6 @@ public class PanleMovimientos extends javax.swing.JPanel {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
         if (movSeleccionado == null) {
             JOptionPane.showMessageDialog(this, "Por favor, selecciona un movimiento de la lista dando clic sobre él.");
             return;
@@ -493,11 +432,11 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
         String tipoTarjeta = tiposTarjetas.get(indiceActual);
         int idTarjeta = idsTarjetas.get(indiceActual);
-
         Connection cx = null;
+
         try {
-            cx = dataMov.getConnection();
-            cx.setAutoCommit(false); // Iniciar transacción
+            cx = ConexionDB.getInstance();
+            cx.setAutoCommit(false);
 
             String sqlDelete = "";
             String sqlUpdateSaldo = "";
@@ -506,37 +445,28 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
             if (tipoTarjeta.equals("debito")) {
                 sqlDelete = "DELETE FROM movimientos_debito WHERE id_movimiento = ?";
-
-                // Lógica inversa para débito
                 if (movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
                     sqlUpdateSaldo = "UPDATE cardsdebito SET saldo_actual = saldo_actual + ? WHERE id_carddebito = ?";
                 } else {
                     sqlUpdateSaldo = "UPDATE cardsdebito SET saldo_actual = saldo_actual - ? WHERE id_carddebito = ?";
                 }
-
             } else if (tipoTarjeta.equals("credito")) {
                 sqlDelete = "DELETE FROM movimientos_credito WHERE id_movimiento = ?";
-
-                // Lógica inversa para crédito
                 if (movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
-                    // Borrar un egreso (compra) -> mi deuda baja
                     sqlUpdateSaldo = "UPDATE cardscredito SET saldo_actual = saldo_actual - ? WHERE id_cardcredito = ?";
                 } else {
-                    // Borrar un ingreso (pago) -> mi deuda sube y la cantidad abonada baja
                     sqlUpdateSaldo = "UPDATE cardscredito SET saldo_actual = saldo_actual + ?, cantidadabonada = cantidadabonada - ? WHERE id_cardcredito = ?";
                 }
             }
 
-            // Ejecutar Borrado
             psDelete = cx.prepareStatement(sqlDelete);
-            psDelete.setInt(1, movSeleccionado.getIdMovimiento()); // Asumiendo que tu clase Movimiento tiene getId_movimiento()
+            psDelete.setInt(1, movSeleccionado.getIdMovimiento());
             psDelete.executeUpdate();
 
-            // Ejecutar Actualización de Saldo
             psUpdate = cx.prepareStatement(sqlUpdateSaldo);
             psUpdate.setDouble(1, movSeleccionado.getMonto());
             if (tipoTarjeta.equals("credito") && movSeleccionado.getConcepto().equalsIgnoreCase("ingreso")) {
-                psUpdate.setDouble(2, movSeleccionado.getMonto()); // Para cantidadabonada
+                psUpdate.setDouble(2, movSeleccionado.getMonto());
                 psUpdate.setInt(3, idTarjeta);
             } else {
                 psUpdate.setInt(2, idTarjeta);
@@ -545,8 +475,8 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
             cx.commit();
             JOptionPane.showMessageDialog(this, "Movimiento eliminado y saldo restaurado.");
-            movSeleccionado = null; // Limpiar selección
-            cargarMovimientos(); // Recargar la vista
+            movSeleccionado = null;
+            cargarMovimientos();
 
         } catch (Exception ex) {
             if (cx != null) try {
@@ -554,11 +484,15 @@ public class PanleMovimientos extends javax.swing.JPanel {
             } catch (Exception r) {
             }
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+        } finally {
+            try {
+                cx.setAutoCommit(true);
+            } catch (Exception e) {
+            }
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
         if (movSeleccionado == null) {
             JOptionPane.showMessageDialog(this, "Selecciona un movimiento para modificar.");
             return;
@@ -582,33 +516,29 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
         double diferencia = nuevoMonto - movSeleccionado.getMonto();
         if (diferencia == 0) {
-            return; // No hubo cambios
+            return;
         }
         String tipoTarjeta = tiposTarjetas.get(indiceActual);
         int idTarjeta = idsTarjetas.get(indiceActual);
 
         Connection cx = null;
         try {
-            cx = dataMov.getConnection();
+            cx = ConexionDB.getInstance();
             cx.setAutoCommit(false);
 
-            // --- VALIDACIONES DE LÍMITE ---
             if (tipoTarjeta.equals("credito") && movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
-                // Consultar saldo actual y límite antes de permitir el aumento
                 java.sql.PreparedStatement psCheck = cx.prepareStatement("SELECT saldo_actual, limite_credito FROM cardscredito WHERE id_cardcredito = ?");
                 psCheck.setInt(1, idTarjeta);
                 java.sql.ResultSet rs = psCheck.executeQuery();
                 if (rs.next()) {
                     double saldoActual = rs.getDouble("saldo_actual");
                     double limite = rs.getDouble("limite_credito");
-                    // Si la diferencia aumenta la deuda, checar que no pase del límite
                     if (diferencia > 0 && (saldoActual + diferencia > limite)) {
                         JOptionPane.showMessageDialog(this, "Error: El nuevo monto excede tu límite de crédito disponible.");
                         return;
                     }
                 }
             } else if (tipoTarjeta.equals("debito") && movSeleccionado.getConcepto().equalsIgnoreCase("egreso")) {
-                // Validar que la de débito tenga fondos suficientes si el gasto aumenta
                 java.sql.PreparedStatement psCheck = cx.prepareStatement("SELECT saldo_actual FROM cardsdebito WHERE id_carddebito = ?");
                 psCheck.setInt(1, idTarjeta);
                 java.sql.ResultSet rs = psCheck.executeQuery();
@@ -620,14 +550,12 @@ public class PanleMovimientos extends javax.swing.JPanel {
                 }
             }
 
-            // --- ACTUALIZAR EL MOVIMIENTO ---
             String tablaMov = tipoTarjeta.equals("debito") ? "movimientos_debito" : "movimientos_credito";
             java.sql.PreparedStatement psUpdateMov = cx.prepareStatement("UPDATE " + tablaMov + " SET monto = ? WHERE id_movimiento = ?");
             psUpdateMov.setDouble(1, nuevoMonto);
             psUpdateMov.setInt(2, movSeleccionado.getIdMovimiento());
             psUpdateMov.executeUpdate();
 
-            // --- ACTUALIZAR EL SALDO ---
             String sqlUpdateSaldo = "";
             java.sql.PreparedStatement psUpdateSaldo = null;
 
@@ -668,6 +596,11 @@ public class PanleMovimientos extends javax.swing.JPanel {
             } catch (Exception r) {
             }
             JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+        } finally {
+            try {
+                cx.setAutoCommit(true);
+            } catch (Exception e) {
+            }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 

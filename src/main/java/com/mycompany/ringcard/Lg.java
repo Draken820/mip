@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package com.mycompany.ringcard;
-import com.mycompany.ringcard.clases.usuarios;
+import com.mycompany.ringcard.models.Usuario;
 import com.mycompany.ringcard.reutilizables.BotonRedondo;
 import com.mycompany.ringcard.reutilizables.PanelRedondeado;
 import java.awt.event.MouseAdapter;
@@ -22,10 +22,20 @@ public class Lg extends javax.swing.JPanel {
      */
     public Lg() {
         initComponents();
-      
+      new com.mycompany.ringcard.controllers.LoginController(this, new com.mycompany.ringcard.dao.impl.UsuarioDAOImpl());
         
     }
+public javax.swing.JTextField getTxtEmail() {
+        return txt1;
+    }
 
+    public javax.swing.JTextField getTxtPass() {
+        return txt2;
+    }
+
+    public javax.swing.JButton getBtnIngresar() {
+        return BtnIngresar;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -160,35 +170,7 @@ public class Lg extends javax.swing.JPanel {
     }//GEN-LAST:event_txt1ActionPerformed
 
     private void BtnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIngresarActionPerformed
-        // TODO add your handling code here:
-        usuarios o=new usuarios();
-        try{
-            o.setEmail(txt1.getText());
-            o.setPass(txt2.getText());
-            if (o.autenticarUsuario()) {
-    JOptionPane.showMessageDialog(null, "Inicio correcto");
-    
-    
-    int id = o.getId_usuario(); 
 
-
-    home ventanaHome = new home(id);
-    
-    
-    ventanaHome.setVisible(true);
-  
-    java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
-    if (ventanaPadre != null) {
-        ventanaPadre.dispose();
-    }
-    
-} else {
-    JOptionPane.showMessageDialog(null, "Credenciales incorrectas");
-}
-            
-        }catch(Exception e){
-            e.printStackTrace();
-        }
     }//GEN-LAST:event_BtnIngresarActionPerformed
 
     private void txt1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt1FocusGained

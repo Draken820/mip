@@ -4,8 +4,8 @@
  */
 package com.mycompany.ringcard;
 
-import com.mycompany.ringcard.clases.TarjetasCred;
-import com.mycompany.ringcard.data.dataTarjetascred;
+import com.mycompany.ringcard.models.TarjetasCred;
+
 import java.sql.Date;
 import javax.swing.text.MaskFormatter;
 import java.text.ParseException;
@@ -37,8 +37,21 @@ public class TarjetasAddC extends javax.swing.JPanel {
         } catch (ParseException ex) {
             System.err.println("Error en el formato de la fecha: " + ex.getMessage());
         }
+        new com.mycompany.ringcard.controllers.TarjetaCreditoController(
+            this, 
+            new com.mycompany.ringcard.dao.impl.TarjetaCreditoDAOImpl(), 
+            this.idUser
+        );
     }
-
+public javax.swing.JTextField getTxtBanco() { return jTextField1; }
+    public javax.swing.JFormattedTextField getTxtFecha() { return jFormattedTextField1; }
+    public javax.swing.JSpinner getSpnSaldo() { return jSpinner1; }
+    public javax.swing.JSpinner getSpnLimite() { return jSpinner2; }
+    public javax.swing.JSpinner getSpnCorte() { return jSpinner3; }
+    public javax.swing.JSpinner getSpnInteres() { return jSpinner4; }
+    public javax.swing.JSpinner getSpnAbonado() { return jSpinner5; }
+    public javax.swing.JComboBox<String> getCmbEstado() { return jComboBox1; }
+    public javax.swing.JButton getBtnGuardar() { return jButton1; }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -227,46 +240,7 @@ public class TarjetasAddC extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            TarjetasCred tCred = new TarjetasCred();
-
-            tCred.setBanco(jTextField1.getText());
-
-            // Se extraen los nuevos valores numéricos usando Number para evitar errores de casteo
-            tCred.setCantidadab(((Number) jSpinner5.getValue()).doubleValue());
-            tCred.setPctinteres(((Number) jSpinner4.getValue()).intValue());
-
-            String textoFecha = jFormattedTextField1.getText();
-            try {
-                java.text.SimpleDateFormat formatoEntrada = new java.text.SimpleDateFormat("dd/MM/yyyy");
-                java.util.Date fechaParseada = formatoEntrada.parse(textoFecha);
-                tCred.setFecha_vencimiento(new java.sql.Date(fechaParseada.getTime()));
-            } catch (java.text.ParseException e) {
-                JOptionPane.showMessageDialog(this, "Por favor ingresa la fecha completa en formato DD/MM/YYYY (ej. 06/06/2026).", "Error en la Fecha", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-
-            tCred.setEstado(jComboBox1.getSelectedItem().toString());
-            tCred.setSaldo_actual(((Number) jSpinner1.getValue()).doubleValue());
-            tCred.setLimite_credito(((Number) jSpinner2.getValue()).doubleValue());
-            tCred.setFecha_corte(((Number) jSpinner3.getValue()).intValue());
-            tCred.setId_usuario(idUser);
-
-            if (tCred.insertarTarjetac()) {
-                JOptionPane.showMessageDialog(this, "Tarjeta de crédito agregada con éxito.");
-                home ventanaHome = new home(idUser);
-                ventanaHome.setVisible(true);
-
-                java.awt.Window ventanaPadre = javax.swing.SwingUtilities.getWindowAncestor(this);
-                if (ventanaPadre != null) {
-                    ventanaPadre.dispose();
-                }
-            } else {
-                JOptionPane.showMessageDialog(this, "Error al guardar en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
