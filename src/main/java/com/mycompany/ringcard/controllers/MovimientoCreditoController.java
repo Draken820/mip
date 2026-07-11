@@ -3,6 +3,8 @@ package com.mycompany.ringcard.controllers;
 import com.mycompany.ringcard.MovimientosAddC;
 import com.mycompany.ringcard.dao.IMovimientoDAO;
 import com.mycompany.ringcard.models.Movimiento;
+import com.mycompany.ringcard.services.EstadoCuentaService;
+
 import javax.swing.JOptionPane;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,14 +22,13 @@ public class MovimientoCreditoController {
     }
 
     private void initController() {
-        // Escuchamos el clic del botón de guardar
         this.vista.getBtnGuardar().addActionListener(e -> guardarMovimiento());
     }
 
     private void guardarMovimiento() {
         try {
             Movimiento mov = new Movimiento();
-            mov.setIdCardDebito(idTarjeta); // Usamos el mismo campo de ID que definimos en el modelo
+            mov.setIdCardDebito(idTarjeta); 
             mov.setTipoMovimiento(vista.getCmbTipo().getSelectedItem().toString().toLowerCase());
             mov.setConcepto(vista.getTxtConcepto().getText());
             
@@ -42,9 +43,18 @@ public class MovimientoCreditoController {
             java.util.Date fechaParseada = sdf.parse(vista.getTxtFecha().getText());
             mov.setFechaMovimiento(new java.sql.Date(fechaParseada.getTime()));
 
-            // Llamamos al DAO de crédito
             if (dao.insertarMovimientoCredito(mov)) {
-                JOptionPane.showMessageDialog(vista, "Movimiento de crédito registrado con éxito.");
+                JOptionPane.showMessageDialog(vista, "Movimiento de crédito registrado en la base de datos.");
+                
+                // === GENERACIÓN DEL ESTADO DE CUENTA ===
+                try {
+                    EstadoCuentaService docService = new EstadoCuentaService(dao);
+                    docService.actualizarEstadoCuenta(idTarjeta, vista.getNombreBanco(), "credito");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(vista, "No se pudo generar el DOCX: " + ex.getMessage(), "Error DOCX", JOptionPane.ERROR_MESSAGE);
+                }
+                // =======================================
+
                 vista.volverAtras();
             } else {
                 JOptionPane.showMessageDialog(vista, "Error al guardar el movimiento en la base de datos.");

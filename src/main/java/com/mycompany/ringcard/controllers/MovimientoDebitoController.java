@@ -3,6 +3,8 @@ package com.mycompany.ringcard.controllers;
 import com.mycompany.ringcard.MovimientosAddD;
 import com.mycompany.ringcard.dao.IMovimientoDAO;
 import com.mycompany.ringcard.models.Movimiento;
+import com.mycompany.ringcard.services.EstadoCuentaService;
+
 import javax.swing.JOptionPane;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,7 +44,17 @@ public class MovimientoDebitoController {
             mov.setFechaMovimiento(new java.sql.Date(fechaParseada.getTime()));
 
             if (dao.insertarMovimientoDebito(mov)) {
-                JOptionPane.showMessageDialog(vista, "Movimiento registrado y saldo actualizado con éxito.");
+                JOptionPane.showMessageDialog(vista, "Movimiento registrado en la base de datos con éxito.");
+                
+                // === GENERACIÓN DEL ESTADO DE CUENTA ===
+                try {
+                    EstadoCuentaService docService = new EstadoCuentaService(dao);
+                    docService.actualizarEstadoCuenta(idTarjeta, vista.getNombreBanco(), "debito");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(vista, "No se pudo generar el DOCX: " + ex.getMessage(), "Error DOCX", JOptionPane.ERROR_MESSAGE);
+                }
+                // =======================================
+
                 vista.volverAtras();
             } else {
                 JOptionPane.showMessageDialog(vista, "Error al guardar el movimiento en la base de datos.");

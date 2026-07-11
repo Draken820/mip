@@ -8,20 +8,20 @@ public class MovimientosAddC extends javax.swing.JPanel {
 
     private int idUsuarioLog;
     private int idTarjeta;
-    private JPanel panelPadre; 
+    private JPanel panelPadre;
     private String nombreBanco;
 
     public MovimientosAddC(int idUsuarioLogueado, int idTarjetaSeleccionada, String nombreBanco, JPanel padre) {
         initComponents(); // ESTE ES EL QUE GENERA NETBEANS, DÉJALO INTACTO.
-        
+
         this.idUsuarioLog = idUsuarioLogueado;
         this.idTarjeta = idTarjetaSeleccionada;
         this.nombreBanco = nombreBanco;
         this.panelPadre = padre;
-        
+
         jLabel1.setText("Tarjeta a hacer el cambio: " + this.nombreBanco);
         aplicarEstilosModernos();
-        
+
         try {
             MaskFormatter mascaraFecha = new MaskFormatter("##/##/####");
             mascaraFecha.setPlaceholderCharacter('_');
@@ -32,25 +32,43 @@ public class MovimientosAddC extends javax.swing.JPanel {
 
         // Conectamos la vista con su controlador
         new com.mycompany.ringcard.controllers.MovimientoCreditoController(
-            this, 
-            new com.mycompany.ringcard.dao.impl.MovimientoDAOImpl(), 
-            this.idTarjeta
+                this,
+                new com.mycompany.ringcard.dao.impl.MovimientoDAOImpl(),
+                this.idTarjeta
         );
     }
 
-    // --- GETTERS PARA EL CONTROLADOR ---
-    public javax.swing.JComboBox<String> getCmbTipo() { return jComboBox1; }
-    public javax.swing.JFormattedTextField getTxtFecha() { return jFormattedTextField1; }
-    public javax.swing.JTextField getTxtConcepto() { return jTextField1; }
-    public javax.swing.JSpinner getSpnMonto() { return jSpinner1; }
-    public javax.swing.JButton getBtnGuardar() { return jButton2; }
-    public javax.swing.JButton getBtnVolver() { return jButton1; }
+// --- GETTERS PARA EL CONTROLADOR ---
+    public javax.swing.JComboBox<String> getCmbTipo() {
+        return jComboBox1;
+    }
 
-                                      
+    public javax.swing.JFormattedTextField getTxtFecha() {
+        return jFormattedTextField1;
+    }
 
-                                        
-    
- 
+    public javax.swing.JTextField getTxtConcepto() {
+        return jTextField1;
+    }
+
+    public javax.swing.JSpinner getSpnMonto() {
+        return jSpinner1;
+    }
+
+    public javax.swing.JButton getBtnGuardar() {
+        return jButton2;
+    }
+
+    public javax.swing.JButton getBtnVolver() {
+        return jButton1;
+    }
+
+    // AGREGA ESTE NUEVO GETTER:
+    public String getNombreBanco() {
+        return this.nombreBanco;
+    }
+
+
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -165,7 +183,7 @@ public class MovimientosAddC extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         volverAtras();
+        volverAtras();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -183,7 +201,7 @@ public class MovimientosAddC extends javax.swing.JPanel {
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1ActionPerformed
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;

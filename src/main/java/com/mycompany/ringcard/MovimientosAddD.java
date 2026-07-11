@@ -28,32 +28,54 @@ public class MovimientosAddD extends javax.swing.JPanel {
         this.idTarjeta = idTarjetaSeleccionada;
         this.nombreBanco = nombreBanco;
         this.panelPadre = padre;
-        
+
         jLabel1.setText("Tarjeta a hacer el cambio: " + this.nombreBanco);
         aplicarEstilosModernos();
-        
+
         try {
             javax.swing.text.MaskFormatter mascaraFecha = new javax.swing.text.MaskFormatter("##/##/####");
             mascaraFecha.setPlaceholderCharacter('_');
             mascaraFecha.install(jFormattedTextField1);
-        } catch (java.text.ParseException ex) {}
+        } catch (java.text.ParseException ex) {
+        }
 
         // ¡Inyectamos el controlador!
         new com.mycompany.ringcard.controllers.MovimientoDebitoController(
-            this, 
-            new com.mycompany.ringcard.dao.impl.MovimientoDAOImpl(), 
-            this.idTarjeta
+                this,
+                new com.mycompany.ringcard.dao.impl.MovimientoDAOImpl(),
+                this.idTarjeta
         );
     }
+// --- GETTERS PARA EL CONTROLADOR ---
 
-    // --- AGREGA ESTOS GETTERS AL FINAL DE LA CLASE ---
-    public javax.swing.JComboBox<String> getCmbTipo() { return jComboBox1; }
-    public javax.swing.JFormattedTextField getTxtFecha() { return jFormattedTextField1; }
-    public javax.swing.JTextField getTxtConcepto() { return jTextField1; }
-    public javax.swing.JSpinner getSpnMonto() { return jSpinner1; }
-    public javax.swing.JButton getBtnGuardar() { return jButton2; }
-    public javax.swing.JButton getBtnVolver() { return jButton1; }
-    // ...resto del código
+    public javax.swing.JComboBox<String> getCmbTipo() {
+        return jComboBox1;
+    }
+
+    public javax.swing.JFormattedTextField getTxtFecha() {
+        return jFormattedTextField1;
+    }
+
+    public javax.swing.JTextField getTxtConcepto() {
+        return jTextField1;
+    }
+
+    public javax.swing.JSpinner getSpnMonto() {
+        return jSpinner1;
+    }
+
+    public javax.swing.JButton getBtnGuardar() {
+        return jButton2;
+    }
+
+    public javax.swing.JButton getBtnVolver() {
+        return jButton1;
+    }
+
+    // AGREGA ESTE NUEVO GETTER:
+    public String getNombreBanco() {
+        return this.nombreBanco;
+    }
 
     public void volverAtras() {
         // this.getParent() nos da el ContSCP (el contenedor donde estamos metidos)
@@ -210,7 +232,7 @@ public class MovimientosAddD extends javax.swing.JPanel {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
-private void aplicarEstilosModernos() {
+    private void aplicarEstilosModernos() {
         // 1. Fondo oscuro para que combine con el resto de la app
         this.setBackground(new java.awt.Color(45, 45, 45));
 
@@ -233,13 +255,13 @@ private void aplicarEstilosModernos() {
 
         // 4. Estilizar los campos de texto
         java.awt.Color fondoInputs = new java.awt.Color(64, 64, 64);
-        
+
         jFormattedTextField1.setBackground(fondoInputs);
         jFormattedTextField1.setForeground(colorTexto);
         jFormattedTextField1.setCaretColor(colorTexto); // Color del cursor titilante
         jFormattedTextField1.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-            javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)),
-            javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5) // Padding interno
+                javax.swing.BorderFactory.createLineBorder(new java.awt.Color(100, 100, 100)),
+                javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5) // Padding interno
         ));
 
         jTextField1.setBackground(fondoInputs);

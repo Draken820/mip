@@ -2,6 +2,7 @@
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/Lg.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/MovimientosAddC.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/MovimientosAddD.java
+/home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/PanelEstadosCuenta.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/PanleMovimientos.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/RingCard.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/Tarjetas.java
@@ -13,6 +14,7 @@
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/LoginController.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/MovimientoCreditoController.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/MovimientoDebitoController.java
+/home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/PanelEstadosCuentaController.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/PanelMovimientosController.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/RegistroController.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/TarjetaCreditoController.java
@@ -34,5 +36,7 @@
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/reutilizables/BotonRedondo.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/reutilizables/PanelRedondeado.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/rg.java
+/home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/services/EstadoCuentaService.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/services/TarjetaService.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/utils/ConexionDB.java
+/home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/utils/ConfigManager.java

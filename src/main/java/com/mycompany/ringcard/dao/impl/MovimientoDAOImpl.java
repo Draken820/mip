@@ -11,7 +11,88 @@ import java.util.ArrayList;
 public class MovimientoDAOImpl implements IMovimientoDAO {
 
     @Override
-    public boolean insertarMovimientoDebito(Movimiento mov) { return false; /* Movido al controlador en módulos anteriores */ }
+    public boolean insertarMovimientoDebito(Movimiento mov) {
+        String sqlInsert = "INSERT INTO movimientos_debito (id_carddebito, tipo_movimiento, fecha_movimiento, concepto, monto) VALUES (?, ?, ?, ?, ?)";
+        String sqlUpdate = mov.getTipoMovimiento().equals("ingreso") ? 
+                           "UPDATE cardsdebito SET saldo_actual = saldo_actual + ? WHERE id_carddebito = ?" :
+                           "UPDATE cardsdebito SET saldo_actual = saldo_actual - ? WHERE id_carddebito = ?";
+        
+        Connection cx = null;
+        try {
+            cx = ConexionDB.getInstance();
+            cx.setAutoCommit(false); // Transacción segura
+            
+            try (PreparedStatement psInsert = cx.prepareStatement(sqlInsert)) {
+                psInsert.setInt(1, mov.getIdCardDebito());
+                psInsert.setString(2, mov.getTipoMovimiento());
+                psInsert.setDate(3, mov.getFechaMovimiento());
+                psInsert.setString(4, mov.getConcepto());
+                psInsert.setDouble(5, mov.getMonto());
+                psInsert.executeUpdate();
+            }
+
+            try (PreparedStatement psUpdate = cx.prepareStatement(sqlUpdate)) {
+                psUpdate.setDouble(1, mov.getMonto());
+                psUpdate.setInt(2, mov.getIdCardDebito());
+                psUpdate.executeUpdate();
+            }
+
+            cx.commit();
+            return true;
+        } catch (Exception e) {
+            if (cx != null) try { cx.rollback(); } catch (Exception ex) {}
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (cx != null) try { cx.setAutoCommit(true); } catch (Exception ex) {}
+        }
+    }
+
+    @Override
+    public boolean insertarMovimientoCredito(Movimiento mov) {
+        String sqlInsert = "INSERT INTO movimientos_credito (id_cardcredito, tipo_movimiento, fecha_movimiento, concepto, monto) VALUES (?, ?, ?, ?, ?)";
+        String sqlUpdate = "";
+        if (mov.getTipoMovimiento().equals("egreso")) {
+            sqlUpdate = "UPDATE cardscredito SET saldo_actual = saldo_actual + ? WHERE id_cardcredito = ?";
+        } else {
+            sqlUpdate = "UPDATE cardscredito SET saldo_actual = saldo_actual - ?, cantidadabonada = cantidadabonada + ? WHERE id_cardcredito = ?";
+        }
+        
+        Connection cx = null;
+        try {
+            cx = ConexionDB.getInstance();
+            cx.setAutoCommit(false);
+            
+            try (PreparedStatement psInsert = cx.prepareStatement(sqlInsert)) {
+                psInsert.setInt(1, mov.getIdCardDebito()); 
+                psInsert.setString(2, mov.getTipoMovimiento());
+                psInsert.setDate(3, mov.getFechaMovimiento());
+                psInsert.setString(4, mov.getConcepto());
+                psInsert.setDouble(5, mov.getMonto());
+                psInsert.executeUpdate();
+            }
+
+            try (PreparedStatement psUpdate = cx.prepareStatement(sqlUpdate)) {
+                psUpdate.setDouble(1, mov.getMonto());
+                if (mov.getTipoMovimiento().equals("egreso")) {
+                    psUpdate.setInt(2, mov.getIdCardDebito());
+                } else {
+                    psUpdate.setDouble(2, mov.getMonto());
+                    psUpdate.setInt(3, mov.getIdCardDebito());
+                }
+                psUpdate.executeUpdate();
+            }
+
+            cx.commit();
+            return true;
+        } catch (Exception e) {
+            if (cx != null) try { cx.rollback(); } catch (Exception ex) {}
+            e.printStackTrace();
+            return false;
+        } finally {
+            if (cx != null) try { cx.setAutoCommit(true); } catch (Exception ex) {}
+        }
+    }
 
     @Override
     public ArrayList<Movimiento> listarMovimientosDebito(int idCardDebito) {
@@ -39,9 +120,6 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
     public boolean eliminarMovimientoDebito(int idMovimiento) { return false; }
 
     @Override
-    public boolean insertarMovimientoCredito(Movimiento mov) { return false; }
-
-    @Override
     public ArrayList<Movimiento> listarMovimientosCredito(int idCardCredito) {
         ArrayList<Movimiento> lista = new ArrayList<>();
         try {
@@ -66,7 +144,6 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
     @Override
     public boolean eliminarMovimientoCredito(int idMovimiento) { return false; }
 
-    // --- MÉTODOS PARA EL DASHBOARD EN HOME ---
     @Override
     public ResultSet obtenerTodosLosMovimientos(int idUsuario) {
         try {

@@ -5,6 +5,7 @@ import com.mycompany.ringcard.utils.ConexionDB;
 import java.awt.BorderLayout;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.awt.Color;
@@ -31,12 +32,21 @@ import org.jfree.data.general.DefaultPieDataset;
 public class home extends javax.swing.JFrame {
 
     public int idUsuarioLogueado;
+    private com.mycompany.ringcard.services.NotificadorCorteService notificadorCorte;
 
     public home(int id) {
-        initComponents(); // ESTE ES TU INIT COMPONENTS GENERADO POR NETBEANS
+        initComponents();
+
         this.idUsuarioLogueado = id;
         this.setLocationRelativeTo(null);
-
+// --- INICIAR EL DEMONIO DE NOTIFICACIONES ---
+        com.mycompany.ringcard.dao.impl.MovimientoDAOImpl movDAO = new com.mycompany.ringcard.dao.impl.MovimientoDAOImpl();
+        com.mycompany.ringcard.dao.impl.NotificacionDAOImpl notifDAO = new com.mycompany.ringcard.dao.impl.NotificacionDAOImpl();
+        
+        this.notificadorCorte = new com.mycompany.ringcard.services.NotificadorCorteService(movDAO, notifDAO);
+        
+        // (Sustituye "usuario@correo.com" por una consulta real que traiga el email del usuario logueado usando UsuarioDAOImpl)
+        this.notificadorCorte.iniciarMonitoreoDiario(this.idUsuarioLogueado, "usuario@correo.com");
         // Ajustar diseño de la tabla
         jTable1.setRowHeight(35);
         jTable1.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
@@ -61,6 +71,17 @@ public class home extends javax.swing.JFrame {
 
         jPanel3.revalidate();
         jPanel3.repaint();
+        // Verificar si la ruta de documentos ya existe
+        if (com.mycompany.ringcard.utils.ConfigManager.getRutaDocumentos() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "¡Bienvenido! Para guardar tus estados de cuenta, selecciona una carpeta en tu equipo.");
+            javax.swing.JFileChooser chooser = new javax.swing.JFileChooser();
+            chooser.setFileSelectionMode(javax.swing.JFileChooser.DIRECTORIES_ONLY);
+            chooser.setDialogTitle("Selecciona la carpeta para tus Estados de Cuenta");
+
+            if (chooser.showOpenDialog(this) == javax.swing.JFileChooser.APPROVE_OPTION) {
+                com.mycompany.ringcard.utils.ConfigManager.setRutaDocumentos(chooser.getSelectedFile().getAbsolutePath());
+            }
+        }
     }
 
     public void cargarTarjetasEnTabla() {
@@ -358,6 +379,8 @@ public class home extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem5 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -498,6 +521,14 @@ public class home extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setText("Registros");
+
+        jMenuItem5.setText("VerRegistrosDeArchivos");
+        jMenuItem5.addActionListener(this::jMenuItem5ActionPerformed);
+        jMenu3.add(jMenuItem5);
+
+        jMenuBar1.add(jMenu3);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -582,6 +613,16 @@ public class home extends javax.swing.JFrame {
         ContentPrincipal.repaint();
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        PanelEstadosCuenta panelDocs = new PanelEstadosCuenta();
+        panelDocs.setSize(ContentPrincipal.getSize());
+        panelDocs.setLocation(0, 0);
+        ContentPrincipal.removeAll();
+        ContentPrincipal.add(panelDocs, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
+        ContentPrincipal.revalidate();
+        ContentPrincipal.repaint();
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -600,11 +641,13 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
