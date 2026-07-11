@@ -42,9 +42,9 @@ public class home extends javax.swing.JFrame {
 // --- INICIAR EL DEMONIO DE NOTIFICACIONES ---
         com.mycompany.ringcard.dao.impl.MovimientoDAOImpl movDAO = new com.mycompany.ringcard.dao.impl.MovimientoDAOImpl();
         com.mycompany.ringcard.dao.impl.NotificacionDAOImpl notifDAO = new com.mycompany.ringcard.dao.impl.NotificacionDAOImpl();
-        
+
         this.notificadorCorte = new com.mycompany.ringcard.services.NotificadorCorteService(movDAO, notifDAO);
-        
+
         // (Sustituye "usuario@correo.com" por una consulta real que traiga el email del usuario logueado usando UsuarioDAOImpl)
         this.notificadorCorte.iniciarMonitoreoDiario(this.idUsuarioLogueado, "usuario@correo.com");
         // Ajustar diseño de la tabla
