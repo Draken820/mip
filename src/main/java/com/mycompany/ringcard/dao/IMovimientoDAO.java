@@ -14,8 +14,13 @@ public interface IMovimientoDAO {
     ArrayList<Movimiento> listarMovimientosCredito(int idCardCredito);
     boolean eliminarMovimientoCredito(int idMovimiento);
     
-    // Consultas generales para Dashboard
+    // Consultas generales para Dashboard y Reportes
     java.sql.ResultSet obtenerTodosLosMovimientos(int idUsuario);
     java.sql.ResultSet obtenerIngresos(int idUsuario);
     java.sql.ResultSet obtenerEgresos(int idUsuario);
+    
+    // --- ESTOS SON LOS MÉTODOS QUE FALTABAN AGREGAR AL CONTRATO ---
+    java.sql.ResultSet obtenerSoloCredito(int idUsuario);
+    java.sql.ResultSet obtenerSoloDebito(int idUsuario);
+    java.sql.ResultSet obtenerTarjetasDashboard(int idUsuario);
 }

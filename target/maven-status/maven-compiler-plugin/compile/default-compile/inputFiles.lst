@@ -20,10 +20,12 @@
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/TarjetaCreditoController.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/controllers/TarjetaDebitoController.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/IMovimientoDAO.java
+/home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/INotificacionDAO.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/ITarjetaCreditoDAO.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/ITarjetaDebitoDAO.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/IUsuarioDAO.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/impl/MovimientoDAOImpl.java
+/home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/impl/NotificacionDAOImpl.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/impl/TarjetaCreditoDAOImpl.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/impl/TarjetaDebitoDAOImpl.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/dao/impl/UsuarioDAOImpl.java
@@ -36,7 +38,9 @@
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/reutilizables/BotonRedondo.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/reutilizables/PanelRedondeado.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/rg.java
+/home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/services/EmailService.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/services/EstadoCuentaService.java
+/home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/services/NotificadorCorteService.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/services/TarjetaService.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/utils/ConexionDB.java
 /home/pichardo/NetBeansProjects/RingCard/mip/src/main/java/com/mycompany/ringcard/utils/ConfigManager.java
