@@ -7,9 +7,15 @@ import java.util.Properties;
 
 public class EmailService {
     
-    // Configura aquí tu correo desde el cual saldrán los avisos
-    private final String remitente = "tu_correo@gmail.com"; 
-    private final String passwordApp = "TU_CONTRASEÑA_DE_APLICACION_DE_16_LETRAS"; 
+
+    
+    // Pon tu correo real aquí
+    private final String remitente = "angelpichardorivera1@gmail.com"; 
+    
+    // Pega aquí las 16 letras EXACTAS que te dio Google (sin espacios)
+    private final String passwordApp = "esqc yqth bxbi stpa"; 
+
+    // ... (el resto del código se queda igual)
 
     public boolean enviarEstadoDeCuenta(String destinatario, String asunto, String cuerpo, String rutaArchivoAdjunto) {
         Properties props = new Properties();
@@ -55,6 +61,35 @@ public class EmailService {
 
         } catch (Exception e) {
             System.err.println("Error al enviar correo: " + e.getMessage());
+            return false;
+        }
+    }
+    public boolean enviarCorreoSimple(String destinatario, String asunto, String cuerpo) {
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(remitente, passwordApp);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(remitente));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+            message.setSubject(asunto);
+            message.setText(cuerpo);
+
+            Transport.send(message);
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error al enviar correo simple: " + e.getMessage());
             return false;
         }
     }

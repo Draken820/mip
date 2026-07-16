@@ -383,6 +383,7 @@ public class home extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         ContentPrincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 

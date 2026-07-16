@@ -157,16 +157,11 @@ public javax.swing.JTextField getTxtEmail() {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt2ActionPerformed
-        // TODO add your handling code here:
-       
-            txt2.setText("");
-       
-    }//GEN-LAST:event_txt2ActionPerformed
-
     private void txt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt1ActionPerformed
-        // TODO add your handling code here:
-       txt1.setText(null);
+       if (txt1.getText().equals("ingresa el correo electronico")) {
+            txt1.setText("");
+            txt1.setForeground(java.awt.Color.BLACK);
+        };
     }//GEN-LAST:event_txt1ActionPerformed
 
     private void BtnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnIngresarActionPerformed
@@ -179,6 +174,13 @@ public javax.swing.JTextField getTxtEmail() {
             txt1.setText("");
         }
     }//GEN-LAST:event_txt1FocusGained
+
+    private void txt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt2ActionPerformed
+        if (txt2.getText().equals("Ingresa tu Contraseña")) {
+            txt2.setText("");
+            txt2.setForeground(java.awt.Color.BLACK);
+        };
+    }//GEN-LAST:event_txt2ActionPerformed
 
     private void txt2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txt2FocusGained
         // TODO add your handling code here:
