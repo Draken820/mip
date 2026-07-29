@@ -1,8 +1,8 @@
 package com.mycompany.ringcard;
 
-
 import com.mycompany.ringcard.dao.impl.MovimientoDAOImpl;
 import com.mycompany.ringcard.models.Movimiento;
+import com.mycompany.ringcard.reutilizables.BotonRedondo;
 import com.mycompany.ringcard.services.TarjetaService;
 import com.mycompany.ringcard.utils.ConexionDB;
 import java.sql.Connection;
@@ -41,11 +41,8 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
         ContSCP.setLayout(new BoxLayout(ContSCP, BoxLayout.Y_AXIS));
         ContSCP.removeAll();
-
-        actualizarImagenTarjeta();
+        
         obtenerTarjetasDelUsuario();
-        actualizarLabelTarjeta();
-        cargarMovimientos();
 
         btnModificarCard.setVisible(false);
         btnBorrarCard.setVisible(false);
@@ -153,7 +150,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
         }
     }
 
-    private void actualizarImagenTarjeta() {
+    public void actualizarImagenTarjeta() {
         if (bancosTargetasc.isEmpty()) {
             jLabel1.setIcon(null);
             return;
@@ -177,7 +174,6 @@ public class PanleMovimientos extends javax.swing.JPanel {
     private void initComponents() {
 
         ContCards = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         btnBorrarCard = new javax.swing.JButton();
@@ -186,40 +182,34 @@ public class PanleMovimientos extends javax.swing.JPanel {
         ScrollContent = new javax.swing.JScrollPane();
         ContSCP = new javax.swing.JPanel();
         ControlMovimientos = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        jButton1 = new BotonRedondo("Ingresar");
+        jButton2 = new BotonRedondo("Ingresar");
+        jButton3 = new BotonRedondo("Ingresar");
 
         setBackground(new java.awt.Color(200, 200, 200));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ContCards.setBackground(new java.awt.Color(64, 64, 64));
+        ContCards.setBackground(new java.awt.Color(217, 217, 217));
         ContCards.setPreferredSize(new java.awt.Dimension(475, 475));
         ContCards.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar todo", "Por Mes", "Por Semana" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-        ContCards.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 20, -1, -1));
-
+        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton4.setText(">");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
             }
         });
-        ContCards.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 300, -1, -1));
+        ContCards.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(482, 300, -1, -1));
 
+        jButton5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton5.setText("<");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
             }
         });
-        ContCards.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, -1, -1));
+        ContCards.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 300, -1, -1));
 
         btnBorrarCard.setText("Borrar");
         btnBorrarCard.addActionListener(new java.awt.event.ActionListener() {
@@ -237,8 +227,11 @@ public class PanleMovimientos extends javax.swing.JPanel {
         });
         ContCards.add(btnModificarCard, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 410, 90, -1));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        ContCards.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(56, 178, 410, 260));
+        jLabel1.setText("Selecciona una flecha para cargar una targeta");
+        ContCards.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 180, 460, 270));
 
         add(ContCards, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 720));
 
@@ -261,7 +254,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
 
         add(ScrollContent, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 0, 760, 610));
 
-        ControlMovimientos.setBackground(new java.awt.Color(255, 255, 255));
+        ControlMovimientos.setBackground(new java.awt.Color(217, 217, 217));
 
         jButton1.setText("Agregar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -289,18 +282,23 @@ public class PanleMovimientos extends javax.swing.JPanel {
         ControlMovimientosLayout.setHorizontalGroup(
             ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ControlMovimientosLayout.createSequentialGroup()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         ControlMovimientosLayout.setVerticalGroup(
             ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ControlMovimientosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(ControlMovimientosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         add(ControlMovimientos, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 610, 760, 110));
@@ -315,6 +313,9 @@ public class PanleMovimientos extends javax.swing.JPanel {
         int idTarjetaActual = idsTarjetas.get(indiceActual);
         String tipoActual = tiposTarjetas.get(indiceActual);
 
+        if (jLabel1.getText().equals("Selecciona una flecha para cargar una targeta")) {
+            JOptionPane.showMessageDialog(this, "favor de primero dar clic a una felcha para cargar la informacion");
+        }else
         if (tipoActual.equals("debito")) {
             String nombreBancoActual = nombresTarjetas.get(indiceActual);
             MovimientosAddD panmov = new MovimientosAddD(idUsuarioLogueado, idTarjetaActual, nombreBancoActual, this);
@@ -344,6 +345,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
             if (indiceActual < 0) {
                 indiceActual = nombresTarjetas.size() - 1;
             }
+            jLabel1.setText("");
             actualizarLabelTarjeta();
             cargarMovimientos();
             actualizarImagenTarjeta();
@@ -356,6 +358,7 @@ public class PanleMovimientos extends javax.swing.JPanel {
             if (indiceActual >= nombresTarjetas.size()) {
                 indiceActual = 0;
             }
+            jLabel1.setText("");
             actualizarLabelTarjeta();
             cargarMovimientos();
             actualizarImagenTarjeta();
@@ -414,10 +417,6 @@ public class PanleMovimientos extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btnModificarCardActionPerformed
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         if (movSeleccionado == null) {
@@ -617,10 +616,10 @@ public class PanleMovimientos extends javax.swing.JPanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
-private void SetImageLabel(JLabel label, String ruta) {
+
+    private void SetImageLabel(JLabel label, String ruta) {
         URL url = getClass().getResource(ruta);
         if (url != null) {
             ImageIcon image = new ImageIcon(url);

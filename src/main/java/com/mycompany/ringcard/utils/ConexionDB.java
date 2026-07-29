@@ -8,7 +8,7 @@ public class ConexionDB {
     private static Connection cx = null;
     private static final String URL = "jdbc:postgresql://localhost:5432/proyecto1"; 
     private static final String USER = "postgres"; 
-    private static final String PASS = "volvo"; 
+    private static final String PASS = "pokoyo5505"; 
 
     // Constructor privado para evitar instancias con 'new'
     private ConexionDB() {}

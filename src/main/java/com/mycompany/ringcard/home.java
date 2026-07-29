@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
@@ -33,10 +34,12 @@ public class home extends javax.swing.JFrame {
 
     public int idUsuarioLogueado;
     private com.mycompany.ringcard.services.NotificadorCorteService notificadorCorte;
+    private PanleMovimientos panleMovimientos;
 
     public home(int id) {
         initComponents();
-
+        this.panleMovimientos = panleMovimientos;
+        actualizarGraficas();
         this.idUsuarioLogueado = id;
         this.setLocationRelativeTo(null);
 // --- INICIAR EL DEMONIO DE NOTIFICACIONES ---
@@ -58,19 +61,23 @@ public class home extends javax.swing.JFrame {
         cargarTarjetasEnTabla();
 
         // --- LÓGICA PARA INSERTAR LAS GRÁFICAS ---
+        jLabel3.removeAll();
+        jLabel4.removeAll();
+
         jLabel3.setLayout(new BorderLayout());
         jLabel4.setLayout(new BorderLayout());
-        jLabel3.setText("");
-        jLabel4.setText("");
 
-        ChartPanel panelGraficaDebito = crearGraficaDebito();
-        ChartPanel panelGraficaCredito = crearGraficaCredito();
+        ChartPanel debito = crearGraficaDebito();
+        ChartPanel credito = crearGraficaCredito();
 
-        jLabel3.add(panelGraficaDebito, BorderLayout.CENTER);
-        jLabel4.add(panelGraficaCredito, BorderLayout.CENTER);
+        jLabel3.add(debito, BorderLayout.CENTER);
+        jLabel4.add(credito, BorderLayout.CENTER);
 
-        jPanel3.revalidate();
-        jPanel3.repaint();
+        jLabel3.revalidate();
+        jLabel3.repaint();
+
+        jLabel4.revalidate();
+        jLabel4.repaint();
         // Verificar si la ruta de documentos ya existe
         if (com.mycompany.ringcard.utils.ConfigManager.getRutaDocumentos() == null) {
             javax.swing.JOptionPane.showMessageDialog(this, "¡Bienvenido! Para guardar tus estados de cuenta, selecciona una carpeta en tu equipo.");
@@ -363,19 +370,15 @@ public class home extends javax.swing.JFrame {
         ContentPrincipal = new javax.swing.JPanel();
         panprincipal = new javax.swing.JPanel();
         ContenedorGeneralCyD = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        CBMostrar = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -390,13 +393,7 @@ public class home extends javax.swing.JFrame {
         panprincipal.setBackground(new java.awt.Color(64, 60, 60));
         panprincipal.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ContenedorGeneralCyD.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jPanel1.setBackground(new java.awt.Color(200, 200, 200));
-
-        CBMostrar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        CBMostrar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Mostrar Todo", "Ingresos", "Egresos", "Solo Credito", "Solo Debito" }));
-        CBMostrar.addActionListener(this::CBMostrarActionPerformed);
+        ContenedorGeneralCyD.setBackground(new java.awt.Color(20, 20, 0));
 
         jTable1.setBackground(new java.awt.Color(64, 64, 64));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -410,84 +407,49 @@ public class home extends javax.swing.JFrame {
         jTable1.setOpaque(false);
         jScrollPane1.setViewportView(jTable1);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(38, 38, 38)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 861, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(51, Short.MAX_VALUE))
+        javax.swing.GroupLayout ContenedorGeneralCyDLayout = new javax.swing.GroupLayout(ContenedorGeneralCyD);
+        ContenedorGeneralCyD.setLayout(ContenedorGeneralCyDLayout);
+        ContenedorGeneralCyDLayout.setHorizontalGroup(
+            ContenedorGeneralCyDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContenedorGeneralCyDLayout.createSequentialGroup()
+                .addGap(153, 153, 153)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 974, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(153, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(CBMostrar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 611, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+        ContenedorGeneralCyDLayout.setVerticalGroup(
+            ContenedorGeneralCyDLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(ContenedorGeneralCyDLayout.createSequentialGroup()
+                .addGap(48, 48, 48)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
-        ContenedorGeneralCyD.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 720));
+        panprincipal.add(ContenedorGeneralCyD, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 370, 1280, 350));
 
-        panprincipal.add(ContenedorGeneralCyD, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 720));
-
-        jPanel3.setBackground(new java.awt.Color(64, 64, 64));
-
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Debito");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Credito");
-
-        jLabel3.setText("jLabel3");
-        jLabel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
-
-        jLabel4.setText("jLabel3");
-        jLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+        jPanel3.setBackground(new java.awt.Color(217, 217, 217));
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(126, 126, 126))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(123, 123, 123))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(34, 34, 34))))
+                .addGap(204, 204, 204)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 271, Short.MAX_VALUE)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(205, 205, 205))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(110, Short.MAX_VALUE))
+                .addGap(59, 59, 59)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
-        panprincipal.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 0, 330, 720));
+        panprincipal.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 370));
 
         ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
 
@@ -495,36 +457,39 @@ public class home extends javax.swing.JFrame {
         jMenu1.setPreferredSize(new java.awt.Dimension(70, 22));
         jMenu1.addActionListener(this::jMenu1ActionPerformed);
 
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IcardmovB.png"))); // NOI18N
-        jMenuItem1.setText("Movimientos");
-        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
-        jMenu1.add(jMenuItem1);
-
         jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/icardgenB.png"))); // NOI18N
         jMenuItem2.setText("General");
         jMenuItem2.addActionListener(this::jMenuItem2ActionPerformed);
         jMenu1.add(jMenuItem2);
 
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IcardmovB.png"))); // NOI18N
+        jMenuItem1.setText("Movimientos");
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
+        jMenu1.add(jMenuItem1);
+
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Tarjeta");
+        jMenu2.setText("Registrar");
         jMenu2.setPreferredSize(new java.awt.Dimension(60, 22));
 
         jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IcardB.png"))); // NOI18N
-        jMenuItem3.setText("TarjetasC");
+        jMenuItem3.setText("Targeta de Credito");
+        jMenuItem3.setActionCommand("Targeta de Credito");
         jMenuItem3.addActionListener(this::jMenuItem3ActionPerformed);
         jMenu2.add(jMenuItem3);
 
         jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/IcardB.png"))); // NOI18N
-        jMenuItem4.setText("TarjetasD");
+        jMenuItem4.setText("Targeta de Debito");
+        jMenuItem4.setActionCommand("Targeta de Debito");
         jMenuItem4.addActionListener(this::jMenuItem4ActionPerformed);
         jMenu2.add(jMenuItem4);
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Registros");
+        jMenu3.setText("Mas");
 
-        jMenuItem5.setText("VerRegistrosDeArchivos");
+        jMenuItem5.setText("Estados de Cuenta");
+        jMenuItem5.setActionCommand("Ver Registros De Archivos");
         jMenuItem5.addActionListener(this::jMenuItem5ActionPerformed);
         jMenu3.add(jMenuItem5);
 
@@ -546,35 +511,13 @@ public class home extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void CBMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CBMostrarActionPerformed
-        MovimientoDAOImpl dao = new MovimientoDAOImpl();
-        String opcion = CBMostrar.getSelectedItem().toString();
-
-        switch (opcion) {
-            case "Mostrar Todo":
-                llenarTabla(dao.obtenerTodosLosMovimientos(idUsuarioLogueado));
-                break;
-            case "Ingresos":
-                llenarTabla(dao.obtenerIngresos(idUsuarioLogueado));
-                break;
-            case "Egresos":
-                llenarTabla(dao.obtenerEgresos(idUsuarioLogueado));
-                break;
-            case "Solo Credito":
-                llenarTabla(dao.obtenerSoloCredito(idUsuarioLogueado));
-                break;
-            case "Solo Debito":
-                llenarTabla(dao.obtenerSoloDebito(idUsuarioLogueado));
-                break;
-        }
-    }//GEN-LAST:event_CBMostrarActionPerformed
-
     private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         PanleMovimientos panmov = new PanleMovimientos(idUsuarioLogueado);
+        actualizarGraficas();
         panmov.setSize(ContentPrincipal.getSize());
         panmov.setLocation(0, 0);
         ContentPrincipal.removeAll();
@@ -585,6 +528,8 @@ public class home extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         panprincipal.setSize(ContentPrincipal.getSize());
+        actualizarGraficas();
+
         panprincipal.setLocation(0, 0);
         ContentPrincipal.removeAll();
         ContentPrincipal.add(panprincipal, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1280, 720));
@@ -596,6 +541,8 @@ public class home extends javax.swing.JFrame {
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         TarjetasAddC tac = new TarjetasAddC(idUsuarioLogueado);
+        actualizarGraficas();
+
         tac.setSize(ContentPrincipal.getSize());
         tac.setLocation(0, 0);
         ContentPrincipal.removeAll();
@@ -606,6 +553,7 @@ public class home extends javax.swing.JFrame {
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         TarjetasAddD tad = new TarjetasAddD(idUsuarioLogueado);
+        actualizarGraficas();
         tad.setSize(ContentPrincipal.getSize());
         tad.setLocation(0, 0);
         ContentPrincipal.removeAll();
@@ -616,6 +564,7 @@ public class home extends javax.swing.JFrame {
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         PanelEstadosCuenta panelDocs = new PanelEstadosCuenta();
+
         panelDocs.setSize(ContentPrincipal.getSize());
         panelDocs.setLocation(0, 0);
         ContentPrincipal.removeAll();
@@ -633,11 +582,8 @@ public class home extends javax.swing.JFrame {
     }*/
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> CBMostrar;
     private javax.swing.JPanel ContenedorGeneralCyD;
     private javax.swing.JPanel ContentPrincipal;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JMenu jMenu1;
@@ -649,7 +595,6 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
@@ -667,6 +612,24 @@ private javax.swing.JLabel lblDummy = new javax.swing.JLabel();
 
     public javax.swing.JLabel getLblSaldo() {
         return lblDummy;
+    }
+
+    private void actualizarGraficas() {
+
+        jLabel3.removeAll();
+        jLabel4.removeAll();
+
+        jLabel3.setLayout(new BorderLayout());
+        jLabel4.setLayout(new BorderLayout());
+
+        jLabel3.add(crearGraficaDebito(), BorderLayout.CENTER);
+        jLabel4.add(crearGraficaCredito(), BorderLayout.CENTER);
+
+        jLabel3.revalidate();
+        jLabel3.repaint();
+
+        jLabel4.revalidate();
+        jLabel4.repaint();
     }
 
     private ChartPanel crearGraficaCredito() {
@@ -722,25 +685,55 @@ private javax.swing.JLabel lblDummy = new javax.swing.JLabel();
     }
 
     private ChartPanel estilizarGraficaPie(JFreeChart chart, Color colorIngreso, Color colorEgreso) {
-        chart.setBackgroundPaint(new Color(64, 64, 64));
+
+        chart.setBackgroundPaint(new Color(217, 217, 217));
+        chart.setBorderVisible(false);
+
+        chart.getTitle().setFont(new Font("Segoe UI", Font.BOLD, 18));
         chart.getTitle().setPaint(Color.WHITE);
+
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setBackgroundPaint(new Color(64, 64, 64));
-        plot.setOutlinePaint(null);
-        plot.setSectionPaint(0, colorIngreso);
-        plot.setSectionPaint(1, colorEgreso);
-        plot.setLabelBackgroundPaint(new Color(0, 0, 0, 0));
-        plot.setLabelShadowPaint(null);
+
+        plot.setBackgroundPaint(new Color(217, 217, 217));
+        plot.setOutlineVisible(false);
+        plot.setShadowPaint(null);
+
+        plot.setSectionPaint("Ingresos", colorIngreso);
+        plot.setSectionPaint("Abonos (Ingresos)", colorIngreso);
+
+        plot.setSectionPaint("Egresos", colorEgreso);
+        plot.setSectionPaint("Compras (Egresos)", colorEgreso);
+        plot.setSectionPaint("Gastos (Egresos)", colorEgreso);
+
+        plot.setInteriorGap(0.05);
+
+        plot.setLabelFont(new Font("Segoe UI", Font.BOLD, 12));
+        plot.setLabelPaint(Color.BLACK);
+
+        plot.setLabelBackgroundPaint(null);
         plot.setLabelOutlinePaint(null);
-        plot.setLabelPaint(Color.WHITE);
-        plot.setLabelFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
-        PieSectionLabelGenerator labelGenerator = new StandardPieSectionLabelGenerator("{0}: {1} ({2})", new DecimalFormat("0.00"), new DecimalFormat("0%"));
-        plot.setLabelGenerator(labelGenerator);
-        plot.setLabelBackgroundPaint(new Color(255, 255, 255, 200));
         plot.setLabelShadowPaint(null);
-        plot.setLabelOutlinePaint(null);
-        ChartPanel chartPanel = new ChartPanel(chart);
-        chartPanel.setOpaque(false);
-        return chartPanel;
+
+        plot.setSimpleLabels(true);
+
+        PieSectionLabelGenerator generator
+                = new StandardPieSectionLabelGenerator(
+                        "{0}\n{2}",
+                        new DecimalFormat("$#,##0.00"),
+                        new DecimalFormat("0.0%"));
+
+        plot.setLabelGenerator(generator);
+
+        ChartPanel panel = new ChartPanel(chart);
+
+        panel.setOpaque(false);
+        panel.setBackground(new Color(217, 217, 217));
+
+        panel.setMouseWheelEnabled(false);
+        panel.setDomainZoomable(false);
+        panel.setRangeZoomable(false);
+
+        return panel;
     }
+
 }

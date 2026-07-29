@@ -45,10 +45,9 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>com.guicedee.services</groupId>
+            <groupId>org.jfree</groupId>
             <artifactId>jfreechart</artifactId>
-            <version>1.2.2.1-jre17</version>
-            <type>jar</type>
+            <version>1.5.5</version>
         </dependency>
     </dependencies>
     <properties>
