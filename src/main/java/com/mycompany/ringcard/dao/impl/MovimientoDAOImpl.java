@@ -13,15 +13,15 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
     @Override
     public boolean insertarMovimientoDebito(Movimiento mov) {
         String sqlInsert = "INSERT INTO movimientos_debito (id_carddebito, tipo_movimiento, fecha_movimiento, concepto, monto) VALUES (?, ?, ?, ?, ?)";
-        String sqlUpdate = mov.getTipoMovimiento().equals("ingreso") ? 
-                           "UPDATE cardsdebito SET saldo_actual = saldo_actual + ? WHERE id_carddebito = ?" :
-                           "UPDATE cardsdebito SET saldo_actual = saldo_actual - ? WHERE id_carddebito = ?";
-        
+        String sqlUpdate = mov.getTipoMovimiento().equals("ingreso")
+                ? "UPDATE cardsdebito SET saldo_actual = saldo_actual + ? WHERE id_carddebito = ?"
+                : "UPDATE cardsdebito SET saldo_actual = saldo_actual - ? WHERE id_carddebito = ?";
+
         Connection cx = null;
         try {
             cx = ConexionDB.getInstance();
             cx.setAutoCommit(false); // Transacción segura
-            
+
             try (PreparedStatement psInsert = cx.prepareStatement(sqlInsert)) {
                 psInsert.setInt(1, mov.getIdCardDebito());
                 psInsert.setString(2, mov.getTipoMovimiento());
@@ -40,11 +40,17 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             cx.commit();
             return true;
         } catch (Exception e) {
-            if (cx != null) try { cx.rollback(); } catch (Exception ex) {}
+            if (cx != null) try {
+                cx.rollback();
+            } catch (Exception ex) {
+            }
             e.printStackTrace();
             return false;
         } finally {
-            if (cx != null) try { cx.setAutoCommit(true); } catch (Exception ex) {}
+            if (cx != null) try {
+                cx.setAutoCommit(true);
+            } catch (Exception ex) {
+            }
         }
     }
 
@@ -57,14 +63,14 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
         } else {
             sqlUpdate = "UPDATE cardscredito SET saldo_actual = saldo_actual - ?, cantidadabonada = cantidadabonada + ? WHERE id_cardcredito = ?";
         }
-        
+
         Connection cx = null;
         try {
             cx = ConexionDB.getInstance();
             cx.setAutoCommit(false);
-            
+
             try (PreparedStatement psInsert = cx.prepareStatement(sqlInsert)) {
-                psInsert.setInt(1, mov.getIdCardDebito()); 
+                psInsert.setInt(1, mov.getIdCardDebito());
                 psInsert.setString(2, mov.getTipoMovimiento());
                 psInsert.setDate(3, mov.getFechaMovimiento());
                 psInsert.setString(4, mov.getConcepto());
@@ -86,11 +92,17 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             cx.commit();
             return true;
         } catch (Exception e) {
-            if (cx != null) try { cx.rollback(); } catch (Exception ex) {}
+            if (cx != null) try {
+                cx.rollback();
+            } catch (Exception ex) {
+            }
             e.printStackTrace();
             return false;
         } finally {
-            if (cx != null) try { cx.setAutoCommit(true); } catch (Exception ex) {}
+            if (cx != null) try {
+                cx.setAutoCommit(true);
+            } catch (Exception ex) {
+            }
         }
     }
 
@@ -112,12 +124,38 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
                 mov.setTipoMovimiento(rs.getString("tipo_movimiento"));
                 lista.add(mov);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return lista;
     }
 
     @Override
-    public boolean eliminarMovimientoDebito(int idMovimiento) { return false; }
+    public double[] obtenerSaldosTarjeta(int idTarjeta, String tipoTarjeta) {
+        // Posición 0: saldo_actual, Posición 1: limite_credito
+        double[] saldos = new double[]{0.0, 0.0};
+
+        String sql = tipoTarjeta.equalsIgnoreCase("credito")
+                ? "SELECT saldo_actual, limite_credito FROM cardscredito WHERE id_cardcredito = ?"
+                : "SELECT saldo_actual, 0 AS limite_credito FROM cardsdebito WHERE id_carddebito = ?";
+        try {
+            java.sql.PreparedStatement ps = ConexionDB.getInstance().prepareStatement(sql);
+            ps.setInt(1, idTarjeta);
+            java.sql.ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                saldos[0] = rs.getDouble("saldo_actual");
+                saldos[1] = rs.getDouble("limite_credito");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return saldos;
+    }
+
+    @Override
+    public boolean eliminarMovimientoDebito(int idMovimiento) {
+        return false;
+    }
 
     @Override
     public ArrayList<Movimiento> listarMovimientosCredito(int idCardCredito) {
@@ -130,19 +168,23 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             while (rs.next()) {
                 Movimiento mov = new Movimiento();
                 mov.setIdMovimiento(rs.getInt("id_movimiento"));
-                mov.setIdCardDebito(rs.getInt("id_cardcredito")); 
+                mov.setIdCardDebito(rs.getInt("id_cardcredito"));
                 mov.setFechaMovimiento(rs.getDate("fecha_movimiento"));
                 mov.setConcepto(rs.getString("concepto"));
                 mov.setMonto(rs.getDouble("monto"));
                 mov.setTipoMovimiento(rs.getString("tipo_movimiento"));
                 lista.add(mov);
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return lista;
     }
 
     @Override
-    public boolean eliminarMovimientoCredito(int idMovimiento) { return false; }
+    public boolean eliminarMovimientoCredito(int idMovimiento) {
+        return false;
+    }
 
     @Override
     public ResultSet obtenerTodosLosMovimientos(int idUsuario) {
@@ -152,7 +194,10 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             ps.setInt(1, idUsuario);
             ps.setInt(2, idUsuario);
             return ps.executeQuery();
-        } catch (Exception e) { e.printStackTrace(); return null; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -163,7 +208,10 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             ps.setInt(1, idUsuario);
             ps.setInt(2, idUsuario);
             return ps.executeQuery();
-        } catch (Exception e) { e.printStackTrace(); return null; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -174,7 +222,10 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             ps.setInt(1, idUsuario);
             ps.setInt(2, idUsuario);
             return ps.executeQuery();
-        } catch (Exception e) { e.printStackTrace(); return null; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public ResultSet obtenerSoloCredito(int idUsuario) {
@@ -183,7 +234,10 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             PreparedStatement ps = ConexionDB.getInstance().prepareStatement(sql);
             ps.setInt(1, idUsuario);
             return ps.executeQuery();
-        } catch (Exception e) { e.printStackTrace(); return null; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public ResultSet obtenerSoloDebito(int idUsuario) {
@@ -192,7 +246,10 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             PreparedStatement ps = ConexionDB.getInstance().prepareStatement(sql);
             ps.setInt(1, idUsuario);
             return ps.executeQuery();
-        } catch (Exception e) { e.printStackTrace(); return null; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public ResultSet obtenerTarjetasDashboard(int idUsuario) {
@@ -202,6 +259,9 @@ public class MovimientoDAOImpl implements IMovimientoDAO {
             ps.setInt(1, idUsuario);
             ps.setInt(2, idUsuario);
             return ps.executeQuery();
-        } catch (Exception e) { e.printStackTrace(); return null; }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

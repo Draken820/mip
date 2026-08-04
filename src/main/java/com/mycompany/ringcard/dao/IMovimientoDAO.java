@@ -8,7 +8,8 @@ public interface IMovimientoDAO {
     boolean insertarMovimientoDebito(Movimiento mov);
     ArrayList<Movimiento> listarMovimientosDebito(int idCardDebito);
     boolean eliminarMovimientoDebito(int idMovimiento);
-    
+    // Método para validaciones financieras
+    double[] obtenerSaldosTarjeta(int idTarjeta, String tipoTarjeta);
     // Para Crédito
     boolean insertarMovimientoCredito(Movimiento mov);
     ArrayList<Movimiento> listarMovimientosCredito(int idCardCredito);

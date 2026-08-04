@@ -42,8 +42,18 @@ public class MovimientoDebitoController {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             java.util.Date fechaParseada = sdf.parse(vista.getTxtFecha().getText());
             mov.setFechaMovimiento(new java.sql.Date(fechaParseada.getTime()));
+// --- NUEVA VALIDACIÓN FINANCIERA ---
+            com.mycompany.ringcard.services.ValidacionFinancieraService validador = new com.mycompany.ringcard.services.ValidacionFinancieraService(dao);
+            String estadoValidacion = validador.validarGasto(idTarjeta, "debito", mov.getTipoMovimiento(), monto);
+            
+            if (estadoValidacion.equals("FONDOS_INSUFICIENTES")) {
+                JOptionPane.showMessageDialog(vista, "Transacción rechazada: Fondos insuficientes.\nNo tienes saldo suficiente para este egreso.", "Operación Denegada", JOptionPane.WARNING_MESSAGE);
+                return; // Corta la ejecución, no guarda nada en la base de datos
+            }
+            // -----------------------------------
 
             if (dao.insertarMovimientoDebito(mov)) {
+                //... (resto de tu código que ya tienes)
                 JOptionPane.showMessageDialog(vista, "Movimiento registrado en la base de datos con éxito.");
                 
                 // === GENERACIÓN DEL ESTADO DE CUENTA ===

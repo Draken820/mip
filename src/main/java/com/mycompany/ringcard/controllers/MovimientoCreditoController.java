@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class MovimientoCreditoController {
+
     private MovimientosAddC vista;
     private IMovimientoDAO dao;
     private int idTarjeta;
@@ -28,10 +29,10 @@ public class MovimientoCreditoController {
     private void guardarMovimiento() {
         try {
             Movimiento mov = new Movimiento();
-            mov.setIdCardDebito(idTarjeta); 
+            mov.setIdCardDebito(idTarjeta);
             mov.setTipoMovimiento(vista.getCmbTipo().getSelectedItem().toString().toLowerCase());
             mov.setConcepto(vista.getTxtConcepto().getText());
-            
+
             double monto = ((Number) vista.getSpnMonto().getValue()).doubleValue();
             if (monto <= 0) {
                 JOptionPane.showMessageDialog(vista, "El monto debe ser mayor a cero.");
@@ -42,10 +43,20 @@ public class MovimientoCreditoController {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             java.util.Date fechaParseada = sdf.parse(vista.getTxtFecha().getText());
             mov.setFechaMovimiento(new java.sql.Date(fechaParseada.getTime()));
+// --- NUEVA VALIDACIÓN FINANCIERA ---
+            com.mycompany.ringcard.services.ValidacionFinancieraService validador = new com.mycompany.ringcard.services.ValidacionFinancieraService(dao);
+            String estadoValidacion = validador.validarGasto(idTarjeta, "credito", mov.getTipoMovimiento(), monto);
+
+            if (estadoValidacion.equals("LIMITE_EXCEDIDO")) {
+                JOptionPane.showMessageDialog(vista, "Transacción rechazada: Límite excedido.\nEsta compra supera el límite de crédito de tu tarjeta.", "Operación Denegada", JOptionPane.WARNING_MESSAGE);
+                return; // Corta la ejecución
+            }
+            // -----------------------------------
 
             if (dao.insertarMovimientoCredito(mov)) {
+                //... (resto de tu código que ya tienes)
                 JOptionPane.showMessageDialog(vista, "Movimiento de crédito registrado en la base de datos.");
-                
+
                 // === GENERACIÓN DEL ESTADO DE CUENTA ===
                 try {
                     EstadoCuentaService docService = new EstadoCuentaService(dao);
